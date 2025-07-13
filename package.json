@@ -6,10 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "deploy": "npm run build && gcloud builds submit --tag gcr.io/$PROJECT_ID/$SERVICE_NAME && gcloud run deploy $SERVICE_NAME --image gcr.io/$PROJECT_ID/$SERVICE_NAME --platform managed --region $REGION --allow-unauthenticated",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "deploy": "npm start --prefix server",
+    "install:deploy": "npm install --omit=dev && npm install --prefix server"
   },
   "dependencies": {
     "@mantine/core": "^8.0.0",

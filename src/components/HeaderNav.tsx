@@ -82,10 +82,10 @@ export function HeaderNav() {
         <UnstyledButton className={classes.subLink}>
           <Group wrap="nowrap" align="flex-start">
             <ThemeIcon size={34} variant="default" radius="md">
-              <item.icon size={22} color={theme.colors.brand[3]} />
+              <item.icon size={22} color={theme.colors.brand[9]} />
             </ThemeIcon>
             <div>
-              <Text size="sm" fw={500} c={theme.colors.brand[9]}>
+              <Text size="sm" fw={500} c={theme.colors.brand[3]}>
                 {item.title}
               </Text>
               <Text size="xs" c="dimmed">

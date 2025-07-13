@@ -54,7 +54,7 @@ const data = [
   {
     icon: IconSword,
     title: "Combat Achievements",
-    description: "Free CA Help",
+    description: "Free CA help",
     link: "/combat-achievements",
   },
   {
@@ -62,27 +62,7 @@ const data = [
     title: "Bingo",
     description: "Check the status of the next bingo!",
     link: "/bingo",
-  },
-  // {
-  //   icon: IconBook,
-  //   title: "Documentation",
-  //   description: "Yanma is capable of seeing 360 degrees without",
-  // },
-  // {
-  //   icon: IconFingerprint,
-  //   title: "Security",
-  //   description: "The shell’s rounded shape and the grooves on its.",
-  // },
-  // {
-  //   icon: IconChartPie3,
-  //   title: "Analytics",
-  //   description: "This Pokémon uses its flying ability to quickly chase",
-  // },
-  // {
-  //   icon: IconNotification,
-  //   title: "Notifications",
-  //   description: "Combusken battles with the intensely hot flames it spews",
-  // },
+  }
 ];
 
 export function HeaderNav() {
@@ -102,10 +82,10 @@ export function HeaderNav() {
         <UnstyledButton className={classes.subLink}>
           <Group wrap="nowrap" align="flex-start">
             <ThemeIcon size={34} variant="default" radius="md">
-              <item.icon size={22} color={theme.colors.blue[6]} />
+              <item.icon size={22} color={theme.colors.brand[3]} />
             </ThemeIcon>
             <div>
-              <Text size="sm" fw={500}>
+              <Text size="sm" fw={500} c={theme.colors.brand[9]}>
                 {item.title}
               </Text>
               <Text size="xs" c="dimmed">
@@ -142,7 +122,7 @@ export function HeaderNav() {
                     <Box component="span" mr={5}>
                       Features
                     </Box>
-                    <IconChevronDown size={16} color={theme.colors.blue[6]} />
+                    <IconChevronDown size={16} color={theme.colors.brand[4]} />
                   </Center>
                 </a>
               </HoverCard.Target>
@@ -176,12 +156,9 @@ export function HeaderNav() {
                 </div> */}
               </HoverCard.Dropdown>
             </HoverCard>
-            {/* <a href="#" className={classes.link}>
-              Learn
+            <a href="/about" className={classes.link}>
+              About
             </a>
-            <a href="#" className={classes.link}>
-              Academy
-            </a> */}
           </Group>
 
           <Group visibleFrom="sm">
@@ -189,7 +166,7 @@ export function HeaderNav() {
               <Button variant="default">Log in</Button>
             </Link>
             <Link href="/register">
-              <Button>Sign up</Button>
+              <Button color="brand.8">Sign up</Button>
             </Link>
           </Group>
 
@@ -221,7 +198,7 @@ export function HeaderNav() {
               <Box component="span" mr={5}>
                 Features
               </Box>
-              <IconChevronDown size={16} color={theme.colors.blue[6]} />
+              <IconChevronDown size={16} />
             </Center>
           </UnstyledButton>
           <Collapse in={linksOpened}>{links}</Collapse>
@@ -235,11 +212,11 @@ export function HeaderNav() {
           <Divider my="sm" />
 
           <Group justify="center" grow pb="xl" px="md">
-          <Link href="/login">
+            <Link href="/login">
               <Button variant="default">Log in</Button>
             </Link>
             <Link href="/register">
-              <Button>Sign up</Button>
+              <Button color="brand.8">Sign up</Button>
             </Link>
           </Group>
         </ScrollArea>

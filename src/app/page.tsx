@@ -7,12 +7,13 @@ import {
   Title,
 } from "@mantine/core";
 import Link from "next/link";
+import theme from "./theme";
 
 export default function Home() {
   return (
-    <AppShell header={{ height: 60 }} padding="md">
+    <AppShell padding="sm">
       <AppShellMain>
-        <Title className="text-center mt-20">
+        {/* <Title className="text-center mt-6">
           <Text
             inherit
             variant="gradient"
@@ -28,26 +29,27 @@ export default function Home() {
           size="lg"
           maw={580}
           mx="auto"
-          mt="xl"
+          mt="md"
         >
           This website is a work in progress
-        </Text>
+        </Text> */}
 
-        <Title size='h3' className="text-center mt-12">
+        <Title size="h3" className="text-center mt-12">
           <Text
             inherit
-            variant="gradient"
+            variant="text"
             component="span"
+            c={theme.colors!.warning![5]}
           >
             ToA 8 GM Times
           </Text>
         </Title>
         <Group className="flex mt-4 justify-center">
           <Link href="/toa/gm-time-8">
-            <Button variant="default">Status & Queue</Button>
+            <Button color='brand.7'>Status & Queue</Button>
           </Link>
           <Link href="/toa/gm-time-8/setup">
-            <Button>Setup & Info</Button>
+            <Button color='brand.5'>Setup & Info</Button>
           </Link>
         </Group>
       </AppShellMain>

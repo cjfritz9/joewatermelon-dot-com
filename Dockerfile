@@ -1,14 +1,17 @@
 FROM node:22-alpine
 
-WORKDIR /
+WORKDIR /app
 
 COPY package*.json ./
-COPY /server /server
 
-RUN ["npm", "run", "install:deploy"]
+RUN npm ci
+
+COPY . .
+
+RUN npm run build
 
 ENV PORT=8080
 
 EXPOSE 8080
 
-CMD ["npm", "run", "deploy"]
+CMD ["npm", "start", "--", "-p", "8080"]

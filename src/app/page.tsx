@@ -48,7 +48,7 @@ export default function Home() {
           <Link href="/toa/gm-time-8">
             <Button color='brand.7'>Status & Queue</Button>
           </Link>
-          <Link href="/toa/gm-time-8/setup">
+          <Link href="/toa/gm-time-8/info">
             <Button color='brand.5'>Setup & Info</Button>
           </Link>
         </Group>

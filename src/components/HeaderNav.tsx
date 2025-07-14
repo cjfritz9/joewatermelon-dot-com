@@ -2,6 +2,7 @@
 
 import logo from "@/assets/melon-logo.png";
 import classes from "@/styles/HeaderNav.module.css";
+import { getBrandColor } from "@/utils/theme";
 import {
   Anchor,
   Box,
@@ -62,7 +63,7 @@ const data = [
     title: "Bingo",
     description: "Check the status of the next bingo!",
     link: "/bingo",
-  }
+  },
 ];
 
 export function HeaderNav() {
@@ -82,10 +83,10 @@ export function HeaderNav() {
         <UnstyledButton className={classes.subLink}>
           <Group wrap="nowrap" align="flex-start">
             <ThemeIcon size={34} variant="default" radius="md">
-              <item.icon size={22} color={theme.colors.brand[9]} />
+              <item.icon size={22} color={getBrandColor(9)} />
             </ThemeIcon>
             <div>
-              <Text size="sm" fw={500} c={theme.colors.brand[3]}>
+              <Text size="sm" fw={500} c={getBrandColor(3)}>
                 {item.title}
               </Text>
               <Text size="xs" c="dimmed">
@@ -99,16 +100,16 @@ export function HeaderNav() {
   });
 
   return (
-    <Box pb={120}>
+    <Box pb={48}>
       <header className={classes.header}>
         <Group justify="space-between" h="100%">
-          <a href="/" className={classes.link}>
+          <Link href="/" className={classes.link}>
             <Image src={logo} alt="logo" height={36} />
-          </a>
+          </Link>
           <Group h="100%" gap={0} visibleFrom="sm">
-            <a href="/" className={classes.link}>
+            <Link href="/" className={classes.link}>
               Home
-            </a>
+            </Link>
             <HoverCard
               width={600}
               position="bottom"
@@ -117,14 +118,14 @@ export function HeaderNav() {
               withinPortal
             >
               <HoverCard.Target>
-                <a href="#" className={classes.link}>
+                <Link href="/features" className={classes.link}>
                   <Center inline>
                     <Box component="span" mr={5}>
                       Features
                     </Box>
-                    <IconChevronDown size={16} color={theme.colors.brand[4]} />
+                    <IconChevronDown size={16} color={getBrandColor(4)} />
                   </Center>
-                </a>
+                </Link>
               </HoverCard.Target>
 
               <HoverCard.Dropdown style={{ overflow: "hidden" }}>
@@ -156,9 +157,9 @@ export function HeaderNav() {
                 </div> */}
               </HoverCard.Dropdown>
             </HoverCard>
-            <a href="/about" className={classes.link}>
+            <Link href="/about" className={classes.link}>
               About
-            </a>
+            </Link>
           </Group>
 
           <Group visibleFrom="sm">
@@ -190,9 +191,9 @@ export function HeaderNav() {
         <ScrollArea h="calc(100vh - 80px" mx="-md">
           <Divider my="sm" />
 
-          <a href="#" className={classes.link}>
+          <Link href="/" className={classes.link}>
             Home
-          </a>
+          </Link>
           <UnstyledButton className={classes.link} onClick={toggleLinks}>
             <Center inline>
               <Box component="span" mr={5}>
@@ -202,12 +203,9 @@ export function HeaderNav() {
             </Center>
           </UnstyledButton>
           <Collapse in={linksOpened}>{links}</Collapse>
-          <a href="#" className={classes.link}>
-            Learn
-          </a>
-          <a href="#" className={classes.link}>
-            Academy
-          </a>
+          <Link href="/about" className={classes.link}>
+            About
+          </Link>
 
           <Divider my="sm" />
 

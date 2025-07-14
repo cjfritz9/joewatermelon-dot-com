@@ -16,12 +16,20 @@ function NotFound() {
             ta="center"
             className={classes.description}
           >
-            The page you are trying to open does not exist. If you were linked
-            here, this may be a future addition.
+            The page you are trying to open does not exist.
+          </Text>
+          <Text
+            c="dimmed"
+            size="lg"
+            ta="center"
+            className={classes.description}
+          >
+            Most of this website is a WIP and the majority of the content is
+            temporary or placeholder.
           </Text>
           <Group justify="center">
             <Link href="/">
-              <Button size="md">Take me back to home page</Button>
+              <Button size="md">Take me back home</Button>
             </Link>
           </Group>
         </div>

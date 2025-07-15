@@ -1,4 +1,6 @@
-import { HeaderNav } from "@/components/HeaderNav";
+import { Footer } from "@/components/global/Footer";
+import { HeaderNav } from "@/components/global/HeaderNav";
+import { UserProvider } from "@/lib/context/UserContext";
 import {
   ColorSchemeScript,
   mantineHtmlProps,
@@ -25,8 +27,11 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <MantineProvider defaultColorScheme="dark" theme={theme}>
-          <HeaderNav />
-          {children}
+          <UserProvider>
+            <HeaderNav />
+            {children}
+            <Footer />
+          </UserProvider>
         </MantineProvider>
       </body>
     </html>

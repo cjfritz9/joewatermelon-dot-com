@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge, Card, Stack, Table, Text } from "@mantine/core";
+import { Badge, Card, Stack, Table, Text, Title } from "@mantine/core";
 
 interface QueuePlayer {
   position: number;
@@ -25,7 +25,8 @@ const getStatusBadge = (status: QueuePlayer["status"]) => {
   }
 };
 
-export default function Queue({ players,
+export default function Queue({
+  players,
   // onJoinQueue
 }: QueueProps) {
   const rows = players.map((player) => (
@@ -39,9 +40,9 @@ export default function Queue({ players,
 
   return (
     <Stack gap="md">
-      <Text fw={700} size="lg">
+      <Title fw={700} order={3}>
         Current Queue
-      </Text>
+      </Title>
 
       <Text size="sm" c="dimmed">
         Players waiting for the next run. Make sure your gear and skills meet

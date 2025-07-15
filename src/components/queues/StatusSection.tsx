@@ -1,4 +1,4 @@
-import { getBrandColor } from "@/utils/theme";
+import { getBrandColor } from "@/lib/theme";
 import { Badge, Button, Card, Group, Stack, Text } from "@mantine/core";
 
 type Status = "active" | "inactive";
@@ -32,7 +32,7 @@ export default function StatusSection({
       hour: "numeric",
       minute: "numeric",
       hour12: true,
-      timeZoneName: "short"
+      timeZoneName: "short",
     }).format(_date);
   };
 

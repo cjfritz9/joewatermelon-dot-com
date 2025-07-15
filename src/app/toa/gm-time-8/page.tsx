@@ -1,8 +1,8 @@
 import theme from "@/app/theme";
-import JoinQueueModal from "@/components/Queues/JoinQueueModal";
-import PrepareForRun from "@/components/Queues/PrepareForTheRun";
-import Queue from "@/components/Queues/Queue";
-import StatusSection from "@/components/Queues/StatusSection";
+import JoinQueueModal from "@/components/queues/JoinQueueModal";
+import PrepareForRun from "@/components/queues/PrepareForTheRun";
+import Queue from "@/components/queues/Queue";
+import StatusSection from "@/components/queues/StatusSection";
 import { Stack, Title } from "@mantine/core";
 import React from "react";
 

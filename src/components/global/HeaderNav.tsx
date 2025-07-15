@@ -1,8 +1,8 @@
 "use client";
 
 import logo from "@/assets/melon-logo.png";
+import { getBrandColor } from "@/lib/theme";
 import classes from "@/styles/HeaderNav.module.css";
-import { getBrandColor } from "@/utils/theme";
 import {
   Anchor,
   Box,

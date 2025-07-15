@@ -1,4 +1,4 @@
-import { Illustration } from "@/components/404Background";
+import { Illustration } from "@/components/global/404Background";
 import classes from "@/styles/NotFound.module.css";
 import { Button, Container, Group, Text, Title } from "@mantine/core";
 import Link from "next/link";

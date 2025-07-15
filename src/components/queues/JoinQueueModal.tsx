@@ -1,6 +1,6 @@
 "use client";
 
-import { getBrandColor } from "@/utils/theme";
+import { getBrandColor } from "@/lib/theme";
 import {
   Button,
   Checkbox,

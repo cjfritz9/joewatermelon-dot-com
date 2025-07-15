@@ -6,7 +6,7 @@ import Link from "next/link";
 import React from "react";
 
 const AuthButtonGroup: React.FC = () => {
-  const { user, loading, error, refetchUser } = useUser();
+  const { user, loading, refetchUser } = useUser();
 
   const handleLogout = async () => {
     const res = await fetch("/api/auth/logout", {

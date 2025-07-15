@@ -31,6 +31,7 @@ import {
 } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
+import AuthButtonGroup from "../auth/AuthButtonGroup";
 
 const data = [
   {
@@ -160,14 +161,7 @@ export function HeaderNav() {
             </Link>
           </Group>
 
-          <Group visibleFrom="sm">
-            <Link href="/login">
-              <Button variant="default">Log in</Button>
-            </Link>
-            <Link href="/register">
-              <Button color="brand.8">Sign up</Button>
-            </Link>
-          </Group>
+          <AuthButtonGroup />
 
           <Burger
             opened={drawerOpened}

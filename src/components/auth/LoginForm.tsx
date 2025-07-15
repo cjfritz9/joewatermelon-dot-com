@@ -1,5 +1,6 @@
 "use client";
 
+import { useUser } from "@/lib/context/UserContext";
 import {
   Anchor,
   Button,
@@ -16,6 +17,7 @@ import { IconBrandTwitch } from "@tabler/icons-react";
 import Link from "next/link";
 
 export function LoginForm() {
+  const { refetchUser } = useUser();
   const form = useForm({
     initialValues: {
       email: "",
@@ -48,6 +50,8 @@ export function LoginForm() {
     if (!res.ok) {
       throw new Error(data.error || "Failed to login");
     }
+
+    await refetchUser();
   };
 
   return (

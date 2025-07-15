@@ -1,13 +1,5 @@
 import theme from "@/app/theme";
-import {
-  Anchor,
-  Card,
-  Group,
-  SimpleGrid,
-  Stack,
-  Text,
-  Title,
-} from "@mantine/core";
+import { Card, Group, SimpleGrid, Stack, Text, Title } from "@mantine/core";
 import { IconChecklist, IconFlame, IconSwords } from "@tabler/icons-react";
 import Link from "next/link";
 
@@ -63,7 +55,7 @@ export default function PrepareForRun() {
               maw="424px"
               miw="224px"
             >
-              <Group gap="md" align='center'>
+              <Group gap="md" align="center">
                 {link.icon}
                 <div>
                   <Text fw={600}>{link.title}</Text>

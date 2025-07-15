@@ -1,14 +1,6 @@
-'use client'
+"use client";
 
-import {
-  Table,
-  Card,
-  Stack,
-  Text,
-  Button,
-  Group,
-  Badge,
-} from "@mantine/core";
+import { Badge, Card, Stack, Table, Text } from "@mantine/core";
 
 interface QueuePlayer {
   position: number;
@@ -33,9 +25,8 @@ const getStatusBadge = (status: QueuePlayer["status"]) => {
   }
 };
 
-export default function Queue({
-  players,
-  onJoinQueue,
+export default function Queue({ players,
+  // onJoinQueue
 }: QueueProps) {
   const rows = players.map((player) => (
     <Table.Tr key={player.position}>

@@ -20,7 +20,8 @@ const TOA8ManPage: React.FC = async () => {
       <Queue
         players={[
           { position: 1, name: "Dead Point", status: "ready" },
-          { position: 2, name: "KoiTris", status: "not ready" },
+          { position: 2, name: "Wide Boris", status: "not ready" },
+          { position: 3, name: "KoiTris", status: "not ready" },
         ]}
       />
       <JoinQueueModal />

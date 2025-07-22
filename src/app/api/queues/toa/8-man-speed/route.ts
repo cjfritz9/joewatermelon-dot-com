@@ -14,10 +14,15 @@ export async function GET() {
       );
     }
 
-    const docs = queueSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const docs = queueSnapshot.docs.map((doc) => {
+      const data = doc.data();
+
+      return {
+        id: doc.id,
+        createdAt: (data.createdAt as Timestamp)?.toDate() || null,
+        ...data,
+      };
+    });
 
     return NextResponse.json(APIResponse.success("Queue found", docs));
   } catch (err) {
@@ -43,10 +48,9 @@ export async function POST(req: Request) {
     const isValid = getToaQueueEntryIsValid(data);
 
     if (!isValid) {
-      return NextResponse.json(
-        APIResponse.error("Missing required fields"),
-        { status: 400 },
-      );
+      return NextResponse.json(APIResponse.error("Missing required fields"), {
+        status: 400,
+      });
     }
 
     const docRef = await firestore.collection("toa-queue").add({

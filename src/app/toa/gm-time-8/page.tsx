@@ -7,10 +7,12 @@ import { getToa8SpeedQueue } from "@/lib/server/toa-queues";
 import { Stack, Title } from "@mantine/core";
 import React from "react";
 
-export const revalidate = 0;
+// export const revalidate = 0;
 
 const TOA8ManPage: React.FC = async () => {
+  console.time("getToa8SpeedQueue");
   const queue = await getToa8SpeedQueue();
+  console.timeEnd("getToa8SpeedQueue");
 
   return (
     <Stack align="center" mx="xl" my="xl">

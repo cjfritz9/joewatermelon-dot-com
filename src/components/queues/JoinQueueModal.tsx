@@ -42,8 +42,7 @@ export default function JoinQueueModal() {
     notes: "",
   });
 
-  const { twitchUsername, rsn, expertKC, ready, notes } =
-    formData;
+  const { twitchUsername, rsn, expertKC, ready, notes } = formData;
 
   const handleUpdateFormData = (
     key: keyof FormData,
@@ -160,7 +159,7 @@ export default function JoinQueueModal() {
 
           <Group justify="space-between" wrap="nowrap" mt="md">
             <Text c={success ? "green" : "red"}>{success || error}</Text>
-            <Group wrap='nowrap'>
+            <Group wrap="nowrap">
               <Button variant="default" onClick={close}>
                 Cancel
               </Button>

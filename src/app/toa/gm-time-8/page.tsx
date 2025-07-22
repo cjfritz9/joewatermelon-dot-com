@@ -7,6 +7,8 @@ import { getToa8SpeedQueue } from "@/lib/server/toa-queues";
 import { Stack, Title } from "@mantine/core";
 import React from "react";
 
+export const revalidate = 0;
+
 const TOA8ManPage: React.FC = async () => {
   const queue = await getToa8SpeedQueue();
 

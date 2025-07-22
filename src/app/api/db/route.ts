@@ -9,9 +9,6 @@ export const GET = async () => {
     timestamp: new Date().toISOString(),
   });
 
-  const docTest = await doc.get();
-  const data = docTest.data();
-
   await doc.delete();
 
   return NextResponse.json(

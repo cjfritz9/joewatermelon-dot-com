@@ -1,3 +1,4 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 export const getToaQueueEntryIsValid = (body: any) => {
   if (typeof body !== "object" || !body) {
     return false;

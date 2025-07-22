@@ -1,7 +1,8 @@
 import { Firestore } from "@google-cloud/firestore";
 
 async function debugFirestore() {
-  const projectId = process.env.GOOGLE_CLOUD_PROJECT || process.env.GCLOUD_PROJECT;
+  const projectId =
+    process.env.GOOGLE_CLOUD_PROJECT || process.env.GCLOUD_PROJECT;
 
   console.log("📄 Firestore Debug Start");
   console.log(`🔷 Detected Project ID: ${projectId || "NOT SET"}`);
@@ -33,19 +34,32 @@ async function debugFirestore() {
     console.log("🧹 Cleaned up dummy document.");
 
     console.log("🎉 Firestore test completed successfully.");
-
-  } catch (err: any) {
+  } catch (err) {
     console.error("🔥 Firestore error occurred:");
-    console.error(err);
 
-    if (err.code) {
-      console.error(`Error code: ${err.code}`);
-    }
-    if (err.details) {
-      console.error(`Details: ${err.details}`);
-    }
-    if (err.metadata) {
-      console.error(`Metadata: ${JSON.stringify(err.metadata)}`);
+    if (err instanceof Error) {
+      console.error(`Message: ${err.message}`);
+      console.error(err.stack);
+
+      const grpcErr = err as Partial<Error> & {
+        code?: unknown;
+        details?: unknown;
+        metadata?: unknown;
+      };
+
+      if (grpcErr.code !== undefined) {
+        console.error(`Error code: ${grpcErr.code}`);
+      }
+
+      if (grpcErr.details !== undefined) {
+        console.error(`Details: ${grpcErr.details}`);
+      }
+
+      if (grpcErr.metadata !== undefined) {
+        console.error(`Metadata: ${JSON.stringify(grpcErr.metadata)}`);
+      }
+    } else {
+      console.error("Unknown error:", err);
     }
   }
 }

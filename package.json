@@ -1,6 +1,6 @@
 {
-  "name": "next-app-mantine-tailwind-template",
-  "version": "0.1.0",
+  "name": "joewatermelon-dot-com",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "docker:build": "docker build -t cjfritz9/joewatermelon-dot-com:latest .",

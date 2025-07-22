@@ -126,21 +126,18 @@ export default function JoinQueueModal() {
           <Checkbox
             required
             label="Red Keris"
-            // checked={redKeris}
             onChange={(e) => handleUpdateFormData("redKeris", e.target.value)}
           />
 
           <Checkbox
             required
             label="BGS"
-            // checked={bgs}
             onChange={(e) => handleUpdateFormData("bgs", e.target.value)}
           />
 
           <Checkbox
             required
             label="ZCB"
-            // checked={zcb}
             onChange={(e) => handleUpdateFormData("zcb", e.target.value)}
           />
 
@@ -149,7 +146,6 @@ export default function JoinQueueModal() {
           <Checkbox
             required
             label="I am Ready"
-            // checked={ready}
             onChange={(e) => handleUpdateFormData("ready", e.target.value)}
           />
 

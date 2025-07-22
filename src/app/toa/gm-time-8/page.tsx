@@ -3,7 +3,7 @@ import JoinQueueModal from "@/components/queues/JoinQueueModal";
 import PrepareForRun from "@/components/queues/PrepareForTheRun";
 import Queue from "@/components/queues/Queue";
 import StatusSection from "@/components/queues/StatusSection";
-import { addToToa8SpeedQueue, getToa8SpeedQueue } from "@/lib/server/toa-queues";
+import { getToa8SpeedQueue } from "@/lib/server/toa-queues";
 import { Stack, Title } from "@mantine/core";
 import React from "react";
 
@@ -20,9 +20,7 @@ const TOA8ManPage: React.FC = async () => {
         nextRunTime={new Date("July 21, 2025 14:00:00")}
       />
       <PrepareForRun />
-      <Queue
-        players={queue}
-      />
+      <Queue players={queue} />
       <JoinQueueModal />
     </Stack>
   );

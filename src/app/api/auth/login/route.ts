@@ -1,3 +1,4 @@
+import APIResponse from "@/lib/classes/APIResponse";
 import firestore from "@/lib/db/firestore";
 import { getSession } from "@/lib/session";
 import bcrypt from "bcrypt";
@@ -11,7 +12,7 @@ export const POST = async (req: Request) => {
 
     if (!email || !password) {
       return NextResponse.json(
-        { error: "Email and password are required" },
+        APIResponse.error("Email and password are required"),
         { status: 400 },
       );
     }
@@ -20,10 +21,9 @@ export const POST = async (req: Request) => {
     const querySnap = await usersRef.where("email", "==", email).limit(1).get();
 
     if (querySnap.empty) {
-      return NextResponse.json(
-        { error: "Invalid email or password" },
-        { status: 401 },
-      );
+      return NextResponse.json(APIResponse.error("Invalid email or password"), {
+        status: 401,
+      });
     }
 
     const userDoc = querySnap.docs[0];
@@ -31,10 +31,9 @@ export const POST = async (req: Request) => {
 
     const isValid = await bcrypt.compare(password, userData.passwordHash);
     if (!isValid) {
-      return NextResponse.json(
-        { error: "Invalid email or password" },
-        { status: 401 },
-      );
+      return NextResponse.json(APIResponse.error("Invalid email or password"), {
+        status: 401,
+      });
     }
 
     const session = await getSession();
@@ -42,19 +41,18 @@ export const POST = async (req: Request) => {
     session.email = userData.email;
     await session.save();
 
-    return NextResponse.json({
-      message: 'Login successful',
-      user: {
-        id: userDoc.id,
-        email: userData.email,
-        name: userData.name ?? null,
-      },
-    });
+    return NextResponse.json(
+      APIResponse.success("Login successful", {
+        user: {
+          id: userDoc.id,
+          email: userData.email,
+        },
+      }),
+    );
   } catch (err) {
     console.error(err);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 },
-    );
+    return NextResponse.json(APIResponse.error("Internal Server Error"), {
+      status: 500,
+    });
   }
 };

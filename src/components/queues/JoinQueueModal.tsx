@@ -1,5 +1,6 @@
 "use client";
 
+import APIResponse from "@/lib/classes/APIResponse";
 import { getBrandColor } from "@/lib/theme";
 import {
   Button,
@@ -26,13 +27,10 @@ interface FormData {
   notes: string;
 }
 
-// interface JoinQueueModalProps {
-//   onSubmit: (data: { rsn: string; availability: string; notes?: string }) => void;
-// }
-
 export default function JoinQueueModal() {
-  // { onSubmit }: JoinQueueModalProps
   const [opened, { open, close }] = useDisclosure(false);
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState<FormData>({
     twitchUsername: "",
     rsn: "",
@@ -47,13 +45,42 @@ export default function JoinQueueModal() {
   const { twitchUsername, rsn, expertKC, ready, redKeris, bgs, zcb, notes } =
     formData;
 
-  const handleSubmit = () => {
-    if (rsn.trim() || !ready) {
-      // Add Error logic
+  const handleUpdateFormData = (
+    key: keyof FormData,
+    value: string | number | boolean,
+  ) => {
+    setSuccess("");
+    setError("");
+
+    setFormData((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  const handleSubmit = async () => {
+    if (!rsn.trim() || !twitchUsername.trim() || !ready) {
+      setError("Please fill out the entire form");
       return;
     }
 
-    close();
+    const res = await fetch("/api/queues/toa/8-man-speed", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ data: formData }),
+    });
+
+    const data = (await res.json()) as APIResponse;
+
+    if (data.success) {
+      setSuccess("Added to queue");
+    }
+
+    setTimeout(() => {
+      close();
+      setSuccess("");
+      setError("");
+    }, 3000);
   };
 
   return (
@@ -67,7 +94,7 @@ export default function JoinQueueModal() {
           <TextInput
             required
             label="Twitch Username"
-            placeholder="Your Twitch Username"
+            placeholder="Twitch Name"
             value={twitchUsername}
             onChange={(e) =>
               setFormData((prev) => ({
@@ -80,11 +107,9 @@ export default function JoinQueueModal() {
           <TextInput
             required
             label="RuneScape Name"
-            placeholder="Your RSN"
+            placeholder="RSN"
             value={rsn}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, rsn: e.target.value }))
-            }
+            onChange={(e) => handleUpdateFormData("rsn", e.target.value)}
           />
 
           <NumberInput
@@ -93,9 +118,7 @@ export default function JoinQueueModal() {
             placeholder="0"
             value={expertKC}
             allowNegative={false}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, expertKC: Number(e) }))
-            }
+            onChange={(e) => handleUpdateFormData("expertKC", Number(e))}
           />
 
           <Text>Gear Check</Text>
@@ -103,28 +126,31 @@ export default function JoinQueueModal() {
           <Checkbox
             required
             label="Red Keris"
-            checked={redKeris}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, redKeris: e.target.checked }))
-            }
+            // checked={redKeris}
+            onChange={(e) => handleUpdateFormData("redKeris", e.target.value)}
           />
 
           <Checkbox
             required
             label="BGS"
-            checked={bgs}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, bgs: e.target.checked }))
-            }
+            // checked={bgs}
+            onChange={(e) => handleUpdateFormData("bgs", e.target.value)}
           />
 
           <Checkbox
             required
             label="ZCB"
-            checked={zcb}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, zcb: e.target.checked }))
-            }
+            // checked={zcb}
+            onChange={(e) => handleUpdateFormData("zcb", e.target.value)}
+          />
+
+          <Text>Ready Check</Text>
+
+          <Checkbox
+            required
+            label="I am Ready"
+            // checked={ready}
+            onChange={(e) => handleUpdateFormData("ready", e.target.value)}
           />
 
           <Textarea
@@ -136,13 +162,20 @@ export default function JoinQueueModal() {
             }
           />
 
-          <Group justify="flex-end" mt="md">
-            <Button variant="default" onClick={close}>
-              Cancel
-            </Button>
-            <Button color={getBrandColor(7)} onClick={handleSubmit}>
-              Submit
-            </Button>
+          <Group justify="space-between" wrap="nowrap" mt="md">
+            <Text c={success ? "green" : "red"}>{success || error}</Text>
+            <Group wrap='nowrap'>
+              <Button variant="default" onClick={close}>
+                Cancel
+              </Button>
+              <Button
+                color={getBrandColor(7)}
+                onClick={handleSubmit}
+                disabled={success.length > 0 || error.length > 0}
+              >
+                Submit
+              </Button>
+            </Group>
           </Group>
         </Stack>
       </Modal>

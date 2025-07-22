@@ -1,3 +1,4 @@
+import { DBUser } from "@/@types/firestore";
 import APIResponse from "@/lib/classes/APIResponse";
 import firestore from "@/lib/db/firestore";
 import { getSession } from "@/lib/session";
@@ -23,7 +24,7 @@ export async function GET() {
     });
   }
 
-  const userData = userSnap.data();
+  const userData = userSnap.data() as DBUser;
 
   return NextResponse.json(
     APIResponse.success("User check complete", {

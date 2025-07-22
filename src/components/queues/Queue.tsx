@@ -1,40 +1,49 @@
 "use client";
 
-import { Badge, Card, Stack, Table, Text, Title } from "@mantine/core";
-
-interface QueuePlayer {
-  position: number;
-  name: string;
-  status: "ready" | "pending" | "not ready";
-  notes?: string;
-}
+import { APIToaQueueEntrant } from "@/@types/api";
+import { DBToaQueueEntrant } from "@/@types/firestore";
+import { Badge, Card, Group, Stack, Table, Text, Title } from "@mantine/core";
+import { IconSquareCheck, IconSquareX } from "@tabler/icons-react";
 
 interface QueueProps {
-  players: QueuePlayer[];
-  onJoinQueue?: () => void;
+  players: APIToaQueueEntrant[];
 }
 
-const getStatusBadge = (status: QueuePlayer["status"]) => {
-  switch (status) {
-    case "ready":
-      return <Badge color="green">Ready</Badge>;
-    case "pending":
-      return <Badge color="yellow">Pending</Badge>;
-    case "not ready":
-      return <Badge color="red">Not Ready</Badge>;
-  }
-};
+const getStatusBadge = (status: boolean) =>
+  status ? (
+    <Group justify="flex-end">
+      <Badge color="green">Ready</Badge>
+    </Group>
+  ) : (
+    <Group justify="flex-end">
+      <Badge color="red">Not Ready</Badge>
+    </Group>
+  );
+
+const getGearIcon = (hasItem: boolean) =>
+  hasItem ? (
+    <Group justify="flex-end">
+      <IconSquareCheck color="green" />
+    </Group>
+  ) : (
+    <Group justify="flex-end">
+      <IconSquareX color="red" />
+    </Group>
+  );
 
 export default function Queue({
-  players,
-  // onJoinQueue
+  players
 }: QueueProps) {
   const rows = players.map((player) => (
-    <Table.Tr key={player.position}>
-      <Table.Td>{player.position}</Table.Td>
-      <Table.Td>{player.name}</Table.Td>
-      <Table.Td>{getStatusBadge(player.status)}</Table.Td>
-      <Table.Td>{player.notes || "-"}</Table.Td>
+    <Table.Tr key={player.id}>
+      <Table.Td>{player.rsn ?? "-"}</Table.Td>
+      <Table.Td>{player.expertKC ?? "-"}</Table.Td>
+      <Table.Td style={{ textAlign: "right" }}>
+        {getGearIcon(player.redKeris) ?? "-"}
+      </Table.Td>
+      <Table.Td>{getGearIcon(player.bgs) ?? "-"}</Table.Td>
+      <Table.Td>{getGearIcon(player.zcb) ?? "-"}</Table.Td>
+      <Table.Td>{getStatusBadge(player.ready)}</Table.Td>
     </Table.Tr>
   ));
 
@@ -53,10 +62,12 @@ export default function Queue({
         <Table highlightOnHover withTableBorder withColumnBorders>
           <Table.Thead>
             <Table.Tr>
-              <Table.Th>Position</Table.Th>
-              <Table.Th>Player Name</Table.Th>
+              <Table.Th>RSN</Table.Th>
+              <Table.Th>KC</Table.Th>
+              <Table.Th>Red Keris</Table.Th>
+              <Table.Th>BGS</Table.Th>
+              <Table.Th>ZCB</Table.Th>
               <Table.Th>Status</Table.Th>
-              <Table.Th>Notes</Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>{rows}</Table.Tbody>

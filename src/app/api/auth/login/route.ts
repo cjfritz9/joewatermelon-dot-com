@@ -1,3 +1,4 @@
+import { DBUser } from "@/@types/firestore";
 import APIResponse from "@/lib/classes/APIResponse";
 import firestore from "@/lib/db/firestore";
 import { getSession } from "@/lib/session";
@@ -27,7 +28,7 @@ export const POST = async (req: Request) => {
     }
 
     const userDoc = querySnap.docs[0];
-    const userData = userDoc.data();
+    const userData = userDoc.data() as DBUser;
 
     const isValid = await bcrypt.compare(password, userData.passwordHash);
     if (!isValid) {

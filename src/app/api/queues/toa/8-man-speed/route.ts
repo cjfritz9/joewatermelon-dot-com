@@ -1,3 +1,4 @@
+import { DBToaQueueEntrant } from "@/@types/firestore";
 import APIResponse from "@/lib/classes/APIResponse";
 import firestore from "@/lib/db/firestore";
 import { getToaQueueEntryIsValid } from "@/lib/db/validation";
@@ -15,12 +16,12 @@ export async function GET() {
     }
 
     const docs = queueSnapshot.docs.map((doc) => {
-      const data = doc.data();
+      const data = doc.data() as DBToaQueueEntrant;
 
       return {
-        id: doc.id,
-        createdAt: (data.createdAt as Timestamp)?.toDate() || null,
         ...data,
+        id: doc.id,
+        createdAt: data.createdAt?.toDate() || null,
       };
     });
 

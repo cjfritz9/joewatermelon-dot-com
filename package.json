@@ -1,10 +1,10 @@
 {
   "name": "joewatermelon-dot-com",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "private": true,
   "scripts": {
-    "docker:build": "docker build -t cjfritz9/joewatermelon-dot-com:latest .",
-    "docker:tag": "docker tag cjfritz9/joewatermelon-dot-com:latest cjfritz9/joewatermelon-dot-com:latest",
+    "docker:build": "docker build -t cjfritz9/joewatermelon-dot-com:${npm_package_version} .",
+    "docker:tag": "docker tag cjfritz9/joewatermelon-dot-com:${npm_package_version} cjfritz9/joewatermelon-dot-com:${npm_package_version}",
     "docker:login": "docker login",
     "docker:push": "docker push cjfritz9/joewatermelon-dot-com:latest",
     "docker:deploy": "npm run docker:build && npm run docker:tag && npm run docker:push",

@@ -42,7 +42,7 @@ export default function JoinQueueModal() {
     notes: "",
   });
 
-  const { twitchUsername, rsn, expertKC, ready, redKeris, bgs, zcb, notes } =
+  const { twitchUsername, rsn, expertKC, ready, notes } =
     formData;
 
   const handleUpdateFormData = (

@@ -1,7 +1,6 @@
 "use client";
 
 import { APIToaQueueEntrant } from "@/@types/api";
-import { DBToaQueueEntrant } from "@/@types/firestore";
 import { Badge, Card, Group, Stack, Table, Text, Title } from "@mantine/core";
 import { IconSquareCheck, IconSquareX } from "@tabler/icons-react";
 
@@ -31,9 +30,7 @@ const getGearIcon = (hasItem: boolean) =>
     </Group>
   );
 
-export default function Queue({
-  players
-}: QueueProps) {
+export default function Queue({ players }: QueueProps) {
   const rows = players.map((player) => (
     <Table.Tr key={player.id}>
       <Table.Td>{player.rsn ?? "-"}</Table.Td>

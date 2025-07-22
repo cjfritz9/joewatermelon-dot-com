@@ -35,7 +35,7 @@ export default function Queue({ players }: QueueProps) {
     <Table.Tr key={player.id}>
       <Table.Td>{player.rsn ?? "-"}</Table.Td>
       <Table.Td>{player.expertKC ?? "-"}</Table.Td>
-      <Table.Td style={{ textAlign: "right" }}>
+      <Table.Td>
         {getGearIcon(player.redKeris) ?? "-"}
       </Table.Td>
       <Table.Td>{getGearIcon(player.bgs) ?? "-"}</Table.Td>

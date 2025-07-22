@@ -125,19 +125,19 @@ export default function JoinQueueModal() {
           <Checkbox
             required
             label="Red Keris"
-            onChange={(e) => handleUpdateFormData("redKeris", e.target.value)}
+            onChange={(e) => handleUpdateFormData("redKeris", e.target.checked)}
           />
 
           <Checkbox
             required
             label="BGS"
-            onChange={(e) => handleUpdateFormData("bgs", e.target.value)}
+            onChange={(e) => handleUpdateFormData("bgs", e.target.checked)}
           />
 
           <Checkbox
             required
             label="ZCB"
-            onChange={(e) => handleUpdateFormData("zcb", e.target.value)}
+            onChange={(e) => handleUpdateFormData("zcb", e.target.checked)}
           />
 
           <Text>Ready Check</Text>
@@ -145,7 +145,7 @@ export default function JoinQueueModal() {
           <Checkbox
             required
             label="I am Ready"
-            onChange={(e) => handleUpdateFormData("ready", e.target.value)}
+            onChange={(e) => handleUpdateFormData("ready", e.target.checked)}
           />
 
           <Textarea

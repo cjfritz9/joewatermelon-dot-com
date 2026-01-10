@@ -6,6 +6,7 @@ import {
   mantineHtmlProps,
   MantineProvider,
 } from "@mantine/core";
+import { DatesProvider } from "@mantine/dates";
 import { Notifications } from "@mantine/notifications";
 import type { Metadata } from "next";
 import "./globals.css";
@@ -28,12 +29,14 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <MantineProvider defaultColorScheme="dark" theme={theme}>
-          <Notifications />
-          <UserProvider>
-            <HeaderNav />
-            {children}
-            <Footer />
-          </UserProvider>
+          <DatesProvider settings={{ firstDayOfWeek: 0 }}>
+            <Notifications />
+            <UserProvider>
+              <HeaderNav />
+              {children}
+              <Footer />
+            </UserProvider>
+          </DatesProvider>
         </MantineProvider>
       </body>
     </html>

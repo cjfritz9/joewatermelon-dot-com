@@ -1,5 +1,6 @@
 @import "tailwind-preset-mantine";
 @import "@mantine/notifications/styles.css";
+@import "@mantine/dates/styles.css";
 @import "./theme.css";
 
 .mantine-Notifications-root {

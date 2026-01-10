@@ -29,6 +29,35 @@ export const getToa8SpeedQueue = async (): Promise<APIToaQueueEntrant[]> => {
   }
 };
 
+export type EventStatus = "active" | "inactive";
+
+export interface EventSettings {
+  status: EventStatus;
+  nextRunTime: Date | null;
+}
+
+export const getToa8SpeedSettings = async (): Promise<EventSettings> => {
+  try {
+    const doc = await firestore
+      .collection("settings")
+      .doc("toa-8man-speed-settings")
+      .get();
+
+    if (!doc.exists) {
+      return { status: "inactive", nextRunTime: null };
+    }
+
+    const data = doc.data();
+    return {
+      status: data?.status || "inactive",
+      nextRunTime: data?.nextRunTime?.toDate() || null,
+    };
+  } catch (err) {
+    console.error(err);
+    return { status: "inactive", nextRunTime: null };
+  }
+};
+
 export const addToToa8SpeedQueue = async (entrantData: DBToaQueueEntrant) => {
   try {
     const isValid = getToaQueueEntryIsValid(entrantData);

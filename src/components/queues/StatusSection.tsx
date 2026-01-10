@@ -40,7 +40,7 @@ export default function StatusSection({
     if (status === "active") return "Runs are currently in progress!";
     if (status === "inactive" && nextRunTime)
       return getFormattedLocalTime(nextRunTime);
-    if (status === "inactive") return "Next run: TBD";
+    if (status === "inactive") return "Next run TBD";
   };
 
   return (

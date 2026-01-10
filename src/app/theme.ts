@@ -11,16 +11,16 @@ const theme = createTheme({
   },
   colors: {
     brand: [
-      "#fff0f2", // very light pink
-      "#ffe6eb", // pale pink
-      "#ffc2cb", // light watermelon flesh
-      "#fc6c85", // classic watermelon pink/red
-      "#f94f6e", // deeper pink/red
-      "#e63950", // dark watermelon flesh
-      "#c5283f", // even deeper red
-      "#86c232", // watermelon rind green
-      "#5eaa1f", // darker rind
-      "#3e7515", // deepest green
+      "#fff0f2",
+      "#ffe6eb",
+      "#ffc2cb",
+      "#fc6c85",
+      "#f94f6e",
+      "#e63950",
+      "#c5283f",
+      "#86c232",
+      "#5eaa1f",
+      "#3e7515",
     ],
 
     success: [

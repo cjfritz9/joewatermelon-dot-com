@@ -13,8 +13,8 @@ import "./globals.css";
 import theme from "./theme";
 
 export const metadata: Metadata = {
-  title: "Next App Mantine Tailwind Template",
-  description: "Next App Mantine Tailwind Template",
+  title: "JoeWatermelon.com",
+  description: "A personal website for JoeWatermelon.",
 };
 
 export default function RootLayout({

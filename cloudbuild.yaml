@@ -27,6 +27,10 @@ steps:
       - '--platform'
       - 'managed'
       - '--allow-unauthenticated'
+      - '--set-env-vars'
+      - 'NODE_ENV=production'
+      - '--set-secrets'
+      - 'SESSION_SECRET=SESSION_SECRET:latest'
 
 images:
   - 'gcr.io/$PROJECT_ID/joewatermelon-dot-com:$COMMIT_SHA'

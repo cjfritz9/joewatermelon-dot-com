@@ -2,11 +2,14 @@
 
 import { useUser } from "@/lib/context/UserContext";
 import { Button, Group, Loader } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const AuthButtonGroup: React.FC = () => {
   const { user, loading, refetchUser } = useUser();
+  const router = useRouter();
 
   const handleLogout = async () => {
     const res = await fetch("/api/auth/logout", {
@@ -20,6 +23,15 @@ const AuthButtonGroup: React.FC = () => {
     }
 
     await refetchUser();
+
+    notifications.show({
+      title: "Goodbye!",
+      message: "You have successfully logged out.",
+      position: "top-right",
+      color: "green",
+    });
+
+    router.push("/");
   };
 
   if (loading) {

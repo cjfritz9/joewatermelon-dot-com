@@ -1,2 +1,12 @@
 @import "tailwind-preset-mantine";
+@import "@mantine/notifications/styles.css";
 @import "./theme.css";
+
+.mantine-Notifications-root {
+  top: 70px;
+  pointer-events: none;
+}
+
+.mantine-Notifications-notification {
+  pointer-events: auto;
+}

@@ -13,11 +13,14 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { notifications } from "@mantine/notifications";
 import { IconBrandTwitch } from "@tabler/icons-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export function LoginForm() {
   const { refetchUser } = useUser();
+  const router = useRouter();
   const form = useForm({
     initialValues: {
       email: "",
@@ -52,6 +55,15 @@ export function LoginForm() {
     }
 
     await refetchUser();
+
+    notifications.show({
+      title: "Welcome back!",
+      message: "You have successfully logged in.",
+      position: "top-right",
+      color: "green",
+    });
+
+    router.push("/");
   };
 
   return (

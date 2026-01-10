@@ -30,8 +30,10 @@ import {
   IconGrid4x4,
   IconSword,
 } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import AuthButtonGroup from "../auth/AuthButtonGroup";
 
 const data = [
@@ -69,6 +71,7 @@ const data = [
 
 export function HeaderNav() {
   const { user, refetchUser } = useUser();
+  const router = useRouter();
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
@@ -77,6 +80,15 @@ export function HeaderNav() {
     await fetch("/api/auth/logout", { credentials: "include" });
     await refetchUser();
     closeDrawer();
+
+    notifications.show({
+      title: "Goodbye!",
+      message: "You have successfully logged out.",
+      position: "top-right",
+      color: "green",
+    });
+
+    router.push("/");
   };
 
   const links = data.map((item) => {

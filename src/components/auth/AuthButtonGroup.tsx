@@ -4,12 +4,13 @@ import { useUser } from "@/lib/context/UserContext";
 import { Button, Group, Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 
 const AuthButtonGroup: React.FC = () => {
   const { user, loading, refetchUser } = useUser();
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleLogout = async () => {
     const res = await fetch("/api/auth/logout", {
@@ -31,7 +32,7 @@ const AuthButtonGroup: React.FC = () => {
       color: "green",
     });
 
-    router.push("/");
+    router.refresh();
   };
 
   if (loading) {
@@ -50,7 +51,7 @@ const AuthButtonGroup: React.FC = () => {
 
   return (
     <Group visibleFrom="sm">
-      <Link href="/login">
+      <Link href={`/login?redirect=${encodeURIComponent(pathname)}`}>
         <Button variant="default">Log in</Button>
       </Link>
       <Link href="/register">

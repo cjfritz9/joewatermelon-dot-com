@@ -45,6 +45,16 @@ export async function POST(req: Request) {
       return APIResponse.error("Missing required fields");
     }
 
+    const existingEntry = await firestore
+      .collection("toa-queue")
+      .where("rsn", "==", data.rsn)
+      .limit(1)
+      .get();
+
+    if (!existingEntry.empty) {
+      return APIResponse.error("This RSN is already in the queue");
+    }
+
     const docRef = await firestore.collection("toa-queue").add({
       createdAt: Timestamp.now(),
       ...data,

@@ -33,7 +33,7 @@ import {
 import { notifications } from "@mantine/notifications";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import AuthButtonGroup from "../auth/AuthButtonGroup";
 
 const data = [
@@ -72,6 +72,7 @@ const data = [
 export function HeaderNav() {
   const { user, refetchUser } = useUser();
   const router = useRouter();
+  const pathname = usePathname();
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
@@ -88,7 +89,7 @@ export function HeaderNav() {
       color: "green",
     });
 
-    router.push("/");
+    router.refresh();
   };
 
   const links = data.map((item) => {
@@ -228,7 +229,7 @@ export function HeaderNav() {
               </Button>
             ) : (
               <>
-                <Button variant="default" component={Link} href="/login" fullWidth onClick={closeDrawer}>
+                <Button variant="default" component={Link} href={`/login?redirect=${encodeURIComponent(pathname)}`} fullWidth onClick={closeDrawer}>
                   Log in
                 </Button>
                 <Button color="brand.8" component={Link} href="/register" fullWidth onClick={closeDrawer}>

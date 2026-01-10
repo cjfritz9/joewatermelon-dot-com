@@ -1,19 +1,22 @@
 import theme from "@/app/theme";
-import JoinQueueModal from "@/components/queues/JoinQueueModal";
+import AdminQueue from "@/components/queues/AdminQueue";
 import PrepareForRun from "@/components/queues/PrepareForTheRun";
 import Queue from "@/components/queues/Queue";
 import StatusSection from "@/components/queues/StatusSection";
 import { getToa8SpeedQueue } from "@/lib/server/toa-queues";
+import { isAdmin } from "@/lib/session";
 import { Stack, Title } from "@mantine/core";
-import React from "react";
 
 export const revalidate = 0;
 
-const TOA8ManPage: React.FC = async () => {
-  const queue = await getToa8SpeedQueue();
+const TOA8ManPage = async () => {
+  const [queue, isUserAdmin] = await Promise.all([
+    getToa8SpeedQueue(),
+    isAdmin(),
+  ]);
 
   return (
-    <Stack align="center" mx="xl" my="xl">
+    <Stack align="center" px="xl" my="xl" mx="auto" style={{ width: "100%", maxWidth: 1200, overflow: "hidden" }}>
       <Title c={theme.colors!.warning![3]} mb="md">
         ToA 8-man GM Time
       </Title>
@@ -21,9 +24,8 @@ const TOA8ManPage: React.FC = async () => {
         status="inactive"
         nextRunTime={new Date("July 21, 2025 14:00:00")}
       />
+      {isUserAdmin ? <AdminQueue players={queue} /> : <Queue players={queue} />}
       <PrepareForRun />
-      <Queue players={queue} />
-      <JoinQueueModal />
     </Stack>
   );
 };

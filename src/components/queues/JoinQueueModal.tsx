@@ -14,6 +14,8 @@ import {
   Textarea,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface FormData {
@@ -29,8 +31,7 @@ interface FormData {
 
 export default function JoinQueueModal() {
   const [opened, { open, close }] = useDisclosure(false);
-  const [success, setSuccess] = useState("");
-  const [error, setError] = useState("");
+  const router = useRouter();
   const [formData, setFormData] = useState<FormData>({
     twitchUsername: "",
     rsn: "",
@@ -48,9 +49,6 @@ export default function JoinQueueModal() {
     key: keyof FormData,
     value: string | number | boolean,
   ) => {
-    setSuccess("");
-    setError("");
-
     setFormData((prev) => ({
       ...prev,
       [key]: value,
@@ -59,7 +57,12 @@ export default function JoinQueueModal() {
 
   const handleSubmit = async () => {
     if (!rsn.trim() || !twitchUsername.trim() || !ready) {
-      setError("Please fill out the entire form");
+      notifications.show({
+        title: "Missing fields",
+        message: "Please fill out all required fields and confirm you are ready.",
+        position: "top-right",
+        color: "red",
+      });
       return;
     }
 
@@ -72,20 +75,28 @@ export default function JoinQueueModal() {
     const data = (await res.json()) as APIResponse;
 
     if (data.success) {
-      setSuccess("Added to queue");
-    }
-
-    setTimeout(() => {
       close();
-      setSuccess("");
-      setError("");
-    }, 3000);
+      notifications.show({
+        title: "You're in!",
+        message: "You have been added to the queue.",
+        position: "top-right",
+        color: "green",
+      });
+      router.refresh();
+    } else {
+      notifications.show({
+        title: "Error",
+        message: data.message || "Failed to join queue.",
+        position: "top-right",
+        color: "red",
+      });
+    }
   };
 
   return (
     <>
       <Button color="yellow" onClick={open}>
-        Join the Queue
+        Join
       </Button>
 
       <Modal opened={opened} onClose={close} title="Join the Queue" centered>
@@ -157,20 +168,16 @@ export default function JoinQueueModal() {
             }
           />
 
-          <Group justify="space-between" wrap="nowrap" mt="md">
-            <Text c={success ? "green" : "red"}>{success || error}</Text>
-            <Group wrap="nowrap">
-              <Button variant="default" onClick={close}>
-                Cancel
-              </Button>
-              <Button
-                color={getBrandColor(7)}
-                onClick={handleSubmit}
-                disabled={success.length > 0 || error.length > 0}
-              >
-                Submit
-              </Button>
-            </Group>
+          <Group justify="flex-end" wrap="nowrap" mt="md">
+            <Button variant="default" onClick={close}>
+              Cancel
+            </Button>
+            <Button
+              color={getBrandColor(7)}
+              onClick={handleSubmit}
+            >
+              Submit
+            </Button>
           </Group>
         </Stack>
       </Modal>

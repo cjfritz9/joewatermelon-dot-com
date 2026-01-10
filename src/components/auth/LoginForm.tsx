@@ -16,11 +16,13 @@ import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { IconBrandTwitch } from "@tabler/icons-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export function LoginForm() {
   const { refetchUser } = useUser();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/";
   const form = useForm({
     initialValues: {
       email: "",
@@ -63,7 +65,7 @@ export function LoginForm() {
       color: "green",
     });
 
-    router.push("/");
+    router.push(redirectTo);
   };
 
   return (

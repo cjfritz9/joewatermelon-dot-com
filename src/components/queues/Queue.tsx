@@ -3,6 +3,7 @@
 import { APIToaQueueEntrant } from "@/@types/api";
 import { Badge, Card, Group, Stack, Table, Text, Title } from "@mantine/core";
 import { IconSquareCheck, IconSquareX } from "@tabler/icons-react";
+import JoinQueueModal from "./JoinQueueModal";
 
 interface QueueProps {
   players: APIToaQueueEntrant[];
@@ -32,7 +33,7 @@ const getGearIcon = (hasItem: boolean) =>
 
 export default function Queue({ players }: QueueProps) {
   const rows = players.map((player) => (
-    <Table.Tr key={player.id}>
+    <Table.Tr key={player.id} >
       <Table.Td>{player.rsn ?? "-"}</Table.Td>
       <Table.Td>{player.expertKC ?? "-"}</Table.Td>
       <Table.Td>
@@ -45,30 +46,38 @@ export default function Queue({ players }: QueueProps) {
   ));
 
   return (
-    <Stack gap="md">
-      <Title fw={700} order={3}>
-        Current Queue
-      </Title>
+    <Stack gap="md" w="100%" maw={800}>
+      <Group justify="space-between" align="center">
+        <Title fw={700} order={3}>
+          Current Queue
+        </Title>
+        <JoinQueueModal />
+      </Group>
 
       <Text size="sm" c="dimmed">
         Players waiting for the next run. Make sure your gear and skills meet
         the requirements!
       </Text>
 
-      <Card withBorder shadow="sm">
-        <Table highlightOnHover withTableBorder withColumnBorders>
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th>RSN</Table.Th>
-              <Table.Th>KC</Table.Th>
-              <Table.Th>Red Keris</Table.Th>
-              <Table.Th>BGS</Table.Th>
-              <Table.Th>ZCB</Table.Th>
-              <Table.Th>Status</Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>{rows}</Table.Tbody>
-        </Table>
+      <Text size="xs" c="dimmed" hiddenFrom="sm">
+        Swipe to see more →
+      </Text>
+      <Card withBorder shadow="sm" p={0}>
+        <Table.ScrollContainer minWidth={500}>
+          <Table highlightOnHover withTableBorder withColumnBorders>
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th>RSN</Table.Th>
+                <Table.Th>KC</Table.Th>
+                <Table.Th>Keris</Table.Th>
+                <Table.Th>BGS</Table.Th>
+                <Table.Th>ZCB</Table.Th>
+                <Table.Th>Status</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>{rows}</Table.Tbody>
+          </Table>
+        </Table.ScrollContainer>
       </Card>
     </Stack>
   );

@@ -3,16 +3,13 @@ import APIResponse from "@/lib/classes/APIResponse";
 import firestore from "@/lib/db/firestore";
 import { getToaQueueEntryIsValid } from "@/lib/db/validation";
 import { Timestamp } from "@google-cloud/firestore";
-import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
     const queueSnapshot = await firestore.collection("toa-queue").get();
 
     if (queueSnapshot.empty) {
-      return NextResponse.json(
-        APIResponse.success("No documents found within queue, defaulting", []),
-      );
+      return APIResponse.success("No documents found within queue, defaulting", []);
     }
 
     const docs = queueSnapshot.docs.map((doc) => {
@@ -25,12 +22,10 @@ export async function GET() {
       };
     });
 
-    return NextResponse.json(APIResponse.success("Queue found", docs));
+    return APIResponse.success("Queue found", docs);
   } catch (err) {
     console.error(err);
-    return NextResponse.json(APIResponse.error("Internal Server Error"), {
-      status: 500,
-    });
+    return APIResponse.error("Internal Server Error", 500);
   }
 }
 
@@ -39,9 +34,7 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     if (!body || typeof body !== "object") {
-      return NextResponse.json(APIResponse.error("Invalid request body"), {
-        status: 400,
-      });
+      return APIResponse.error("Invalid request body");
     }
 
     const { data } = body;
@@ -49,9 +42,7 @@ export async function POST(req: Request) {
     const isValid = getToaQueueEntryIsValid(data);
 
     if (!isValid) {
-      return NextResponse.json(APIResponse.error("Missing required fields"), {
-        status: 400,
-      });
+      return APIResponse.error("Missing required fields");
     }
 
     const docRef = await firestore.collection("toa-queue").add({
@@ -59,14 +50,9 @@ export async function POST(req: Request) {
       ...data,
     });
 
-    return NextResponse.json(
-      APIResponse.success("Document added to queue", { id: docRef.id }),
-      { status: 201 },
-    );
+    return APIResponse.success("Document added to queue", { id: docRef.id }, 201);
   } catch (err) {
     console.error(err);
-    return NextResponse.json(APIResponse.error("Internal Server Error"), {
-      status: 500,
-    });
+    return APIResponse.error("Internal Server Error", 500);
   }
 }

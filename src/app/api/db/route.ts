@@ -1,6 +1,5 @@
 import APIResponse from "@/lib/classes/APIResponse";
 import firestore from "@/lib/db/firestore";
-import { NextResponse } from "next/server";
 
 export const GET = async () => {
   const doc = firestore.doc("test/firestore-test");
@@ -11,7 +10,5 @@ export const GET = async () => {
 
   await doc.delete();
 
-  return NextResponse.json(
-    APIResponse.success("Firestore operations completed"),
-  );
+  return APIResponse.success("Firestore operations completed");
 };

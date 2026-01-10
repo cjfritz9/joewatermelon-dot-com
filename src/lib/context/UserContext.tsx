@@ -6,7 +6,7 @@ import useSWR, { mutate as globalMutate } from "swr";
 type User = {
   id: string;
   email: string;
-  name?: string | null;
+  isAdmin: boolean;
 };
 
 type UserContextType = {
@@ -16,29 +16,40 @@ type UserContextType = {
   refetchUser: () => Promise<void>;
 };
 
-const UserContext = createContext<UserContextType | undefined>(undefined);
+export const UserContext = createContext<UserContextType | undefined>(
+  undefined,
+);
 
-const fetcher = async (url: string) => {
-  const res = await fetch(url, { credentials: "include" });
-  if (!res.ok) {
-    if (res.status === 401) return { user: null };
-    throw new Error("Failed to fetch");
-  }
-  return res.json();
+type APIResponse = {
+  success: boolean;
+  message: string;
+  data: { user: User } | null;
 };
 
+const fetcher = async (url: string): Promise<User | null> => {
+  const res = await fetch(url, { credentials: "include" });
+  if (!res.ok) {
+    if (res.status === 401) return null;
+    throw new Error("Failed to fetch");
+  }
+  const json: APIResponse = await res.json();
+  return json.data?.user ?? null;
+};
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const { data, error, isLoading } = useSWR<{ user: User }>("/api/auth/me", fetcher);
+  const { data, error, isLoading } = useSWR<User | null>(
+    "/api/auth/me",
+    fetcher,
+  );
 
   const refetchUser = async () => {
-    await globalMutate("/auth/api/me");
+    await globalMutate("/api/auth/me");
   };
 
   return (
     <UserContext.Provider
       value={{
-        user: data?.user ?? null,
+        user: data ?? null,
         loading: isLoading,
         error: error?.message ?? null,
         refetchUser,

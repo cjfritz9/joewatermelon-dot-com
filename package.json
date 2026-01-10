@@ -8,7 +8,7 @@
     "docker:login": "docker login",
     "docker:push": "docker push cjfritz9/joewatermelon-dot-com:latest",
     "docker:deploy": "npm run docker:build && npm run docker:tag && npm run docker:push",
-    "dev": "next dev",
+    "dev": "rm -rf ./next && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

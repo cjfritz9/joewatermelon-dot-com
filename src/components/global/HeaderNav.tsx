@@ -1,6 +1,7 @@
 "use client";
 
 import logo from "@/assets/melon-logo.png";
+import { useUser } from "@/lib/context/UserContext";
 import { getBrandColor } from "@/lib/theme";
 import classes from "@/styles/HeaderNav.module.css";
 import {
@@ -67,9 +68,16 @@ const data = [
 ];
 
 export function HeaderNav() {
+  const { user, refetchUser } = useUser();
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
+
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { credentials: "include" });
+    await refetchUser();
+    closeDrawer();
+  };
 
   const links = data.map((item) => {
     const isExternal = item.link.startsWith("http");
@@ -202,12 +210,20 @@ export function HeaderNav() {
           <Divider my="sm" />
 
           <Group justify="center" grow pb="xl" px="md">
-            <Link href="/login">
-              <Button variant="default">Log in</Button>
-            </Link>
-            <Link href="/register">
-              <Button color="brand.8">Sign up</Button>
-            </Link>
+            {user ? (
+              <Button color="brand.8" onClick={handleLogout} fullWidth>
+                Log out
+              </Button>
+            ) : (
+              <>
+                <Button variant="default" component={Link} href="/login" fullWidth onClick={closeDrawer}>
+                  Log in
+                </Button>
+                <Button color="brand.8" component={Link} href="/register" fullWidth onClick={closeDrawer}>
+                  Sign up
+                </Button>
+              </>
+            )}
           </Group>
         </ScrollArea>
       </Drawer>

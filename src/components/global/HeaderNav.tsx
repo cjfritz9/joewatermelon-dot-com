@@ -5,7 +5,6 @@ import { useUser } from "@/lib/context/UserContext";
 import { getBrandColor } from "@/lib/theme";
 import classes from "@/styles/HeaderNav.module.css";
 import {
-  Anchor,
   Box,
   Burger,
   Button,
@@ -126,9 +125,12 @@ export function HeaderNav() {
     <Box pb={48}>
       <header className={classes.header}>
         <Group justify="space-between" h="100%" className="container">
-          <Link href="/" className={classes.link}>
-            <Image src={logo} alt="logo" height={36} />
-          </Link>
+          <Box style={{ flex: 1 }}>
+            <Link href="/" className={classes.link}>
+              <Image src={logo} alt="logo" height={36} />
+            </Link>
+          </Box>
+
           <Group h="100%" gap={0} visibleFrom="sm">
             <Link href="/" className={classes.link}>
               Home
@@ -141,23 +143,18 @@ export function HeaderNav() {
               withinPortal
             >
               <HoverCard.Target>
-                <Link href="/features" className={classes.link}>
+                <UnstyledButton className={classes.link}>
                   <Center inline>
                     <Box component="span" mr={5}>
                       Features
                     </Box>
                     <IconChevronDown size={16} color={getBrandColor(4)} />
                   </Center>
-                </Link>
+                </UnstyledButton>
               </HoverCard.Target>
 
               <HoverCard.Dropdown style={{ overflow: "hidden" }}>
-                <Group justify="space-between" px="md">
-                  <Text fw={500}>Features</Text>
-                  <Anchor href="#" fz="xs">
-                    View all
-                  </Anchor>
-                </Group>
+                <Text fw={500} px="md">Features</Text>
 
                 <Divider my="sm" />
 
@@ -171,7 +168,9 @@ export function HeaderNav() {
             </Link>
           </Group>
 
-          <AuthButtonGroup />
+          <Group style={{ flex: 1 }} justify="flex-end" visibleFrom="sm">
+            <AuthButtonGroup />
+          </Group>
 
           <Burger
             opened={drawerOpened}

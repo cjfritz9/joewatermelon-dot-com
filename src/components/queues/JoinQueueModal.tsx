@@ -56,7 +56,7 @@ export default function JoinQueueModal({ config }: JoinQueueModalProps) {
       grouped[section].push(col);
     }
     return grouped;
-  }, [config.columns]);
+  }, [config]);
 
   useEffect(() => {
     if (opened && user) {

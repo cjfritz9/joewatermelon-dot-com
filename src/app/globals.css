@@ -20,3 +20,10 @@
   padding-left: var(--mantine-spacing-md);
   padding-right: var(--mantine-spacing-md);
 }
+
+@media (max-width: 576px) {
+  .container {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+}

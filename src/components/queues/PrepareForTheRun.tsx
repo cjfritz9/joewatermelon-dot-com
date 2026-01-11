@@ -15,25 +15,25 @@ const infoLinks: InfoLink[] = [
     title: "Requirements",
     description: "Requirements to join the teams.",
     icon: <IconChecklist size={32} color={theme.colors.success[6]} />,
-    href: "toa/gm-time-8/info?section=gear",
+    href: "/toa/gm-time-8/info?section=gear",
   },
   {
     title: "Setup & Inventory",
     description: "Optimal combat styles and inventory.",
     icon: <IconFlame size={32} color={theme.colors.error[5]} />,
-    href: "toa/gm-time-8/info?section=setup",
+    href: "/toa/gm-time-8/info?section=setup",
   },
   {
     title: "Strategy & Methods",
     description: "Best combat and prayer strategy.",
     icon: <IconSwords size={32} color={theme.colors.warning[4]} />,
-    href: "toa/gm-time-8/info?section=strategy",
+    href: "/toa/gm-time-8/info?section=strategy",
   },
 ];
 
 export default function PrepareForRun() {
   return (
-    <Stack gap="md" align="center" mb="xl">
+    <Stack gap="md" align={{ base: "stretch", sm: "center" }} mb="xl" w="100%">
       <Title fw={700} order={3}>
         Prepare for the Run
       </Title>
@@ -43,17 +43,17 @@ export default function PrepareForRun() {
         Amascut 8-man speedrun.
       </Title>
 
-      <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="md" mt="sm">
+      <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="md" mt="sm" w="100%">
         {infoLinks.map((link) => (
-          <Link key={link.title} href={link.href}>
+          <Link key={link.title} href={link.href} style={{ width: "100%" }}>
             <Card
               shadow="md"
               radius="md"
               p="md"
               withBorder
               style={{ height: "100%" }}
-              maw="424px"
-              miw="224px"
+              maw={{ base: "100%", sm: 424 }}
+              miw={{ base: "auto", sm: 224 }}
             >
               <Group gap="md" align="center">
                 {link.icon}

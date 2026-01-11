@@ -148,12 +148,13 @@ export default function AdminStatusSection({
         {status === "inactive" && (
           <>
             {isWithinSixHours(nextRunTime) && (
-              <Text size="xs" c="yellow">
+              <Text key="warning" size="xs" c="yellow">
                 Within 6 hours of run time - consider setting to Active
               </Text>
             )}
 
             <DateTimePicker
+              key="datetime-picker"
               label="Next Run Time"
               value={nextRunTime}
               onChange={handleDateChange}
@@ -163,7 +164,7 @@ export default function AdminStatusSection({
             />
 
             {isValidDate(nextRunTime) && (
-              <Text size="sm" c={getBrandColor(7)}>
+              <Text key="formatted-time" size="sm" c={getBrandColor(7)}>
                 {getFormattedLocalTime(nextRunTime!)}
               </Text>
             )}

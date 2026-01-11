@@ -46,7 +46,7 @@ const ToaSpeedQueuePage = async () => {
         <Queue
           players={queue as unknown as Record<string, unknown>[]}
           config={toaQueueConfig}
-          joinModal={<JoinQueueModal config={toaQueueConfig} />}
+          joinModal={<JoinQueueModal key="join-modal" config={toaQueueConfig} />}
         />
       )}
       <PrepareForRun

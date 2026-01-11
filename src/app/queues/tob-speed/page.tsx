@@ -46,7 +46,7 @@ export default async function TobSpeedQueuePage() {
         <Queue
           players={queue as unknown as Record<string, unknown>[]}
           config={tobQueueConfig}
-          joinModal={<JoinQueueModal config={tobQueueConfig} />}
+          joinModal={<JoinQueueModal key="join-modal" config={tobQueueConfig} />}
         />
       )}
       <PrepareForRun

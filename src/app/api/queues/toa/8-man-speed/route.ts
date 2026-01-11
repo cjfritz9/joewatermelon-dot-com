@@ -18,7 +18,8 @@ export async function GET() {
       return {
         ...data,
         id: doc.id,
-        createdAt: data.createdAt?.toDate() || null,
+        createdAt: data.createdAt?.toDate().toISOString() || null,
+        notifiedAt: data.notifiedAt?.toDate().toISOString() || null,
       };
     });
 

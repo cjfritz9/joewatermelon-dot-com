@@ -18,7 +18,8 @@ export const getToa8SpeedQueue = async (): Promise<APIToaQueueEntrant[]> => {
       return {
         ...data,
         id: doc.id,
-        createdAt: data.createdAt?.toDate().toString() || null,
+        createdAt: data.createdAt?.toDate().toISOString() || null,
+        notifiedAt: data.notifiedAt?.toDate().toISOString() || null,
       };
     }) as APIToaQueueEntrant[];
 

@@ -1,13 +1,21 @@
 "use client";
 
 import { APIToaQueueEntrant } from "@/@types/api";
+import APIResponse from "@/lib/classes/APIResponse";
 import { Badge, Card, Group, Stack, Table, Text, Title, Tooltip } from "@mantine/core";
 import { IconSquareCheck, IconSquareX } from "@tabler/icons-react";
+import useSWR from "swr";
 import JoinQueueModal from "./JoinQueueModal";
+import QueueNotificationListener from "./QueueNotificationListener";
 
 interface QueueProps {
   players: APIToaQueueEntrant[];
 }
+
+const fetcher = (url: string) =>
+  fetch(url)
+    .then((res) => res.json())
+    .then((data: APIResponse<APIToaQueueEntrant[]>) => data.data ?? []);
 
 const getStatusBadge = (status: boolean) =>
   status ? (
@@ -31,7 +39,12 @@ const getGearIcon = (hasItem: boolean) =>
     </Group>
   );
 
-export default function Queue({ players }: QueueProps) {
+export default function Queue({ players: initialPlayers }: QueueProps) {
+  const { data: players } = useSWR("/api/queues/toa/8-man-speed", fetcher, {
+    fallbackData: initialPlayers,
+    refreshInterval: 10000, // Poll every 10 seconds
+  });
+
   const rows = players.map((player) => (
     <Table.Tr key={player.id}>
       <Table.Td>{player.rsn ?? "-"}</Table.Td>
@@ -46,6 +59,7 @@ export default function Queue({ players }: QueueProps) {
 
   return (
     <Stack gap="md" w="100%" maw={1040} mb="xl">
+      <QueueNotificationListener players={players} />
       <Group justify="space-between" align="center">
         <Title fw={700} order={3}>
           Current Queue

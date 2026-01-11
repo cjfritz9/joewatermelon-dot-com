@@ -29,6 +29,7 @@ interface FormData {
   zcb: boolean;
   eye: boolean;
   notes: string;
+  notificationsEnabled: boolean;
 }
 
 export default function JoinQueueModal() {
@@ -45,6 +46,7 @@ export default function JoinQueueModal() {
     zcb: false,
     eye: false,
     notes: "",
+    notificationsEnabled: false,
   });
 
   const [submitting, setSubmitting] = useState(false);
@@ -72,6 +74,40 @@ export default function JoinQueueModal() {
     }));
   };
 
+  const handleNotificationToggle = async (checked: boolean) => {
+    if (checked) {
+      if (!("Notification" in window)) {
+        notifications.show({
+          title: "Not Supported",
+          message: "Your browser does not support notifications.",
+          position: "top-right",
+          color: "red",
+        });
+        return;
+      }
+
+      const permission = await Notification.requestPermission();
+      if (permission === "granted") {
+        handleUpdateFormData("notificationsEnabled", true);
+        notifications.show({
+          title: "Notifications Enabled",
+          message: "You will be notified when it's your turn.",
+          position: "top-right",
+          color: "green",
+        });
+      } else {
+        notifications.show({
+          title: "Permission Denied",
+          message: "Please enable notifications in your browser settings.",
+          position: "top-right",
+          color: "yellow",
+        });
+      }
+    } else {
+      handleUpdateFormData("notificationsEnabled", false);
+    }
+  };
+
   const handleSubmit = async () => {
     if (!rsn.trim() || !twitchUsername.trim() || !ready) {
       notifications.show({
@@ -91,9 +127,11 @@ export default function JoinQueueModal() {
         body: JSON.stringify({ data: formData }),
       });
 
-      const data = (await res.json()) as APIResponse;
+      const data = (await res.json()) as APIResponse<{ id: string }>;
 
-      if (data.success) {
+      if (data.success && data.data?.id) {
+        // Store the queue entry ID for notification polling
+        localStorage.setItem("toaQueueEntryId", data.data.id);
         close();
         notifications.show({
           title: "You're in!",
@@ -102,7 +140,7 @@ export default function JoinQueueModal() {
           color: "green",
         });
         router.refresh();
-      } else {
+      } else if (!data.success) {
         notifications.show({
           title: "Error",
           message: data.message || "Failed to join queue.",
@@ -194,6 +232,13 @@ export default function JoinQueueModal() {
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, notes: e.target.value }))
             }
+          />
+
+          <Checkbox
+            label="Notify me when it's my turn"
+            description="Receive a browser notification when an admin marks you as ready"
+            checked={formData.notificationsEnabled}
+            onChange={(e) => handleNotificationToggle(e.target.checked)}
           />
 
           <Group justify="flex-end" wrap="nowrap" mt="md">

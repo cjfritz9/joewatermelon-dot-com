@@ -5,7 +5,8 @@ export interface APIUser extends DBUser {
   createdAt: string;
 }
 
-export interface APIToaQueueEntrant extends DBToaQueueEntrant {
+export interface APIToaQueueEntrant extends Omit<DBToaQueueEntrant, 'createdAt' | 'notifiedAt'> {
   id: string;
   createdAt: string;
+  notifiedAt?: string;
 }

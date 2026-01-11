@@ -32,4 +32,6 @@ export interface DBToaQueueEntrant {
   zcb: boolean;
   eye: boolean;
   notes: string;
+  notificationsEnabled: boolean;
+  notifiedAt?: Timestamp;
 }

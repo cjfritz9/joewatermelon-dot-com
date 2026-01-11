@@ -12,7 +12,7 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { IconSquareCheck, IconSquareX, IconTrash } from "@tabler/icons-react";
+import { IconBell, IconSquareCheck, IconSquareX, IconTrash } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 
 interface AdminQueueProps {
@@ -56,6 +56,29 @@ export default function AdminQueue({ players }: AdminQueueProps) {
     }
   };
 
+  const handleNotify = async (id: string, rsn: string) => {
+    const res = await fetch(`/api/queues/toa/8-man-speed/${id}/notify`, {
+      method: "POST",
+      credentials: "include",
+    });
+
+    if (res.ok) {
+      notifications.show({
+        title: "Notification Sent",
+        message: `${rsn} has been notified.`,
+        position: "top-right",
+        color: "green",
+      });
+    } else {
+      notifications.show({
+        title: "Error",
+        message: "Failed to send notification.",
+        position: "top-right",
+        color: "red",
+      });
+    }
+  };
+
   const rows = players.map((player) => (
     <Table.Tr key={player.id}>
       <Table.Td>{player.rsn ?? "-"}</Table.Td>
@@ -72,6 +95,25 @@ export default function AdminQueue({ players }: AdminQueueProps) {
             {player.notes || "-"}
           </Text>
         </Tooltip>
+      </Table.Td>
+      <Table.Td>
+        {player.notificationsEnabled ? (
+          <Tooltip label="Send notification">
+            <ActionIcon
+              color="yellow"
+              variant="subtle"
+              onClick={() => handleNotify(player.id, player.rsn)}
+            >
+              <IconBell size={18} />
+            </ActionIcon>
+          </Tooltip>
+        ) : (
+          <Tooltip label="Notifications not enabled">
+            <ActionIcon color="gray" variant="subtle" disabled>
+              <IconBell size={18} />
+            </ActionIcon>
+          </Tooltip>
+        )}
       </Table.Td>
       <Table.Td>
         <ActionIcon
@@ -128,6 +170,7 @@ export default function AdminQueue({ players }: AdminQueueProps) {
                 </Table.Th>
                 <Table.Th>Status</Table.Th>
                 <Table.Th>Notes</Table.Th>
+                <Table.Th>Notify</Table.Th>
                 <Table.Th></Table.Th>
               </Table.Tr>
             </Table.Thead>

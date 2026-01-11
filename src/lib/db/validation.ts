@@ -14,6 +14,7 @@ export const getToaQueueEntryIsValid = (body: any) => {
     "zcb",
     "eye",
     "notes",
+    "notificationsEnabled",
   ];
 
   return requiredFields.every((field) => field in body);

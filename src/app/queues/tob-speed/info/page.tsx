@@ -1,6 +1,5 @@
 "use client";
 
-import theme from "@/app/theme";
 import PrepareForRun from "@/components/queues/PrepareForTheRun";
 import {
   Alert,
@@ -42,13 +41,18 @@ function InfoPageContent() {
 
   return (
     <Stack my="xl" maw={{ base: "100%", sm: 1040 }} mx="auto">
-      <Title c={theme.colors.warning[3]} ta="center">
-        ToA 8-man GM Time - Info
-      </Title>
+      <Stack align="center" gap={4}>
+        <Title c="#DC143C" ta="center">
+          ToB Speed - Info
+        </Title>
+        <Text c="dimmed" size="sm">
+          4 & 5 Man Grandmaster Times
+        </Text>
+      </Stack>
 
       <Alert
         icon={<IconInfoCircle size={20} />}
-        color="green"
+        color="red"
         title="Everyone is Welcome!"
         radius="md"
       >
@@ -59,18 +63,18 @@ function InfoPageContent() {
       </Alert>
 
       <PrepareForRun
-        basePath="/queues/toa-speed"
-        description="Learn the gear, setup, and strategies required to join the Tombs of Amascut 8-man speedrun."
+        basePath="/queues/tob-speed"
+        description="Learn the gear, setup, and strategies required to join the Theatre of Blood 4 & 5 man speedruns."
         colors={{
-          requirements: theme.colors.success[6],
-          setup: theme.colors.error[5],
-          strategy: theme.colors.warning[4],
+          requirements: "#DC143C",
+          setup: "#8B0000",
+          strategy: "#6B2D7B",
         }}
       />
 
       <Card id="gear" withBorder radius="md" p="lg">
         <Group gap="xs" mb="md">
-          <IconChecklist size={24} color={theme.colors.success[6]} />
+          <IconChecklist size={24} color="#DC143C" />
           <Title order={3}>Requirements & Gear</Title>
         </Group>
 
@@ -81,31 +85,31 @@ function InfoPageContent() {
         <Stack gap="md">
           <Card withBorder radius="sm" p="md" bg="dark.7">
             <Group justify="space-between" mb="xs">
-              <Text fw={600}>Keris Partisan of Corruption</Text>
-              <Badge color="yellow" visibleFrom="sm">Recommended</Badge>
+              <Text fw={600}>Scythe of Vitur</Text>
+              <Badge color="red" visibleFrom="sm">Recommended</Badge>
             </Group>
             <Text size="sm" c="dimmed">
-              Two red keris are required for the run.
-            </Text>
-          </Card>
-
-          <Card withBorder radius="sm" p="md" bg="dark.7">
-            <Group justify="space-between" mb="xs">
-              <Text fw={600}>Bandos Godsword</Text>
-              <Badge color="yellow" visibleFrom="sm">Recommended</Badge>
-            </Group>
-            <Text size="sm" c="dimmed">
-              Required for the BGS role, unless the team is running the magic strategy.
+              Best-in-slot melee weapon for ToB. Essential for fast Nylocas and Verzik phases.
             </Text>
           </Card>
 
           <Card withBorder radius="sm" p="md" bg="dark.7">
             <Group justify="space-between" mb="xs">
               <Text fw={600}>Zaryte Crossbow</Text>
-              <Badge color="yellow" visibleFrom="sm">Recommended</Badge>
+              <Badge color="red" visibleFrom="sm">Recommended</Badge>
             </Group>
             <Text size="sm" c="dimmed">
-              Best-in-slot spec weapon. If you don&apos;t have this you&apos;ll likely be placed on a keris/defence reduction role. Bring your best ToA spec weapon.
+              Best spec weapon for Maiden and Verzik P2. Bring your best ranged spec weapon if you don&apos;t have ZCB.
+            </Text>
+          </Card>
+
+          <Card withBorder radius="sm" p="md" bg="dark.7">
+            <Group justify="space-between" mb="xs">
+              <Text fw={600}>Dragon Claws</Text>
+              <Badge color="red" visibleFrom="sm">Recommended</Badge>
+            </Group>
+            <Text size="sm" c="dimmed">
+              Essential for Verzik P3 specs. One of the most important items for speed runs.
             </Text>
           </Card>
         </Stack>
@@ -113,29 +117,29 @@ function InfoPageContent() {
         <Divider my="md" />
 
         <Group gap="xs" mb="md">
-          <IconStar size={24} color={theme.colors.warning[4]} />
+          <IconStar size={24} color="#6B2D7B" />
           <Title order={4}>Other Requirements</Title>
         </Group>
 
         <Stack gap="sm">
           <Group gap="sm" align="flex-start">
-            <ThemeIcon color="green" size={20} radius="xl">
+            <ThemeIcon color="red" size={20} radius="xl">
               <IconCheck size={14} />
             </ThemeIcon>
             <Text style={{ flex: 1 }}>
-              <strong>Expert Mode KC:</strong> You&apos;ll need to be comfy with the invocations we run, especially insanity.
+              <strong>ToB KC:</strong> You&apos;ll need to be comfortable with ToB mechanics and callouts.
             </Text>
           </Group>
           <Group gap="sm" align="flex-start">
-            <ThemeIcon color="green" size={20} radius="xl">
+            <ThemeIcon color="red" size={20} radius="xl">
               <IconCheck size={14} />
             </ThemeIcon>
             <Text style={{ flex: 1 }}>
-              <strong>Discord:</strong> Being in voice chat helps coordinate all the specs and venges. This is a hard requirement.
+              <strong>Discord:</strong> Being in voice chat is essential for coordinating specs and callouts.
             </Text>
           </Group>
           <Group gap="sm" align="flex-start">
-            <ThemeIcon color="green" size={20} radius="xl">
+            <ThemeIcon color="red" size={20} radius="xl">
               <IconCheck size={14} />
             </ThemeIcon>
             <Text style={{ flex: 1 }}>
@@ -147,38 +151,24 @@ function InfoPageContent() {
 
       <Card id="setup" withBorder radius="md" p="lg">
         <Group gap="xs" mb="md">
-          <IconFlame size={24} color={theme.colors.error[5]} />
+          <IconFlame size={24} color="#8B0000" />
           <Title order={3}>Setup & Inventory</Title>
         </Group>
 
         <Text c="dimmed" size="sm" mb="md">
-          Optimal gear setups and inventory for the 8-man GM Time run.
+          Optimal gear setups and inventory for 4 & 5 man GM Time runs.
         </Text>
 
         <Stack gap="md">
           <Card withBorder radius="sm" p="md" bg="dark.7">
-            <Text fw={600} mb="xs">Red Keris Role</Text>
+            <Text fw={600} mb="xs">4-Man Setup</Text>
             <Text size="sm" c="dimmed">
               Coming soon. Check Discord for current recommendations.
             </Text>
           </Card>
 
           <Card withBorder radius="sm" p="md" bg="dark.7">
-            <Text fw={600} mb="xs">BGS Role</Text>
-            <Text size="sm" c="dimmed">
-              Coming soon. Check Discord for current recommendations.
-            </Text>
-          </Card>
-
-          <Card withBorder radius="sm" p="md" bg="dark.7">
-            <Text fw={600} mb="xs">Ayak Role</Text>
-            <Text size="sm" c="dimmed">
-              Coming soon. Check Discord for current recommendations.
-            </Text>
-          </Card>
-
-          <Card withBorder radius="sm" p="md" bg="dark.7">
-            <Text fw={600} mb="xs">DPS Role</Text>
+            <Text fw={600} mb="xs">5-Man Setup</Text>
             <Text size="sm" c="dimmed">
               Coming soon. Check Discord for current recommendations.
             </Text>
@@ -188,7 +178,7 @@ function InfoPageContent() {
 
       <Card id="strategy" withBorder radius="md" p="lg">
         <Group gap="xs" mb="md">
-          <IconSwords size={24} color={theme.colors.warning[4]} />
+          <IconSwords size={24} color="#6B2D7B" />
           <Title order={3}>Strategy & Methods</Title>
         </Group>
 
@@ -199,8 +189,8 @@ function InfoPageContent() {
         <Stack gap="md">
           <Card withBorder radius="sm" p="md" bg="dark.7">
             <Group gap="xs" mb="xs">
-              <IconFlame size={18} color={theme.colors.error[5]} />
-              <Text fw={600}>Zebak</Text>
+              <IconFlame size={18} color="#DC143C" />
+              <Text fw={600}>The Maiden of Sugadinti</Text>
             </Group>
             <Text size="sm" c="dimmed">
               Strategy details coming soon.
@@ -209,8 +199,8 @@ function InfoPageContent() {
 
           <Card withBorder radius="sm" p="md" bg="dark.7">
             <Group gap="xs" mb="xs">
-              <IconFlame size={18} color={theme.colors.error[5]} />
-              <Text fw={600}>Kephri</Text>
+              <IconFlame size={18} color="#DC143C" />
+              <Text fw={600}>Pestilent Bloat</Text>
             </Group>
             <Text size="sm" c="dimmed">
               Strategy details coming soon.
@@ -219,8 +209,8 @@ function InfoPageContent() {
 
           <Card withBorder radius="sm" p="md" bg="dark.7">
             <Group gap="xs" mb="xs">
-              <IconFlame size={18} color={theme.colors.error[5]} />
-              <Text fw={600}>Ba-Ba</Text>
+              <IconFlame size={18} color="#DC143C" />
+              <Text fw={600}>Nylocas</Text>
             </Group>
             <Text size="sm" c="dimmed">
               Strategy details coming soon.
@@ -229,8 +219,8 @@ function InfoPageContent() {
 
           <Card withBorder radius="sm" p="md" bg="dark.7">
             <Group gap="xs" mb="xs">
-              <IconFlame size={18} color={theme.colors.error[5]} />
-              <Text fw={600}>Akkha</Text>
+              <IconFlame size={18} color="#DC143C" />
+              <Text fw={600}>Sotetseg</Text>
             </Group>
             <Text size="sm" c="dimmed">
               Strategy details coming soon.
@@ -239,8 +229,18 @@ function InfoPageContent() {
 
           <Card withBorder radius="sm" p="md" bg="dark.7">
             <Group gap="xs" mb="xs">
-              <IconFlame size={18} color={theme.colors.error[5]} />
-              <Text fw={600}>Wardens</Text>
+              <IconFlame size={18} color="#DC143C" />
+              <Text fw={600}>Xarpus</Text>
+            </Group>
+            <Text size="sm" c="dimmed">
+              Strategy details coming soon.
+            </Text>
+          </Card>
+
+          <Card withBorder radius="sm" p="md" bg="dark.7">
+            <Group gap="xs" mb="xs">
+              <IconFlame size={18} color="#DC143C" />
+              <Text fw={600}>Verzik Vitur</Text>
             </Group>
             <Text size="sm" c="dimmed">
               Strategy details coming soon.
@@ -259,9 +259,9 @@ function InfoPageContent() {
             unsure about anything, just ask.
           </Text>
           <Link
-            href="/queues/toa-speed"
+            href="/queues/tob-speed"
             style={{
-              color: theme.colors.warning[4],
+              color: "#DC143C",
               fontWeight: 600,
               textDecoration: "underline",
             }}
@@ -281,7 +281,7 @@ function InfoPageContent() {
   );
 }
 
-export default function ToaSpeedInfoPage() {
+export default function TobSpeedInfoPage() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <InfoPageContent />

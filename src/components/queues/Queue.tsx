@@ -1,21 +1,18 @@
 "use client";
 
-import { APIToaQueueEntrant } from "@/@types/api";
 import APIResponse from "@/lib/classes/APIResponse";
+import { QueueConfig } from "@/lib/queue-config";
 import { Badge, Card, Group, Stack, Table, Text, Title, Tooltip } from "@mantine/core";
 import { IconSquareCheck, IconSquareX } from "@tabler/icons-react";
+import { ReactNode } from "react";
 import useSWR from "swr";
-import JoinQueueModal from "./JoinQueueModal";
 import QueueNotificationListener from "./QueueNotificationListener";
 
 interface QueueProps {
-  players: APIToaQueueEntrant[];
+  players: Record<string, unknown>[];
+  config: QueueConfig;
+  joinModal: ReactNode;
 }
-
-const fetcher = (url: string) =>
-  fetch(url)
-    .then((res) => res.json())
-    .then((data: APIResponse<APIToaQueueEntrant[]>) => data.data ?? []);
 
 const getStatusBadge = (status: boolean) =>
   status ? (
@@ -39,32 +36,42 @@ const getGearIcon = (hasItem: boolean) =>
     </Group>
   );
 
-export default function Queue({ players: initialPlayers }: QueueProps) {
-  const { data: players } = useSWR("/api/queues/toa-speed", fetcher, {
+export default function Queue({ players: initialPlayers, config, joinModal }: QueueProps) {
+  const fetcher = (url: string) =>
+    fetch(url)
+      .then((res) => res.json())
+      .then((data: APIResponse<Record<string, unknown>[]>) => data.data ?? []);
+
+  const { data: players } = useSWR(config.apiBasePath, fetcher, {
     fallbackData: initialPlayers,
     refreshInterval: 10000,
   });
 
-  const rows = players.map((player) => (
-    <Table.Tr key={player.id}>
-      <Table.Td>{player.rsn ?? "-"}</Table.Td>
-      <Table.Td>{player.expertKC ?? "-"}</Table.Td>
-      <Table.Td>{getGearIcon(player.redKeris)}</Table.Td>
-      <Table.Td>{getGearIcon(player.bgs)}</Table.Td>
-      <Table.Td>{getGearIcon(player.zcb)}</Table.Td>
-      <Table.Td>{getGearIcon(player.eye)}</Table.Td>
-      <Table.Td>{getStatusBadge(player.ready)}</Table.Td>
-    </Table.Tr>
-  ));
+  const rows = players.map((player) => {
+    const id = player.id as string;
+    const rsn = player.rsn as string;
+    const ready = player.ready as boolean;
+
+    return (
+      <Table.Tr key={id}>
+        <Table.Td>{rsn ?? "-"}</Table.Td>
+        <Table.Td>{(player[config.kcField] as number) ?? "-"}</Table.Td>
+        {config.columns.map((col) => (
+          <Table.Td key={col.key}>{getGearIcon(player[col.key] as boolean)}</Table.Td>
+        ))}
+        <Table.Td>{getStatusBadge(ready)}</Table.Td>
+      </Table.Tr>
+    );
+  });
 
   return (
     <Stack gap="md" w="100%" maw={1040} mb="xl">
-      <QueueNotificationListener players={players} />
+      <QueueNotificationListener players={players} storageKey={config.storageKey} apiBasePath={config.apiBasePath} />
       <Group justify="space-between" align="center">
         <Title fw={700} order={3}>
           Current Queue
         </Title>
-        <JoinQueueModal />
+        {joinModal}
       </Group>
 
       <Text size="sm" c="dimmed">
@@ -82,26 +89,13 @@ export default function Queue({ players: initialPlayers }: QueueProps) {
               <Table.Tr>
                 <Table.Th>RSN</Table.Th>
                 <Table.Th>KC</Table.Th>
-                <Table.Th>
-                  <Tooltip label="Keris Partisan of Corruption">
-                    <span>Keris</span>
-                  </Tooltip>
-                </Table.Th>
-                <Table.Th>
-                  <Tooltip label="Bandos Godsword">
-                    <span>BGS</span>
-                  </Tooltip>
-                </Table.Th>
-                <Table.Th>
-                  <Tooltip label="Zaryte Crossbow">
-                    <span>ZCB</span>
-                  </Tooltip>
-                </Table.Th>
-                <Table.Th>
-                  <Tooltip label="Eye of Ayak">
-                    <span>Eye</span>
-                  </Tooltip>
-                </Table.Th>
+                {config.columns.map((col) => (
+                  <Table.Th key={col.key}>
+                    <Tooltip label={col.tooltip}>
+                      <span>{col.label}</span>
+                    </Tooltip>
+                  </Table.Th>
+                ))}
                 <Table.Th>Status</Table.Th>
               </Table.Tr>
             </Table.Thead>

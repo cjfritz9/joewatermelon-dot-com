@@ -13,7 +13,7 @@ import {
   Title,
 } from "@mantine/core";
 import {
-  IconSword,
+  IconGrid4x4,
   IconTrophy,
   IconUsers,
   IconUsersGroup,
@@ -42,13 +42,11 @@ const quickLinks: QuickLinkCard[] = [
     color: theme.colors.brand[7],
   },
   {
-    title: "CA Guides",
-    description: "Combat Achievement guides and tips.",
+    title: "Combat Achievements",
+    description: "Free GM speed run help and guides.",
     icon: <IconTrophy size={28} />,
-    href: "/guides",
+    href: "/combat-achievements",
     color: theme.colors.brand[8],
-    badge: "Coming Soon",
-    disabled: true,
   },
   {
     title: "Melon Clan",
@@ -61,12 +59,11 @@ const quickLinks: QuickLinkCard[] = [
   },
   {
     title: "Clan Bingos",
-    description: "Participate in clan bingo events and competitions.",
-    icon: <IconSword size={28} />,
+    description: "Team-based bingo competitions and events.",
+    icon: <IconGrid4x4 size={28} />,
     href: "/bingo",
     color: theme.colors.brand[4],
     badge: "Coming Soon",
-    disabled: true,
   },
 ];
 

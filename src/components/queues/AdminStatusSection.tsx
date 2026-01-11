@@ -20,11 +20,13 @@ type Status = "active" | "inactive";
 interface AdminStatusSectionProps {
   initialStatus: Status;
   initialNextRunTime: Date | null;
+  apiEndpoint?: string;
 }
 
 export default function AdminStatusSection({
   initialStatus,
   initialNextRunTime,
+  apiEndpoint = "/api/queues/toa-speed/settings",
 }: AdminStatusSectionProps) {
   const [status, setStatus] = useState<Status>(initialStatus);
   const [nextRunTime, setNextRunTime] = useState<Date | null>(initialNextRunTime);
@@ -71,7 +73,7 @@ export default function AdminStatusSection({
     setSaving(true);
 
     try {
-      const res = await fetch("/api/queues/toa-speed/settings", {
+      const res = await fetch(apiEndpoint, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

@@ -1,19 +1,24 @@
-import { APIToaQueueEntrant } from "@/@types/api";
-import { DBToaQueueEntrant } from "@/@types/firestore";
-import { Timestamp } from "@google-cloud/firestore";
+import { APITobQueueEntrant } from "@/@types/api";
+import { DBTobQueueEntrant } from "@/@types/firestore";
 import firestore from "../db/firestore";
-import { getToaQueueEntryIsValid } from "../db/validation";
 
-export const getToa8SpeedQueue = async (): Promise<APIToaQueueEntrant[]> => {
+export type EventStatus = "active" | "inactive";
+
+export interface EventSettings {
+  status: EventStatus;
+  nextRunTime: Date | null;
+}
+
+export const getTobSpeedQueue = async (): Promise<APITobQueueEntrant[]> => {
   try {
-    const queueSnapshot = await firestore.collection("toa-queue").get();
+    const queueSnapshot = await firestore.collection("tob-queue").get();
 
     if (queueSnapshot.empty) {
       return [];
     }
 
     const docs = queueSnapshot.docs.map((doc) => {
-      const data = doc.data() as DBToaQueueEntrant;
+      const data = doc.data() as DBTobQueueEntrant;
 
       return {
         ...data,
@@ -21,7 +26,7 @@ export const getToa8SpeedQueue = async (): Promise<APIToaQueueEntrant[]> => {
         createdAt: data.createdAt?.toDate().toISOString() || null,
         notifiedAt: data.notifiedAt?.toDate().toISOString() || null,
       };
-    }) as APIToaQueueEntrant[];
+    }) as APITobQueueEntrant[];
 
     docs.sort((a, b) => {
       const orderA = a.order ?? Number.MAX_SAFE_INTEGER;
@@ -37,18 +42,11 @@ export const getToa8SpeedQueue = async (): Promise<APIToaQueueEntrant[]> => {
   }
 };
 
-export type EventStatus = "active" | "inactive";
-
-export interface EventSettings {
-  status: EventStatus;
-  nextRunTime: Date | null;
-}
-
-export const getToa8SpeedSettings = async (): Promise<EventSettings> => {
+export const getTobSpeedSettings = async (): Promise<EventSettings> => {
   try {
     const doc = await firestore
       .collection("settings")
-      .doc("toa-8man-speed-settings")
+      .doc("tob-speed-settings")
       .get();
 
     if (!doc.exists) {
@@ -63,25 +61,5 @@ export const getToa8SpeedSettings = async (): Promise<EventSettings> => {
   } catch (err) {
     console.error(err);
     return { status: "inactive", nextRunTime: null };
-  }
-};
-
-export const addToToa8SpeedQueue = async (entrantData: DBToaQueueEntrant) => {
-  try {
-    const isValid = getToaQueueEntryIsValid(entrantData);
-
-    if (!isValid) {
-      return null;
-    }
-
-    const docRef = await firestore.collection("toa-queue").add({
-      ...entrantData,
-      createdAt: Timestamp.now(),
-    });
-
-    return docRef.id;
-  } catch (err) {
-    console.error(err);
-    return null;
   }
 };

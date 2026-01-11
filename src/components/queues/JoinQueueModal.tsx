@@ -2,6 +2,7 @@
 
 import APIResponse from "@/lib/classes/APIResponse";
 import { useUser } from "@/lib/context/UserContext";
+import { QueueConfig } from "@/lib/queue-config";
 import { getBrandColor } from "@/lib/theme";
 import {
   Button,
@@ -17,39 +18,45 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-interface FormData {
-  twitchUsername: string;
-  rsn: string;
-  expertKC: number;
-  ready: boolean;
-  redKeris: boolean;
-  bgs: boolean;
-  zcb: boolean;
-  eye: boolean;
-  notes: string;
-  notificationsEnabled: boolean;
+interface JoinQueueModalProps {
+  config: QueueConfig;
 }
 
-export default function JoinQueueModal() {
+export default function JoinQueueModal({ config }: JoinQueueModalProps) {
   const [opened, { open, close }] = useDisclosure(false);
   const router = useRouter();
   const { user } = useUser();
-  const [formData, setFormData] = useState<FormData>({
+
+  const initialColumnState = config.columns.reduce(
+    (acc, col) => ({ ...acc, [col.key]: false }),
+    {} as Record<string, boolean>
+  );
+
+  const [formData, setFormData] = useState({
     twitchUsername: "",
     rsn: "",
-    expertKC: 0,
+    [config.kcField]: 0,
     ready: false,
-    redKeris: false,
-    bgs: false,
-    zcb: false,
-    eye: false,
     notes: "",
     notificationsEnabled: false,
+    ...initialColumnState,
   });
 
   const [submitting, setSubmitting] = useState(false);
+
+  const columnsBySection = useMemo(() => {
+    const grouped: Record<string, typeof config.columns> = {};
+    for (const col of config.columns) {
+      const section = col.section || "Options";
+      if (!grouped[section]) {
+        grouped[section] = [];
+      }
+      grouped[section].push(col);
+    }
+    return grouped;
+  }, [config.columns]);
 
   useEffect(() => {
     if (opened && user) {
@@ -61,10 +68,8 @@ export default function JoinQueueModal() {
     }
   }, [opened, user]);
 
-  const { twitchUsername, rsn, expertKC, ready, notes } = formData;
-
   const handleUpdateFormData = (
-    key: keyof FormData,
+    key: string,
     value: string | number | boolean,
   ) => {
     setFormData((prev) => ({
@@ -108,7 +113,7 @@ export default function JoinQueueModal() {
   };
 
   const handleSubmit = async () => {
-    if (!rsn.trim() || !twitchUsername.trim() || !ready) {
+    if (!formData.rsn.trim() || !formData.twitchUsername.trim() || !formData.ready) {
       notifications.show({
         title: "Missing fields",
         message: "Please fill out all required fields and confirm you are ready.",
@@ -120,7 +125,7 @@ export default function JoinQueueModal() {
 
     setSubmitting(true);
     try {
-      const res = await fetch("/api/queues/toa-speed", {
+      const res = await fetch(config.apiBasePath, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ data: formData }),
@@ -129,7 +134,7 @@ export default function JoinQueueModal() {
       const data = (await res.json()) as APIResponse<{ id: string }>;
 
       if (data.success && data.data?.id) {
-        localStorage.setItem("toaQueueEntryId", data.data.id);
+        localStorage.setItem(config.storageKey, data.data.id);
         close();
         notifications.show({
           title: "You're in!",
@@ -153,7 +158,7 @@ export default function JoinQueueModal() {
 
   return (
     <>
-      <Button color="yellow" onClick={open}>
+      <Button color={config.buttonColor} onClick={open}>
         Join
       </Button>
 
@@ -163,7 +168,7 @@ export default function JoinQueueModal() {
             required
             label="Twitch Username"
             placeholder="Twitch Name"
-            value={twitchUsername}
+            value={formData.twitchUsername}
             onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
@@ -176,57 +181,46 @@ export default function JoinQueueModal() {
             required
             label="RuneScape Name"
             placeholder="RSN"
-            value={rsn}
+            value={formData.rsn}
             onChange={(e) => handleUpdateFormData("rsn", e.target.value)}
           />
 
           <NumberInput
             required
-            label="Expert Mode KC"
+            label={config.kcLabel}
             placeholder="0"
-            value={expertKC}
+            value={formData[config.kcField] as number}
             allowNegative={false}
-            onChange={(e) => handleUpdateFormData("expertKC", Number(e))}
+            onChange={(e) => handleUpdateFormData(config.kcField, Number(e))}
           />
 
-          <Text>Gear Check</Text>
-
-          <Checkbox
-            required
-            label="Red Keris"
-            onChange={(e) => handleUpdateFormData("redKeris", e.target.checked)}
-          />
-
-          <Checkbox
-            required
-            label="BGS"
-            onChange={(e) => handleUpdateFormData("bgs", e.target.checked)}
-          />
-
-          <Checkbox
-            required
-            label="ZCB"
-            onChange={(e) => handleUpdateFormData("zcb", e.target.checked)}
-          />
-
-          <Checkbox
-            required
-            label="Eye of Ayak"
-            onChange={(e) => handleUpdateFormData("eye", e.target.checked)}
-          />
+          {Object.entries(columnsBySection).map(([section, cols]) => (
+            <Stack key={section} gap="xs">
+              <Text>{section}</Text>
+              {cols.map((col) => (
+                <Checkbox
+                  key={col.key}
+                  label={col.tooltip}
+                  checked={formData[col.key] as boolean}
+                  onChange={(e) => handleUpdateFormData(col.key, e.target.checked)}
+                />
+              ))}
+            </Stack>
+          ))}
 
           <Text>Ready Check</Text>
 
           <Checkbox
             required
             label="I am Ready"
+            checked={formData.ready}
             onChange={(e) => handleUpdateFormData("ready", e.target.checked)}
           />
 
           <Textarea
             label="Notes (optional)"
             placeholder="Anything you'd like to add?"
-            value={notes}
+            value={formData.notes}
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, notes: e.target.value }))
             }

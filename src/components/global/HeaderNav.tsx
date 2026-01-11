@@ -29,6 +29,7 @@ import {
   IconChevronDown,
   IconGrid4x4,
   IconSword,
+  IconUsersGroup,
 } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -39,34 +40,40 @@ import { logout } from "@/lib/auth";
 
 const data = [
   {
+    icon: IconSword,
+    title: "Combat Achievements",
+    description: "Free GM speed run help & guides",
+    link: "/combat-achievements",
+  },
+  {
+    icon: IconUsersGroup,
+    title: "Queues",
+    description: "Join ToA & ToB speed run queues",
+    link: "/queues",
+  },
+  {
+    icon: IconGrid4x4,
+    title: "Bingo",
+    description: "Clan bingo events",
+    link: "/bingo",
+  },
+  {
     icon: IconBrandTwitch,
     title: "Twitch",
-    description: "I'm live!",
+    description: "Watch live",
     link: "https://twitch.tv/joewatermelon",
   },
   {
     icon: IconBrandYoutube,
     title: "Youtube",
-    description: "Guides, end game series, & more",
+    description: "Guides & videos",
     link: "https://youtube.com/@joewatermelon",
   },
   {
     icon: IconBrandDiscord,
     title: "Discord",
-    description: "Join the discord",
+    description: "Join the community",
     link: "https://discord.com/invite/BrJfA6q",
-  },
-  {
-    icon: IconSword,
-    title: "Combat Achievements",
-    description: "Free CA help",
-    link: "/combat-achievements",
-  },
-  {
-    icon: IconGrid4x4,
-    title: "Bingo",
-    description: "Check the status of the next bingo!",
-    link: "/bingo",
   },
 ];
 

@@ -34,4 +34,20 @@ export interface DBToaQueueEntrant {
   notes: string;
   notificationsEnabled: boolean;
   notifiedAt?: Timestamp;
+  order?: number;
+}
+
+export interface DBTobQueueEntrant {
+  createdAt: Timestamp;
+  twitchUsername: string;
+  rsn: string;
+  kc: number;
+  ready: boolean;
+  scythe: boolean;
+  needs4Man: boolean;
+  needs5Man: boolean;
+  notes: string;
+  notificationsEnabled: boolean;
+  notifiedAt?: Timestamp;
+  order?: number;
 }

@@ -15,13 +15,13 @@ interface QueueLink {
 const queues: QueueLink[] = [
   {
     title: "ToA Speed",
-    description: "Tombs of Amascut GM Time runs. Get your combat achievement!",
+    description: "Tombs of Amascut 8 man GM Time runs",
     icon: <IconPyramid size={32} color={theme.colors.warning[4]} />,
     href: "/queues/toa-speed",
   },
   {
     title: "ToB Speed",
-    description: "Theatre of Blood speed runs.",
+    description: "Theatre of Blood 4 & 5 man GM Time runs",
     icon: <IconDroplet size={32} color="#DC143C" />,
     href: "/queues/tob-speed",
   },

@@ -1,37 +1,39 @@
-import theme from "@/app/theme";
 import { Card, Group, SimpleGrid, Stack, Text, Title } from "@mantine/core";
 import { IconChecklist, IconFlame, IconSwords } from "@tabler/icons-react";
 import Link from "next/link";
 
-interface InfoLink {
-  title: string;
+interface PrepareForRunProps {
+  basePath: string;
   description: string;
-  icon: React.ReactNode;
-  href: string;
+  colors: {
+    requirements: string;
+    setup: string;
+    strategy: string;
+  };
 }
 
-const infoLinks: InfoLink[] = [
-  {
-    title: "Requirements",
-    description: "Requirements to join the teams.",
-    icon: <IconChecklist size={32} color={theme.colors.success[6]} />,
-    href: "/queues/toa-speed/info?section=gear",
-  },
-  {
-    title: "Setup & Inventory",
-    description: "Optimal combat styles and inventory.",
-    icon: <IconFlame size={32} color={theme.colors.error[5]} />,
-    href: "/queues/toa-speed/info?section=setup",
-  },
-  {
-    title: "Strategy & Methods",
-    description: "Best combat and prayer strategy.",
-    icon: <IconSwords size={32} color={theme.colors.warning[4]} />,
-    href: "/queues/toa-speed/info?section=strategy",
-  },
-];
+export default function PrepareForRun({ basePath, description, colors }: PrepareForRunProps) {
+  const infoLinks = [
+    {
+      title: "Requirements",
+      description: "Requirements to join the teams.",
+      icon: <IconChecklist size={32} color={colors.requirements} />,
+      href: `${basePath}/info?section=gear`,
+    },
+    {
+      title: "Setup & Inventory",
+      description: "Optimal combat styles and inventory.",
+      icon: <IconFlame size={32} color={colors.setup} />,
+      href: `${basePath}/info?section=setup`,
+    },
+    {
+      title: "Strategy & Methods",
+      description: "Best combat and prayer strategy.",
+      icon: <IconSwords size={32} color={colors.strategy} />,
+      href: `${basePath}/info?section=strategy`,
+    },
+  ];
 
-export default function PrepareForRun() {
   return (
     <Stack gap="md" mb="xl" w="100%">
       <Title fw={700} order={3}>
@@ -39,8 +41,7 @@ export default function PrepareForRun() {
       </Title>
 
       <Title size="sm" c="dimmed">
-        Learn the gear, setup, and strategies required to join the Tombs of
-        Amascut 8-man speedrun.
+        {description}
       </Title>
 
       <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="md" mt="sm" w="100%">

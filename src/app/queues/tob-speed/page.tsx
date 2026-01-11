@@ -1,13 +1,63 @@
-import { Stack, Title } from "@mantine/core";
+import AdminQueue from "@/components/queues/AdminQueue";
+import AdminStatusSection from "@/components/queues/AdminStatusSection";
+import JoinQueueModal from "@/components/queues/JoinQueueModal";
+import PrepareForRun from "@/components/queues/PrepareForTheRun";
+import Queue from "@/components/queues/Queue";
+import StatusSection from "@/components/queues/StatusSection";
+import { tobQueueConfig } from "@/lib/queue-config";
+import { getTobSpeedQueue, getTobSpeedSettings } from "@/lib/server/tob-queues";
+import { isAdmin } from "@/lib/session";
+import { Stack, Text, Title } from "@mantine/core";
 
 export const revalidate = 0;
 
 export default async function TobSpeedQueuePage() {
+  const [queue, isUserAdmin, settings] = await Promise.all([
+    getTobSpeedQueue(),
+    isAdmin(),
+    getTobSpeedSettings(),
+  ]);
+
   return (
     <Stack align="center" my="xl" maw={1040} w="100%" mx="auto">
-      <Title c="#DC143C" mb="md">
-        ToB Speed
-      </Title>
+      <Stack align="center" gap={4}>
+        <Title c="#DC143C">
+          ToB Speed
+        </Title>
+        <Text c="dimmed" size="sm">
+          4 & 5 Man Grandmaster Times
+        </Text>
+      </Stack>
+      {isUserAdmin ? (
+        <AdminStatusSection
+          initialStatus={settings.status}
+          initialNextRunTime={settings.nextRunTime}
+          apiEndpoint="/api/queues/tob-speed/settings"
+        />
+      ) : (
+        <StatusSection
+          status={settings.status}
+          nextRunTime={settings.nextRunTime ?? undefined}
+        />
+      )}
+      {isUserAdmin ? (
+        <AdminQueue players={queue as unknown as Record<string, unknown>[]} config={tobQueueConfig} />
+      ) : (
+        <Queue
+          players={queue as unknown as Record<string, unknown>[]}
+          config={tobQueueConfig}
+          joinModal={<JoinQueueModal config={tobQueueConfig} />}
+        />
+      )}
+      <PrepareForRun
+        basePath="/queues/tob-speed"
+        description="Learn the gear, setup, and strategies required to join the Theatre of Blood 4 & 5 man speedruns."
+        colors={{
+          requirements: "#DC143C",
+          setup: "#8B0000",
+          strategy: "#6B2D7B",
+        }}
+      />
     </Stack>
   );
 }

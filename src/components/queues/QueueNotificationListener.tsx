@@ -1,21 +1,24 @@
 "use client";
 
-import { APIToaQueueEntrant } from "@/@types/api";
 import { notifications } from "@mantine/notifications";
 import { useEffect, useRef } from "react";
 
 interface QueueNotificationListenerProps {
-  players: APIToaQueueEntrant[];
+  players: Record<string, unknown>[];
+  storageKey: string;
+  apiBasePath?: string;
 }
 
 export default function QueueNotificationListener({
   players,
+  storageKey,
+  apiBasePath,
 }: QueueNotificationListenerProps) {
   const lastNotifiedRef = useRef<string | null>(null);
   const notFoundCountRef = useRef(0);
 
   useEffect(() => {
-    const entryId = localStorage.getItem("toaQueueEntryId");
+    const entryId = localStorage.getItem(storageKey);
     if (!entryId) return;
 
     const myEntry = players.find((p) => p.id === entryId);
@@ -23,7 +26,7 @@ export default function QueueNotificationListener({
     if (!myEntry) {
       notFoundCountRef.current++;
       if (notFoundCountRef.current >= 3) {
-        localStorage.removeItem("toaQueueEntryId");
+        localStorage.removeItem(storageKey);
         notFoundCountRef.current = 0;
       }
       return;
@@ -31,12 +34,14 @@ export default function QueueNotificationListener({
 
     notFoundCountRef.current = 0;
 
-    if (myEntry.notifiedAt && myEntry.notifiedAt !== lastNotifiedRef.current) {
-      lastNotifiedRef.current = myEntry.notifiedAt;
+    const notifiedAt = myEntry.notifiedAt as string | undefined;
+
+    if (notifiedAt && notifiedAt !== lastNotifiedRef.current) {
+      lastNotifiedRef.current = notifiedAt;
 
       notifications.show({
         title: "It's your turn!",
-        message: "An admin has marked you as ready. Head to ToA on world 495!",
+        message: "An admin has marked you as ready. Check Discord for world info!",
         color: "yellow",
         autoClose: false,
         withCloseButton: true,
@@ -44,18 +49,20 @@ export default function QueueNotificationListener({
 
       if ("Notification" in window && Notification.permission === "granted") {
         new Notification("It's your turn!", {
-          body: "An admin has marked you as ready. Head to ToA on world 495!",
+          body: "An admin has marked you as ready. Check Discord for world info!",
           icon: "/favicon.ico",
         });
       }
 
-      fetch(`/api/queues/toa-speed/${entryId}/clear-notification`, {
-        method: "POST",
-      }).catch(() => {
-        // Ignore errors - notification was already shown
-      });
+      if (apiBasePath) {
+        fetch(`${apiBasePath}/${entryId}/clear-notification`, {
+          method: "POST",
+        }).catch(() => {
+          // Ignore errors - notification was already shown
+        });
+      }
     }
-  }, [players]);
+  }, [players, storageKey, apiBasePath]);
 
   return null;
 }

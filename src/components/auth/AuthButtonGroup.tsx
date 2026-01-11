@@ -1,8 +1,8 @@
 "use client";
 
+import { logout } from "@/lib/auth";
 import { useUser } from "@/lib/context/UserContext";
 import { Button, Group, Loader } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -16,26 +16,7 @@ const AuthButtonGroup: React.FC = () => {
   const handleLogout = async () => {
     setLoggingOut(true);
     try {
-      const res = await fetch("/api/auth/logout", {
-        method: "GET",
-        credentials: "include",
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Failed to log out");
-      }
-
-      await refetchUser();
-
-      notifications.show({
-        title: "Goodbye!",
-        message: "You have successfully logged out.",
-        position: "top-right",
-        color: "green",
-      });
-
-      router.refresh();
+      await logout(refetchUser, router);
     } finally {
       setLoggingOut(false);
     }

@@ -30,12 +30,12 @@ import {
   IconGrid4x4,
   IconSword,
 } from "@tabler/icons-react";
-import { notifications } from "@mantine/notifications";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import AuthButtonGroup from "../auth/AuthButtonGroup";
+import { logout } from "@/lib/auth";
 
 const data = [
   {
@@ -82,18 +82,7 @@ export function HeaderNav() {
   const handleLogout = async () => {
     setLoggingOut(true);
     try {
-      await fetch("/api/auth/logout", { credentials: "include" });
-      await refetchUser();
-      closeDrawer();
-
-      notifications.show({
-        title: "Goodbye!",
-        message: "You have successfully logged out.",
-        position: "top-right",
-        color: "green",
-      });
-
-      router.refresh();
+      await logout(refetchUser, router, closeDrawer);
     } finally {
       setLoggingOut(false);
     }
@@ -168,20 +157,6 @@ export function HeaderNav() {
                 <SimpleGrid cols={2} spacing={0}>
                   {links}
                 </SimpleGrid>
-
-                {/* <div className={classes.dropdownFooter}>
-                  <Group justify="space-between">
-                    <div>
-                      <Text fw={500} fz="sm">
-                        Get started
-                      </Text>
-                      <Text size="xs" c="dimmed">
-                        Their food sources have decreased, and their numbers
-                      </Text>
-                    </div>
-                    <Button variant="default">Get started</Button>
-                  </Group>
-                </div> */}
               </HoverCard.Dropdown>
             </HoverCard>
             <Link href="/about" className={classes.link}>

@@ -198,7 +198,7 @@ export default function YouTubeSection({
             </Text>
           </Stack>
           {isAdmin && (
-            <ActionIcon variant="subtle" color="gray" onClick={open}>
+            <ActionIcon variant="subtle" color="gray" onClick={open} style={{ alignSelf: 'flex-start'}} >
               <IconEdit size={18} />
             </ActionIcon>
           )}

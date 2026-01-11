@@ -34,6 +34,7 @@ import { notifications } from "@mantine/notifications";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 import AuthButtonGroup from "../auth/AuthButtonGroup";
 
 const data = [
@@ -76,20 +77,26 @@ export function HeaderNav() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
+  const [loggingOut, setLoggingOut] = useState(false);
 
   const handleLogout = async () => {
-    await fetch("/api/auth/logout", { credentials: "include" });
-    await refetchUser();
-    closeDrawer();
+    setLoggingOut(true);
+    try {
+      await fetch("/api/auth/logout", { credentials: "include" });
+      await refetchUser();
+      closeDrawer();
 
-    notifications.show({
-      title: "Goodbye!",
-      message: "You have successfully logged out.",
-      position: "top-right",
-      color: "green",
-    });
+      notifications.show({
+        title: "Goodbye!",
+        message: "You have successfully logged out.",
+        position: "top-right",
+        color: "green",
+      });
 
-    router.refresh();
+      router.refresh();
+    } finally {
+      setLoggingOut(false);
+    }
   };
 
   const links = data.map((item) => {
@@ -224,9 +231,14 @@ export function HeaderNav() {
 
           <Group justify="center" grow pb="xl" px="md">
             {user ? (
-              <Button color="brand.8" onClick={handleLogout} fullWidth>
-                Log out
-              </Button>
+              <>
+                <Button variant="default" component={Link} href="/account" fullWidth onClick={closeDrawer}>
+                  Account
+                </Button>
+                <Button color="brand.8" onClick={handleLogout} fullWidth loading={loggingOut}>
+                  Log out
+                </Button>
+              </>
             ) : (
               <>
                 <Button variant="default" component={Link} href={`/login?redirect=${encodeURIComponent(pathname)}`} fullWidth onClick={closeDrawer}>

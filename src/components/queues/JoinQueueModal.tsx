@@ -1,6 +1,7 @@
 "use client";
 
 import APIResponse from "@/lib/classes/APIResponse";
+import { useUser } from "@/lib/context/UserContext";
 import { getBrandColor } from "@/lib/theme";
 import {
   Button,
@@ -16,7 +17,7 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface FormData {
   twitchUsername: string;
@@ -32,6 +33,7 @@ interface FormData {
 export default function JoinQueueModal() {
   const [opened, { open, close }] = useDisclosure(false);
   const router = useRouter();
+  const { user } = useUser();
   const [formData, setFormData] = useState<FormData>({
     twitchUsername: "",
     rsn: "",
@@ -42,6 +44,19 @@ export default function JoinQueueModal() {
     zcb: false,
     notes: "",
   });
+
+  const [submitting, setSubmitting] = useState(false);
+
+  // Auto-populate from user account when modal opens
+  useEffect(() => {
+    if (opened && user) {
+      setFormData((prev) => ({
+        ...prev,
+        twitchUsername: user.twitchUsername || prev.twitchUsername,
+        rsn: user.rsn || prev.rsn,
+      }));
+    }
+  }, [opened, user]);
 
   const { twitchUsername, rsn, expertKC, ready, notes } = formData;
 
@@ -66,30 +81,35 @@ export default function JoinQueueModal() {
       return;
     }
 
-    const res = await fetch("/api/queues/toa/8-man-speed", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ data: formData }),
-    });
-
-    const data = (await res.json()) as APIResponse;
-
-    if (data.success) {
-      close();
-      notifications.show({
-        title: "You're in!",
-        message: "You have been added to the queue.",
-        position: "top-right",
-        color: "green",
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/queues/toa/8-man-speed", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: formData }),
       });
-      router.refresh();
-    } else {
-      notifications.show({
-        title: "Error",
-        message: data.message || "Failed to join queue.",
-        position: "top-right",
-        color: "red",
-      });
+
+      const data = (await res.json()) as APIResponse;
+
+      if (data.success) {
+        close();
+        notifications.show({
+          title: "You're in!",
+          message: "You have been added to the queue.",
+          position: "top-right",
+          color: "green",
+        });
+        router.refresh();
+      } else {
+        notifications.show({
+          title: "Error",
+          message: data.message || "Failed to join queue.",
+          position: "top-right",
+          color: "red",
+        });
+      }
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -175,6 +195,7 @@ export default function JoinQueueModal() {
             <Button
               color={getBrandColor(7)}
               onClick={handleSubmit}
+              loading={submitting}
             >
               Submit
             </Button>

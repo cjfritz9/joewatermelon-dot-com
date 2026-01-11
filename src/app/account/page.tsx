@@ -9,6 +9,7 @@ import {
   Loader,
   Stack,
   Text,
+  TextInput,
   Title,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
@@ -21,6 +22,16 @@ function AccountContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [unlinking, setUnlinking] = useState(false);
+  const [rsn, setRsn] = useState("");
+  const [manualTwitchUsername, setManualTwitchUsername] = useState("");
+  const [savingProfile, setSavingProfile] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setRsn(user.rsn || "");
+      setManualTwitchUsername(user.twitchUsername || "");
+    }
+  }, [user]);
 
   useEffect(() => {
     const success = searchParams.get("success");
@@ -99,6 +110,49 @@ function AccountContent() {
     }
   };
 
+  const handleSaveProfile = async () => {
+    setSavingProfile(true);
+    try {
+      const res = await fetch("/api/auth/profile", {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          rsn: rsn.trim() || null,
+          twitchUsername: manualTwitchUsername.trim() || null,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        notifications.show({
+          title: "Profile Updated",
+          message: "Your profile has been saved.",
+          color: "green",
+          position: "top-right",
+        });
+        await refetchUser();
+      } else {
+        notifications.show({
+          title: "Error",
+          message: data.message || "Failed to update profile.",
+          color: "red",
+          position: "top-right",
+        });
+      }
+    } catch {
+      notifications.show({
+        title: "Error",
+        message: "Failed to update profile.",
+        color: "red",
+        position: "top-right",
+      });
+    } finally {
+      setSavingProfile(false);
+    }
+  };
+
   return (
     <Stack align="center" my="xl">
       <Title order={1} mb="lg">
@@ -118,6 +172,32 @@ function AccountContent() {
               {user.isAdmin ? "Admin" : "User"}
             </Badge>
           </Group>
+        </Stack>
+      </Card>
+
+      <Card withBorder radius="md" p="lg" maw={500} w="100%">
+        <Stack gap="md">
+          <Text fw={500} size="lg">Profile</Text>
+
+          <TextInput
+            label="RSN (RuneScape Name)"
+            placeholder="Your in-game name"
+            value={rsn}
+            onChange={(e) => setRsn(e.currentTarget.value)}
+          />
+
+          <TextInput
+            label="Twitch Username"
+            placeholder="Your Twitch username"
+            value={manualTwitchUsername}
+            onChange={(e) => setManualTwitchUsername(e.currentTarget.value)}
+            disabled={user.hasTwitchLinked}
+            description={user.hasTwitchLinked ? "Managed by linked Twitch account" : undefined}
+          />
+
+          <Button onClick={handleSaveProfile} loading={savingProfile}>
+            Save Profile
+          </Button>
         </Stack>
       </Card>
 

@@ -7,7 +7,9 @@ type User = {
   id: string;
   email: string;
   isAdmin: boolean;
+  rsn: string | null;
   twitchUsername: string | null;
+  hasTwitchLinked: boolean;
 };
 
 type UserContextType = {

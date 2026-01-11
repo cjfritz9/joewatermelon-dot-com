@@ -22,7 +22,7 @@ function emailToDocId(email: string): string {
 
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}));
-  const { email, password } = body as DBRegistrant;
+  const { email, password, rsn, twitchUsername } = body as DBRegistrant;
 
   if (!email || !password) {
     return APIResponse.error('Email and password are required.');
@@ -49,6 +49,8 @@ export async function POST(req: NextRequest) {
         email: normalizedEmail,
         roles: ['user'],
         passwordHash,
+        ...(rsn && { rsn: rsn.trim() }),
+        ...(twitchUsername && { twitchUsername: twitchUsername.trim() }),
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       });

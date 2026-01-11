@@ -5,6 +5,8 @@ export type UserRoles = 'user' | 'admin' | 'moderator';
 export interface DBRegistrant {
   email: string;
   password: string;
+  rsn?: string;
+  twitchUsername?: string;
 }
 
 export interface DBUser {
@@ -13,6 +15,7 @@ export interface DBUser {
   email: string;
   roles: UserRoles[];
   passwordHash: string;
+  rsn?: string;
   twitchId?: string;
   twitchUsername?: string;
   twitchLinkedAt?: Timestamp;

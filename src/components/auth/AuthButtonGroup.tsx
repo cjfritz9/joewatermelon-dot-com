@@ -5,34 +5,40 @@ import { Button, Group, Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 
 const AuthButtonGroup: React.FC = () => {
   const { user, loading, refetchUser } = useUser();
   const router = useRouter();
   const pathname = usePathname();
+  const [loggingOut, setLoggingOut] = useState(false);
 
   const handleLogout = async () => {
-    const res = await fetch("/api/auth/logout", {
-      method: "GET",
-      credentials: "include",
-    });
+    setLoggingOut(true);
+    try {
+      const res = await fetch("/api/auth/logout", {
+        method: "GET",
+        credentials: "include",
+      });
 
-    if (!res.ok) {
-      const data = await res.json();
-      throw new Error(data.error || "Failed to log out");
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to log out");
+      }
+
+      await refetchUser();
+
+      notifications.show({
+        title: "Goodbye!",
+        message: "You have successfully logged out.",
+        position: "top-right",
+        color: "green",
+      });
+
+      router.refresh();
+    } finally {
+      setLoggingOut(false);
     }
-
-    await refetchUser();
-
-    notifications.show({
-      title: "Goodbye!",
-      message: "You have successfully logged out.",
-      position: "top-right",
-      color: "green",
-    });
-
-    router.refresh();
   };
 
   if (loading) {
@@ -42,7 +48,10 @@ const AuthButtonGroup: React.FC = () => {
   if (user) {
     return (
       <Group visibleFrom="sm">
-        <Button color="brand.8" onClick={handleLogout}>
+        <Link href="/account">
+          <Button variant="default">Account</Button>
+        </Link>
+        <Button color="brand.8" onClick={handleLogout} loading={loggingOut}>
           Log out
         </Button>
       </Group>

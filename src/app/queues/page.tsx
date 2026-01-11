@@ -1,33 +1,34 @@
 import theme from "@/app/theme";
+import { getToa8SpeedSettings } from "@/lib/server/toa-queues";
+import { getTobSpeedSettings } from "@/lib/server/tob-queues";
 import { Badge, Card, Group, SimpleGrid, Stack, Text, Title } from "@mantine/core";
-import { IconClock, IconDroplet, IconPyramid } from "@tabler/icons-react";
+import { IconDroplet, IconPlayerPlay, IconPlayerStop, IconPyramid } from "@tabler/icons-react";
 import Link from "next/link";
 
-interface QueueLink {
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  href: string;
-  badge?: string;
-  disabled?: boolean;
-}
+export const revalidate = 60;
 
-const queues: QueueLink[] = [
-  {
-    title: "ToA Speed",
-    description: "Tombs of Amascut 8 man GM Time runs",
-    icon: <IconPyramid size={32} color={theme.colors.warning[4]} />,
-    href: "/queues/toa-speed",
-  },
-  {
-    title: "ToB Speed",
-    description: "Theatre of Blood 4 & 5 man GM Time runs",
-    icon: <IconDroplet size={32} color="#DC143C" />,
-    href: "/queues/tob-speed",
-  },
-];
+export default async function QueuesPage() {
+  const [toaSettings, tobSettings] = await Promise.all([
+    getToa8SpeedSettings(),
+    getTobSpeedSettings(),
+  ]);
 
-export default function QueuesPage() {
+  const queues = [
+    {
+      title: "ToA Speed",
+      description: "Tombs of Amascut 8 man GM Time runs",
+      icon: <IconPyramid size={32} color={theme.colors.warning[4]} />,
+      href: "/queues/toa-speed",
+      status: toaSettings.status,
+    },
+    {
+      title: "ToB Speed",
+      description: "Theatre of Blood 4 & 5 man GM Time runs",
+      icon: <IconDroplet size={32} color="#DC143C" />,
+      href: "/queues/tob-speed",
+      status: tobSettings.status,
+    },
+  ];
   return (
     <Stack align="center" my="xl" maw={1040} w="100%" mx="auto">
       <Title c={theme.colors.warning[3]} mb="md">
@@ -39,29 +40,28 @@ export default function QueuesPage() {
       </Text>
 
       <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="lg" mt="xl" w="100%" maw={800}>
-        {queues.map((queue) => {
-          const content = (
+        {queues.map((queue) => (
+          <Link key={queue.title} href={queue.href} style={{ textDecoration: "none" }}>
             <Card
               shadow="md"
               radius="md"
               p="lg"
               withBorder
-              style={{
-                height: "100%",
-                opacity: queue.disabled ? 0.6 : 1,
-                cursor: queue.disabled ? "not-allowed" : "pointer",
-              }}
+              className="hover-card"
+              style={{ height: "100%" }}
             >
               <Group gap="md" align="flex-start">
                 {queue.icon}
                 <Stack gap="xs" style={{ flex: 1 }}>
                   <Group justify="space-between" align="center">
                     <Text fw={600} size="lg">{queue.title}</Text>
-                    {queue.badge && (
-                      <Badge color="gray" variant="light" leftSection={<IconClock size={12} />}>
-                        {queue.badge}
-                      </Badge>
-                    )}
+                    <Badge
+                      color={queue.status === "active" ? "green" : "gray"}
+                      variant="light"
+                      leftSection={queue.status === "active" ? <IconPlayerPlay size={12} /> : <IconPlayerStop size={12} />}
+                    >
+                      {queue.status === "active" ? "Active" : "Inactive"}
+                    </Badge>
                   </Group>
                   <Text size="sm" c="dimmed">
                     {queue.description}
@@ -69,18 +69,8 @@ export default function QueuesPage() {
                 </Stack>
               </Group>
             </Card>
-          );
-
-          if (queue.disabled) {
-            return <div key={queue.title}>{content}</div>;
-          }
-
-          return (
-            <Link key={queue.title} href={queue.href} style={{ textDecoration: "none" }}>
-              {content}
-            </Link>
-          );
-        })}
+          </Link>
+        ))}
       </SimpleGrid>
     </Stack>
   );

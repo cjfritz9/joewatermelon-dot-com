@@ -54,8 +54,6 @@ const quickLinks: QuickLinkCard[] = [
     icon: <IconUsers size={28} />,
     href: "/clan",
     color: theme.colors.brand[3],
-    badge: "Coming Soon",
-    disabled: true,
   },
   {
     title: "Clan Bingos",

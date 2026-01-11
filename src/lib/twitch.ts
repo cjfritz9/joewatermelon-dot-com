@@ -1,4 +1,4 @@
-import firestore from "./db/firestore";
+import firestore, { isFirestoreAvailable } from "./db/firestore";
 import { DBUser } from "@/@types/firestore";
 
 const TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID || "";
@@ -81,6 +81,8 @@ export async function fetchTwitchUser(
 export async function findUserByTwitchId(
   twitchId: string
 ): Promise<(DBUser & { id: string }) | null> {
+  if (!isFirestoreAvailable) return null;
+
   const snapshot = await firestore
     .collection("users")
     .where("twitchId", "==", twitchId)
@@ -98,6 +100,8 @@ export async function findUserByTwitchId(
 export async function findUserByEmail(
   email: string
 ): Promise<(DBUser & { id: string }) | null> {
+  if (!isFirestoreAvailable) return null;
+
   const normalizedId = email.replace(/\./g, "_").replace(/@/g, "_");
   const doc = await firestore.collection("users").doc(normalizedId).get();
 

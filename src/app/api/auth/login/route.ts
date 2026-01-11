@@ -1,11 +1,16 @@
 import { DBUser } from "@/@types/firestore";
 import APIResponse from "@/lib/classes/APIResponse";
-import firestore from "@/lib/db/firestore";
+import firestore, { isFirestoreAvailable } from "@/lib/db/firestore";
 import { getSession } from "@/lib/session";
 import bcrypt from "bcrypt";
 
 export const POST = async (req: Request) => {
   try {
+    if (!isFirestoreAvailable) {
+      console.error("Firestore not available. GCP_PROJECT_ID:", process.env.GCP_PROJECT_ID, "GOOGLE_CLOUD_PROJECT:", process.env.GOOGLE_CLOUD_PROJECT);
+      return APIResponse.error("Service temporarily unavailable", 503);
+    }
+
     const body = await req.json();
 
     const { email, password } = body;
@@ -50,7 +55,8 @@ export const POST = async (req: Request) => {
       },
     });
   } catch (err) {
-    console.error(err);
+    console.error("Login error:", err instanceof Error ? err.message : err);
+    console.error("Stack:", err instanceof Error ? err.stack : "N/A");
     return APIResponse.error("Internal Server Error", 500);
   }
 };

@@ -1,4 +1,4 @@
-import firestore from "@/lib/db/firestore";
+import firestore, { isFirestoreAvailable } from "@/lib/db/firestore";
 import { getSession } from "@/lib/session";
 import {
   exchangeCodeForToken,
@@ -24,6 +24,11 @@ function getBaseUrl(req: NextRequest): string {
 
 export const GET = async (req: NextRequest) => {
   try {
+    if (!isFirestoreAvailable) {
+      console.error("Firestore not available in Twitch callback");
+      return NextResponse.redirect(new URL("/login?error=service_unavailable", getBaseUrl(req)));
+    }
+
     const baseUrl = getBaseUrl(req);
     const searchParams = req.nextUrl.searchParams;
     const code = searchParams.get("code");
@@ -143,7 +148,8 @@ export const GET = async (req: NextRequest) => {
 
     return NextResponse.redirect(new URL(returnUrl, baseUrl));
   } catch (err) {
-    console.error("Twitch OAuth callback error:", err);
+    console.error("Twitch OAuth callback error:", err instanceof Error ? err.message : err);
+    console.error("Stack:", err instanceof Error ? err.stack : "N/A");
     return NextResponse.redirect(
       new URL("/login?error=oauth_callback_failed", getBaseUrl(req))
     );

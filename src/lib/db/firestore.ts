@@ -31,6 +31,6 @@ const firestore = new Proxy({} as Firestore, {
   }
 });
 
-export const isFirestoreAvailable = true;
+export const isFirestoreAvailable = !!(process.env.GCP_PROJECT_ID || process.env.GOOGLE_CLOUD_PROJECT);
 
 export default firestore;

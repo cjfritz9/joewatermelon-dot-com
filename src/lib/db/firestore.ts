@@ -23,7 +23,7 @@ function getFirestore(): Firestore {
 const firestore = new Proxy({} as Firestore, {
   get(_, prop) {
     const instance = getFirestore();
-    const value = (instance as Record<string | symbol, unknown>)[prop];
+    const value = (instance as unknown as Record<string | symbol, unknown>)[prop];
     if (typeof value === 'function') {
       return value.bind(instance);
     }

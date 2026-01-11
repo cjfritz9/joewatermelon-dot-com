@@ -2,8 +2,6 @@ import theme from "@/app/theme";
 import {
   Card,
   Group,
-  List,
-  ListItem,
   SimpleGrid,
   Stack,
   Text,

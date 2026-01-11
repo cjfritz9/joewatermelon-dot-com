@@ -1,6 +1,6 @@
 import theme from "@/app/theme";
 import { Badge, Card, Group, SimpleGrid, Stack, Text, Title } from "@mantine/core";
-import { IconClock, IconPyramid, IconSkull } from "@tabler/icons-react";
+import { IconClock, IconDroplet, IconPyramid } from "@tabler/icons-react";
 import Link from "next/link";
 
 interface QueueLink {
@@ -14,7 +14,7 @@ interface QueueLink {
 
 const queues: QueueLink[] = [
   {
-    title: "ToA 8-Man Speed",
+    title: "ToA Speed",
     description: "Tombs of Amascut GM Time runs. Get your combat achievement!",
     icon: <IconPyramid size={32} color={theme.colors.warning[4]} />,
     href: "/queues/toa-speed",
@@ -22,10 +22,8 @@ const queues: QueueLink[] = [
   {
     title: "ToB Speed",
     description: "Theatre of Blood speed runs.",
-    icon: <IconSkull size={32} color={theme.colors.error[5]} />,
+    icon: <IconDroplet size={32} color="#DC143C" />,
     href: "/queues/tob-speed",
-    badge: "Coming Soon",
-    disabled: true,
   },
 ];
 

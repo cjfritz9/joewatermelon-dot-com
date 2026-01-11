@@ -145,10 +145,11 @@ async function getAppAccessToken(): Promise<string> {
   }
 
   const data = await response.json();
-  appAccessToken = data.access_token;
+  const token: string = data.access_token;
+  appAccessToken = token;
   appTokenExpiry = Date.now() + data.expires_in * 1000;
 
-  return appAccessToken;
+  return token;
 }
 
 export interface TwitchStream {
@@ -179,7 +180,7 @@ export async function checkIfLive(username: string): Promise<LiveStatus> {
           Authorization: `Bearer ${token}`,
           "Client-Id": TWITCH_CLIENT_ID,
         },
-        next: { revalidate: 60 }, // Cache for 60 seconds
+        next: { revalidate: 60 },
       }
     );
 
@@ -264,7 +265,7 @@ export async function getLatestVod(username: string): Promise<TwitchVideo | null
           Authorization: `Bearer ${token}`,
           "Client-Id": TWITCH_CLIENT_ID,
         },
-        next: { revalidate: 300 }, // Cache for 5 minutes
+        next: { revalidate: 300 },
       }
     );
 

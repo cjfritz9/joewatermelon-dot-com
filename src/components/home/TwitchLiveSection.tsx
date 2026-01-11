@@ -2,7 +2,13 @@
 
 import { LiveStatus, TwitchVideo } from "@/lib/twitch";
 import { Badge, Card, Group, Stack, Text, Title } from "@mantine/core";
-import { IconBrandTwitch } from "@tabler/icons-react";
+import {
+  IconBrandTwitch,
+  IconClock,
+  IconDeviceGamepad2,
+  IconEye,
+  IconUsers,
+} from "@tabler/icons-react";
 
 interface TwitchLiveSectionProps {
   liveStatus: LiveStatus;
@@ -11,16 +17,38 @@ interface TwitchLiveSectionProps {
 
 function formatDuration(duration: string): string {
   // Duration format: "1h2m3s" or "2m3s" or "3s"
-  const hours = duration.match(/(\d+)h/)?.[1];
-  const minutes = duration.match(/(\d+)m/)?.[1];
-  const seconds = duration.match(/(\d+)s/)?.[1];
+  const hours = duration.match(/(\d+)h/)?.[1] || "0";
+  const minutes = duration.match(/(\d+)m/)?.[1] || "0";
+  const seconds = duration.match(/(\d+)s/)?.[1] || "0";
 
-  const parts = [];
-  if (hours) parts.push(`${hours}h`);
-  if (minutes) parts.push(`${minutes}m`);
-  if (seconds && !hours) parts.push(`${seconds}s`);
+  if (parseInt(hours) > 0) {
+    return `${hours}:${minutes.padStart(2, "0")}:${seconds.padStart(2, "0")}`;
+  }
+  return `${minutes}:${seconds.padStart(2, "0")}`;
+}
 
-  return parts.join(" ") || duration;
+function formatViewCount(count: number): string {
+  if (count >= 1_000_000) {
+    return `${(count / 1_000_000).toFixed(1)}M`;
+  }
+  if (count >= 1_000) {
+    return `${(count / 1_000).toFixed(1)}K`;
+  }
+  return count.toLocaleString();
+}
+
+function formatStreamUptime(startedAt: string): string {
+  const start = new Date(startedAt);
+  const now = new Date();
+  const diffMs = now.getTime() - start.getTime();
+
+  const hours = Math.floor(diffMs / (1000 * 60 * 60));
+  const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+  if (hours > 0) {
+    return `${hours}h ${minutes}m`;
+  }
+  return `${minutes}m`;
 }
 
 export default function TwitchLiveSection({ liveStatus, latestVod }: TwitchLiveSectionProps) {
@@ -65,17 +93,20 @@ export default function TwitchLiveSection({ liveStatus, latestVod }: TwitchLiveS
         </div>
 
         <Group mt="sm" justify="space-between">
-          <Text size="xs" c="dimmed">
-            {new Date(latestVod.created_at).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-            {" · "}
-            {formatDuration(latestVod.duration)}
-            {" · "}
-            {latestVod.view_count.toLocaleString()} views
-          </Text>
+          <Group gap="md">
+            <Group gap={4}>
+              <IconEye size={14} color="gray" />
+              <Text size="xs" c="dimmed">
+                {formatViewCount(latestVod.view_count)}
+              </Text>
+            </Group>
+            <Group gap={4}>
+              <IconClock size={14} color="gray" />
+              <Text size="xs" c="dimmed">
+                {formatDuration(latestVod.duration)}
+              </Text>
+            </Group>
+          </Group>
           <a
             href="https://twitch.tv/JoeWatermelon"
             target="_blank"
@@ -154,11 +185,6 @@ export default function TwitchLiveSection({ liveStatus, latestVod }: TwitchLiveS
             >
               LIVE
             </Badge>
-            {stream && (
-              <Badge color="gray" variant="light">
-                {stream.viewer_count.toLocaleString()} viewers
-              </Badge>
-            )}
           </Group>
           {stream && (
             <Text size="sm" fw={500} lineClamp={1}>
@@ -187,9 +213,26 @@ export default function TwitchLiveSection({ liveStatus, latestVod }: TwitchLiveS
 
       {stream && (
         <Group mt="sm" justify="space-between">
-          <Text size="xs" c="dimmed">
-            Playing {stream.game_name}
-          </Text>
+          <Group gap="md">
+            <Group gap={4}>
+              <IconUsers size={14} color="gray" />
+              <Text size="xs" c="dimmed">
+                {formatViewCount(stream.viewer_count)}
+              </Text>
+            </Group>
+            <Group gap={4}>
+              <IconDeviceGamepad2 size={14} color="gray" />
+              <Text size="xs" c="dimmed">
+                {stream.game_name}
+              </Text>
+            </Group>
+            <Group gap={4}>
+              <IconClock size={14} color="gray" />
+              <Text size="xs" c="dimmed">
+                {formatStreamUptime(stream.started_at)}
+              </Text>
+            </Group>
+          </Group>
           <a
             href="https://twitch.tv/JoeWatermelon"
             target="_blank"

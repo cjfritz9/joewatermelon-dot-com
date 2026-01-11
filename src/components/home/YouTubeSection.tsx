@@ -15,7 +15,13 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { IconBrandYoutube, IconEdit } from "@tabler/icons-react";
+import {
+  IconBrandYoutube,
+  IconClock,
+  IconEdit,
+  IconEye,
+  IconThumbUp,
+} from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -45,6 +51,27 @@ function extractVideoId(input: string): string | null {
   }
 
   return null;
+}
+
+function formatDuration(seconds: number): string {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+
+  if (hours > 0) {
+    return `${hours}:${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  }
+  return `${minutes}:${secs.toString().padStart(2, "0")}`;
+}
+
+function formatViewCount(count: number): string {
+  if (count >= 1_000_000) {
+    return `${(count / 1_000_000).toFixed(1)}M`;
+  }
+  if (count >= 1_000) {
+    return `${(count / 1_000).toFixed(1)}K`;
+  }
+  return count.toLocaleString();
 }
 
 export default function YouTubeSection({
@@ -195,13 +222,26 @@ export default function YouTubeSection({
         </div>
 
         <Group mt="sm" justify="space-between">
-          <Text size="xs" c="dimmed">
-            {new Date(video.publishedAt).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </Text>
+          <Group gap="md">
+            <Group gap={4}>
+              <IconEye size={14} color="gray" />
+              <Text size="xs" c="dimmed">
+                {formatViewCount(video.viewCount)}
+              </Text>
+            </Group>
+            <Group gap={4}>
+              <IconThumbUp size={14} color="gray" />
+              <Text size="xs" c="dimmed">
+                {formatViewCount(video.likeCount)}
+              </Text>
+            </Group>
+            <Group gap={4}>
+              <IconClock size={14} color="gray" />
+              <Text size="xs" c="dimmed">
+                {formatDuration(video.durationSeconds)}
+              </Text>
+            </Group>
+          </Group>
           <a
             href="https://youtube.com/@JoeWatermelon"
             target="_blank"

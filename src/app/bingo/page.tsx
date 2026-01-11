@@ -30,15 +30,15 @@ import {
 import Link from "next/link";
 
 const previewTiles = [
-  { text: "500 Barrows KC", completed: true },
-  { text: "Fire Cape", completed: true },
-  { text: "Quest Cape", completed: false },
-  { text: "99 Slayer", completed: false },
-  { text: "Infernal Cape", highlighted: true },
-  { text: "CoX Completion", completed: true },
-  { text: "ToB Completion", completed: false },
-  { text: "Pet Drop", completed: false },
-  { text: "1B Bank", completed: false },
+  { text: "Boss Pet", completed: true },
+  { text: "Ancient Hilt", completed: true },
+  { text: "Nightmare Unique", completed: false },
+  { text: "Godwars Unique", completed: false },
+  { text: "Scythe, Shadow or Tbow", highlighted: true },
+  { text: "Boss Jar", completed: true },
+  { text: "Any Tome", completed: false },
+  { text: "Barrows Unique", completed: false },
+  { text: "Doom Unique", completed: false },
 ];
 
 interface FeatureCard {

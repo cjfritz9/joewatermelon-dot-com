@@ -10,6 +10,12 @@ export interface YouTubeVideo {
   thumbnailUrl: string;
   publishedAt: string;
   channelTitle: string;
+  duration: string;
+  durationSeconds: number;
+  viewCount: number;
+  likeCount: number;
+  commentCount: number;
+  isShort: boolean;
 }
 
 interface YouTubeSearchItem {
@@ -34,6 +40,11 @@ interface YouTubeVideoItem {
   };
   contentDetails?: {
     duration: string;
+  };
+  statistics?: {
+    viewCount: string;
+    likeCount: string;
+    commentCount: string;
   };
 }
 
@@ -99,7 +110,7 @@ export async function getLatestVideo(): Promise<YouTubeVideo | null> {
       .join(",");
 
     const videosResponse = await fetch(
-      `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${videoIds}&key=${YOUTUBE_API_KEY}`,
+      `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics&id=${videoIds}&key=${YOUTUBE_API_KEY}`,
       { next: { revalidate: 300 } }
     );
 
@@ -115,6 +126,8 @@ export async function getLatestVideo(): Promise<YouTubeVideo | null> {
     });
 
     if (nonShort) {
+      const duration = nonShort.contentDetails?.duration || "PT0S";
+      const durationSeconds = parseDurationToSeconds(duration);
       return {
         id: nonShort.id,
         title: nonShort.snippet.title,
@@ -122,6 +135,12 @@ export async function getLatestVideo(): Promise<YouTubeVideo | null> {
         thumbnailUrl: nonShort.snippet.thumbnails.high.url,
         publishedAt: nonShort.snippet.publishedAt,
         channelTitle: nonShort.snippet.channelTitle,
+        duration,
+        durationSeconds,
+        viewCount: parseInt(nonShort.statistics?.viewCount || "0", 10),
+        likeCount: parseInt(nonShort.statistics?.likeCount || "0", 10),
+        commentCount: parseInt(nonShort.statistics?.commentCount || "0", 10),
+        isShort: durationSeconds <= 60,
       };
     }
 
@@ -137,7 +156,7 @@ export async function getVideoById(videoId: string): Promise<YouTubeVideo | null
 
   try {
     const response = await fetch(
-      `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${YOUTUBE_API_KEY}`,
+      `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics&id=${videoId}&key=${YOUTUBE_API_KEY}`,
       { next: { revalidate: 300 } }
     );
 
@@ -149,6 +168,8 @@ export async function getVideoById(videoId: string): Promise<YouTubeVideo | null
     const data = await response.json();
     if (data.items && data.items.length > 0) {
       const item: YouTubeVideoItem = data.items[0];
+      const duration = item.contentDetails?.duration || "PT0S";
+      const durationSeconds = parseDurationToSeconds(duration);
       return {
         id: item.id,
         title: item.snippet.title,
@@ -156,6 +177,12 @@ export async function getVideoById(videoId: string): Promise<YouTubeVideo | null
         thumbnailUrl: item.snippet.thumbnails.high.url,
         publishedAt: item.snippet.publishedAt,
         channelTitle: item.snippet.channelTitle,
+        duration,
+        durationSeconds,
+        viewCount: parseInt(item.statistics?.viewCount || "0", 10),
+        likeCount: parseInt(item.statistics?.likeCount || "0", 10),
+        commentCount: parseInt(item.statistics?.commentCount || "0", 10),
+        isShort: durationSeconds <= 60,
       };
     }
 

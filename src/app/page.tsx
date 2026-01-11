@@ -91,7 +91,7 @@ export default async function Home() {
           JoeWatermelon
         </Title>
         <Text c="dimmed" ta="center" maw={500}>
-          OSRS content creator, speedrunner, and community builder. Join the Melon clan today!
+          OSRS content creator, GM Ironman, and community builder. Join the Melon clan today!
         </Text>
       </Stack>
 

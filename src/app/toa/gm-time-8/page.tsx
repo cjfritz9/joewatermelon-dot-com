@@ -18,7 +18,7 @@ const TOA8ManPage = async () => {
   ]);
 
   return (
-    <Stack align="center" my="xl">
+    <Stack align="center" my="xl" maw={1040} w="100%" mx="auto">
       <Title c={theme.colors.warning[3]} mb="md">
         ToA 8-man GM Time
       </Title>

@@ -8,6 +8,7 @@ export interface SessionData {
   twitchUsername?: string;
   oauthState?: string;
   oauthAction?: "login" | "link";
+  oauthReturnUrl?: string;
 }
 
 const sessionOptions: SessionOptions = {

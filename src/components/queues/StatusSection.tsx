@@ -44,7 +44,7 @@ export default function StatusSection({
   };
 
   return (
-    <Card shadow="md" mb="xl" radius="md" p="lg" maw={400} withBorder>
+    <Card shadow="md" mb="xl" radius="md" p="lg" maw={{ base: "100%", sm: 500 }} w="100%" withBorder>
       <Stack gap="xs" align="center">
         <Group align="center">
           <Text fw={700} size="lg">

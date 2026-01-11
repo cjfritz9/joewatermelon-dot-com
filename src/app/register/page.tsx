@@ -16,11 +16,13 @@ import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { IconAlertCircle, IconBrandTwitch } from "@tabler/icons-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
 
-export default function RegisterPage() {
+function RegisterForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/";
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -95,7 +97,7 @@ export default function RegisterPage() {
             radius="xl"
             color="violet"
             component="a"
-            href="/api/auth/twitch?action=login"
+            href={`/api/auth/twitch?action=login&returnUrl=${encodeURIComponent(redirectTo)}`}
           >
             Sign up with Twitch
           </Button>
@@ -189,5 +191,13 @@ export default function RegisterPage() {
         </form>
       </Paper>
     </Stack>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <RegisterForm />
+    </Suspense>
   );
 }

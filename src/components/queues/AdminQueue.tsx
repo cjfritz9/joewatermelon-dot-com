@@ -85,7 +85,7 @@ export default function AdminQueue({ players }: AdminQueueProps) {
   ));
 
   return (
-    <Stack gap="md" w="100%" maw={800}>
+    <Stack gap="md" w="100%" maw={1040} mb="xl">
       <Title fw={700} order={3}>
         Queue Management
       </Title>

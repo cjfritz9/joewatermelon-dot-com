@@ -6,6 +6,7 @@ export const GET = async (req: NextRequest) => {
   try {
     const searchParams = req.nextUrl.searchParams;
     const action = searchParams.get("action") as "login" | "link" | null;
+    const returnUrl = searchParams.get("returnUrl") || "/";
 
     const session = await getSession();
 
@@ -18,6 +19,7 @@ export const GET = async (req: NextRequest) => {
     const state = generateState();
     session.oauthState = state;
     session.oauthAction = action || "login";
+    session.oauthReturnUrl = returnUrl;
     await session.save();
 
     // Redirect to Twitch OAuth

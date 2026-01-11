@@ -33,7 +33,7 @@ const infoLinks: InfoLink[] = [
 
 export default function PrepareForRun() {
   return (
-    <Stack gap="md" align={{ base: "stretch", sm: "center" }} mb="xl" w="100%">
+    <Stack gap="md" mb="xl" w="100%">
       <Title fw={700} order={3}>
         Prepare for the Run
       </Title>

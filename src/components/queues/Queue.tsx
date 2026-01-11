@@ -46,7 +46,7 @@ export default function Queue({ players }: QueueProps) {
   ));
 
   return (
-    <Stack gap="md" w="100%" maw={800}>
+    <Stack gap="md" w="100%" maw={1040} mb="xl">
       <Group justify="space-between" align="center">
         <Title fw={700} order={3}>
           Current Queue

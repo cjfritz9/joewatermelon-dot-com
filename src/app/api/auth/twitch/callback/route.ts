@@ -39,10 +39,12 @@ export const GET = async (req: NextRequest) => {
     }
 
     const action = session.oauthAction || "login";
+    const returnUrl = session.oauthReturnUrl || "/";
 
     // Clear OAuth state from session
     delete session.oauthState;
     delete session.oauthAction;
+    delete session.oauthReturnUrl;
 
     // Exchange code for access token
     const tokenResponse = await exchangeCodeForToken(code);
@@ -102,7 +104,7 @@ export const GET = async (req: NextRequest) => {
       session.twitchUsername = twitchUser.display_name;
       await session.save();
 
-      return NextResponse.redirect(new URL("/", req.url));
+      return NextResponse.redirect(new URL(returnUrl, req.url));
     }
 
     // Check if email already exists as an email/password user
@@ -138,7 +140,7 @@ export const GET = async (req: NextRequest) => {
     session.twitchUsername = twitchUser.display_name;
     await session.save();
 
-    return NextResponse.redirect(new URL("/", req.url));
+    return NextResponse.redirect(new URL(returnUrl, req.url));
   } catch (err) {
     console.error("Twitch OAuth callback error:", err);
     return NextResponse.redirect(

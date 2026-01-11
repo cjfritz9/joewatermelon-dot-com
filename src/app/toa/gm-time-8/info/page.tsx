@@ -41,7 +41,7 @@ function InfoPageContent() {
   }, [section]);
 
   return (
-    <Stack my="xl" maw={{ base: "100%", sm: 800 }} mx="auto">
+    <Stack my="xl" maw={{ base: "100%", sm: 1040 }} mx="auto">
       <Title c={theme.colors.warning[3]} ta="center">
         ToA 8-man GM Time - Info
       </Title>

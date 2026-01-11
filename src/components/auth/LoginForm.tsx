@@ -95,7 +95,7 @@ export function LoginForm() {
           radius="xl"
           color="violet"
           component="a"
-          href="/api/auth/twitch?action=login"
+          href={`/api/auth/twitch?action=login&returnUrl=${encodeURIComponent(redirectTo)}`}
         >
           Twitch
         </Button>

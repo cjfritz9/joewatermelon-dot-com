@@ -9,6 +9,12 @@ import { toaQueueConfig } from "@/lib/queue-config";
 import { getToa8SpeedQueue, getToa8SpeedSettings } from "@/lib/server/toa-queues";
 import { isAdmin } from "@/lib/session";
 import { Stack, Text, Title } from "@mantine/core";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ToA Speed Queue",
+  description: "Join the Tombs of Amascut 8-man Grandmaster speed run queue. Sign up and get notified when it's your turn to raid.",
+};
 
 export const revalidate = 0;
 

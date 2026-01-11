@@ -20,12 +20,19 @@ export async function GET() {
   }
 
   const userData = userSnap.data() as DBUser;
+  const dbRoles = userData?.roles ?? [];
+
+  // Sync session roles with database if they've changed
+  if (JSON.stringify(session.roles ?? []) !== JSON.stringify(dbRoles)) {
+    session.roles = dbRoles;
+    await session.save();
+  }
 
   return APIResponse.success("User check complete", {
     user: {
       id: session.userId,
       email: userData?.email,
-      isAdmin: userData?.roles?.includes("admin") ?? false,
+      isAdmin: dbRoles.includes("admin"),
       rsn: userData?.rsn ?? null,
       twitchUsername: userData?.twitchUsername ?? null,
       hasTwitchLinked: !!userData?.twitchId,

@@ -21,7 +21,14 @@ import {
   IconTrophy,
   IconUsers,
 } from "@tabler/icons-react";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Combat Achievements",
+  description:
+    "Free Grandmaster Combat Achievement help for OSRS raids. Join ToA and ToB speed run queues and get your GM times with experienced runners.",
+};
 
 interface QueueCard {
   title: string;

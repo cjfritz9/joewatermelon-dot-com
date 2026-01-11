@@ -3,7 +3,14 @@ import { getToa8SpeedSettings } from "@/lib/server/toa-queues";
 import { getTobSpeedSettings } from "@/lib/server/tob-queues";
 import { Badge, Card, Group, SimpleGrid, Stack, Text, Title } from "@mantine/core";
 import { IconDroplet, IconPlayerPlay, IconPlayerStop, IconPyramid } from "@tabler/icons-react";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Queues",
+  description:
+    "Join queues for ToA and ToB Grandmaster speed runs. Sign up, wait your turn, and get notified when it's time to raid with JoeWatermelon.",
+};
 
 export const dynamic = "force-dynamic";
 

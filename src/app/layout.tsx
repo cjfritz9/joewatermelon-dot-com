@@ -14,8 +14,12 @@ import "./globals.css";
 import theme from "./theme";
 
 export const metadata: Metadata = {
-  title: "JoeWatermelon.com",
-  description: "A personal website for JoeWatermelon.",
+  title: {
+    default: "JoeWatermelon | OSRS Content Creator & Speedrunner",
+    template: "%s | JoeWatermelon",
+  },
+  description:
+    "OSRS content creator, GM Ironman, and speedrunner. Join queues for ToA and ToB speed runs, get free Grandmaster Combat Achievement help, and connect with the Melon clan community.",
 };
 
 export default function RootLayout({

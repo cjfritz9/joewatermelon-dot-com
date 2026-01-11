@@ -17,7 +17,14 @@ import {
   IconUserPlus,
   IconUsers,
 } from "@tabler/icons-react";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Melon Clan",
+  description:
+    "Join the Melon clan - a social OSRS clan with no requirements. Find us on World 495, participate in bingo events, and share your drops with Dink integration.",
+};
 
 const features = [
   {

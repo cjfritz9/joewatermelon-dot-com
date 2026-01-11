@@ -27,7 +27,14 @@ import {
   IconUsers,
   IconUsersGroup,
 } from "@tabler/icons-react";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Clan Bingos",
+  description:
+    "Team-based OSRS bingo competitions. Form teams, complete tiles together, and compete for prizes in clan-wide bingo events.",
+};
 
 const previewTiles = [
   { text: "Boss Pet", completed: true },

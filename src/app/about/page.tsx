@@ -1,4 +1,5 @@
 import theme from "@/app/theme";
+import { Metadata } from "next";
 import {
   Anchor,
   Card,
@@ -15,6 +16,12 @@ import {
   IconBrandYoutube,
 } from "@tabler/icons-react";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Meet JoeWatermelon - OSRS content creator, speedrunner, and combat achiever. Streaming ToA and ToB speed runs and helping players get Grandmaster times.",
+};
 
 const socials = [
   {

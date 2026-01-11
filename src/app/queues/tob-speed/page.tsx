@@ -8,6 +8,12 @@ import { tobQueueConfig } from "@/lib/queue-config";
 import { getTobSpeedQueue, getTobSpeedSettings } from "@/lib/server/tob-queues";
 import { isAdmin } from "@/lib/session";
 import { Stack, Text, Title } from "@mantine/core";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ToB Speed Queue",
+  description: "Join the Theatre of Blood 4 & 5-man Grandmaster speed run queue. Sign up and get notified when it's your turn to raid.",
+};
 
 export const revalidate = 0;
 

@@ -26,6 +26,7 @@ export async function GET() {
       id: session.userId,
       email: userData?.email,
       isAdmin: userData?.roles?.includes("admin") ?? false,
+      twitchUsername: userData?.twitchUsername ?? null,
     },
   });
 }

@@ -13,6 +13,9 @@ export interface DBUser {
   email: string;
   roles: UserRoles[];
   passwordHash: string;
+  twitchId?: string;
+  twitchUsername?: string;
+  twitchLinkedAt?: Timestamp;
 }
 
 export interface DBToaQueueEntrant {

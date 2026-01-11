@@ -5,6 +5,9 @@ export interface SessionData {
   userId?: string;
   email?: string;
   roles?: string[];
+  twitchUsername?: string;
+  oauthState?: string;
+  oauthAction?: "login" | "link";
 }
 
 const sessionOptions: SessionOptions = {

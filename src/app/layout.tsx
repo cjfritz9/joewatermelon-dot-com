@@ -1,3 +1,4 @@
+import { DevBanner } from "@/components/global/DevBanner";
 import { Footer } from "@/components/global/Footer";
 import { HeaderNav } from "@/components/global/HeaderNav";
 import { UserProvider } from "@/lib/context/UserContext";
@@ -29,6 +30,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <MantineProvider defaultColorScheme="dark" theme={theme}>
+        <DevBanner />
           <DatesProvider settings={{ firstDayOfWeek: 0 }}>
             <Notifications />
             <UserProvider>

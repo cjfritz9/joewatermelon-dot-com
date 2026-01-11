@@ -1,3 +1,4 @@
+import firestore from "@/lib/db/firestore";
 import { getSession } from "@/lib/session";
 import {
   exchangeCodeForToken,
@@ -5,68 +6,73 @@ import {
   findUserByEmail,
   findUserByTwitchId,
 } from "@/lib/twitch";
-import firestore from "@/lib/db/firestore";
 import { Timestamp } from "@google-cloud/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
+function getBaseUrl(req: NextRequest): string {
+  const forwardedHost = req.headers.get("x-forwarded-host");
+  const forwardedProto = req.headers.get("x-forwarded-proto") || "https";
+
+  if (forwardedHost) {
+    return `${forwardedProto}://${forwardedHost}`;
+  }
+
+  const host = req.headers.get("host") || "localhost:3000";
+  const protocol = host.includes("localhost") ? "http" : "https";
+  return `${protocol}://${host}`;
+}
+
 export const GET = async (req: NextRequest) => {
   try {
+    const baseUrl = getBaseUrl(req);
     const searchParams = req.nextUrl.searchParams;
     const code = searchParams.get("code");
     const state = searchParams.get("state");
     const error = searchParams.get("error");
 
-    // Handle user denial or error
     if (error) {
       return NextResponse.redirect(
-        new URL(`/login?error=${encodeURIComponent(error)}`, req.url)
+        new URL(`/login?error=${encodeURIComponent(error)}`, baseUrl)
       );
     }
 
     if (!code || !state) {
       return NextResponse.redirect(
-        new URL("/login?error=missing_params", req.url)
+        new URL("/login?error=missing_params", baseUrl)
       );
     }
 
     const session = await getSession();
 
-    // Validate state for CSRF protection
     if (state !== session.oauthState) {
       return NextResponse.redirect(
-        new URL("/login?error=invalid_state", req.url)
+        new URL("/login?error=invalid_state", baseUrl)
       );
     }
 
     const action = session.oauthAction || "login";
     const returnUrl = session.oauthReturnUrl || "/";
 
-    // Clear OAuth state from session
     delete session.oauthState;
     delete session.oauthAction;
     delete session.oauthReturnUrl;
 
-    // Exchange code for access token
     const tokenResponse = await exchangeCodeForToken(code);
     const twitchUser = await fetchTwitchUser(tokenResponse.access_token);
 
-    // Check if Twitch account is already linked to a user
     const existingTwitchUser = await findUserByTwitchId(twitchUser.id);
 
     if (action === "link") {
-      // Linking flow - user must be logged in
       if (!session.userId) {
-        return NextResponse.redirect(new URL("/login", req.url));
+        return NextResponse.redirect(new URL("/login", baseUrl));
       }
 
-      // Check if Twitch is already linked to another account
       if (existingTwitchUser && existingTwitchUser.id !== session.userId) {
         return NextResponse.redirect(
-          new URL("/account?error=twitch_already_linked", req.url)
+          new URL("/account?error=twitch_already_linked", baseUrl)
         );
       }
 
-      // Link Twitch to current user
       await firestore
         .collection("users")
         .doc(session.userId)
@@ -81,13 +87,11 @@ export const GET = async (req: NextRequest) => {
       await session.save();
 
       return NextResponse.redirect(
-        new URL("/account?success=twitch_linked", req.url)
+        new URL("/account?success=twitch_linked", baseUrl)
       );
     }
 
-    // Login flow
     if (existingTwitchUser) {
-      // Returning Twitch user - update username if changed and login
       if (existingTwitchUser.twitchUsername !== twitchUser.display_name) {
         await firestore
           .collection("users")
@@ -104,13 +108,11 @@ export const GET = async (req: NextRequest) => {
       session.twitchUsername = twitchUser.display_name;
       await session.save();
 
-      return NextResponse.redirect(new URL(returnUrl, req.url));
+      return NextResponse.redirect(new URL(returnUrl, baseUrl));
     }
 
-    // Check if email already exists as an email/password user
     const existingEmailUser = await findUserByEmail(twitchUser.email);
     if (existingEmailUser && !existingEmailUser.twitchId) {
-      // Email conflict - redirect to conflict page
       return NextResponse.redirect(
         new URL(
           `/auth/twitch-conflict?email=${encodeURIComponent(twitchUser.email)}`,
@@ -119,7 +121,6 @@ export const GET = async (req: NextRequest) => {
       );
     }
 
-    // New user - create account
     const userId = `twitch_${twitchUser.id}`;
     const userRef = firestore.collection("users").doc(userId);
 
@@ -140,11 +141,11 @@ export const GET = async (req: NextRequest) => {
     session.twitchUsername = twitchUser.display_name;
     await session.save();
 
-    return NextResponse.redirect(new URL(returnUrl, req.url));
+    return NextResponse.redirect(new URL(returnUrl, baseUrl));
   } catch (err) {
     console.error("Twitch OAuth callback error:", err);
     return NextResponse.redirect(
-      new URL("/login?error=oauth_callback_failed", req.url)
+      new URL("/login?error=oauth_callback_failed", getBaseUrl(req))
     );
   }
 };

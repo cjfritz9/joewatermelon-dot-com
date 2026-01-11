@@ -30,7 +30,7 @@ steps:
       - '--set-env-vars'
       - 'NODE_ENV=production,TWITCH_REDIRECT_URI=https://joewatermelon.com/api/auth/twitch/callback'
       - '--set-secrets'
-      - 'SESSION_SECRET=SESSION_SECRET:latest,TWITCH_CLIENT_ID=TWITCH_CLIENT_ID:latest,TWITCH_CLIENT_SECRET=TWITCH_CLIENT_SECRET:latest'
+      - 'SESSION_SECRET=secrets:latest,TWITCH_CLIENT_ID=TWITCH_CLIENT_ID:latest,TWITCH_CLIENT_SECRET=TWITCH_CLIENT_SECRET:latest'
 
   # Allow unauthenticated access
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'

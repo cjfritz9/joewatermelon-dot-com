@@ -112,10 +112,7 @@ export default async function Home() {
         <Title
           order={2}
           ta="center"
-          className="gradient-text"
-          style={{
-            backgroundImage: `linear-gradient(135deg, ${theme.colors.brand[3]} 0%, ${theme.colors.brand[7]} 100%)`,
-          }}
+          c={theme.colors.brand[7]}
         >
           Explore
         </Title>

@@ -14,19 +14,19 @@ const infoLinks: InfoLink[] = [
   {
     title: "Requirements",
     description: "Requirements to join the teams.",
-    icon: <IconChecklist size={32} color={theme.colors!.success![6]} />,
+    icon: <IconChecklist size={32} color={theme.colors.success[6]} />,
     href: "toa/gm-time-8/info?section=gear",
   },
   {
     title: "Setup & Inventory",
     description: "Optimal combat styles and inventory.",
-    icon: <IconFlame size={32} color={theme.colors!.error![5]} />,
+    icon: <IconFlame size={32} color={theme.colors.error[5]} />,
     href: "toa/gm-time-8/info?section=setup",
   },
   {
     title: "Strategy & Methods",
     description: "Best combat and prayer strategy.",
-    icon: <IconSwords size={32} color={theme.colors!.warning![4]} />,
+    icon: <IconSwords size={32} color={theme.colors.warning[4]} />,
     href: "toa/gm-time-8/info?section=strategy",
   },
 ];

@@ -122,7 +122,7 @@ export function HeaderNav() {
   return (
     <Box pb={48}>
       <header className={classes.header}>
-        <Group justify="space-between" h="100%">
+        <Group justify="space-between" h="100%" className="container">
           <Link href="/" className={classes.link}>
             <Image src={logo} alt="logo" height={36} />
           </Link>

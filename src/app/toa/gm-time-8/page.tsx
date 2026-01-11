@@ -18,8 +18,8 @@ const TOA8ManPage = async () => {
   ]);
 
   return (
-    <Stack align="center" px="xl" my="xl" mx="auto" style={{ width: "100%", maxWidth: 1200, overflow: "hidden" }}>
-      <Title c={theme.colors!.warning![3]} mb="md">
+    <Stack align="center" my="xl">
+      <Title c={theme.colors.warning[3]} mb="md">
         ToA 8-man GM Time
       </Title>
       {isUserAdmin ? (

@@ -33,7 +33,7 @@ export default function RootLayout({
             <Notifications />
             <UserProvider>
               <HeaderNav />
-              {children}
+              <main className="container">{children}</main>
               <Footer />
             </UserProvider>
           </DatesProvider>

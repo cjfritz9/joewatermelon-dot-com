@@ -39,7 +39,7 @@ export default function Home() {
             inherit
             variant="text"
             component="span"
-            c={theme.colors!.warning![5]}
+            c={theme.colors.warning[5]}
           >
             ToA 8 GM Times
           </Text>

@@ -1,4 +1,4 @@
-import { createTheme } from "@mantine/core";
+import { createTheme, MantineTheme } from "@mantine/core";
 
 const theme = createTheme({
   primaryColor: "brand",
@@ -75,6 +75,6 @@ const theme = createTheme({
       "#0c4a6e",
     ],
   },
-});
+}) as MantineTheme;
 
 export default theme;

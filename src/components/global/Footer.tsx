@@ -22,7 +22,7 @@ export function Footer() {
 
   return (
     <div className={classes.footer}>
-      <div className={classes.inner}>
+      <div className={`${classes.inner} container`}>
         <div />
 
         <Group className={classes.links}>{items}</Group>

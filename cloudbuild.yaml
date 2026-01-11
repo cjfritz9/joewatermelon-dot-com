@@ -32,6 +32,21 @@ steps:
       - '--set-secrets'
       - 'SESSION_SECRET=secrets:latest'
 
+  # Allow unauthenticated access
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'services'
+      - 'add-iam-policy-binding'
+      - 'joewatermelon-dot-com'
+      - '--region'
+      - 'us-central1'
+      - '--member'
+      - 'allUsers'
+      - '--role'
+      - 'roles/run.invoker'
+
 images:
   - 'gcr.io/$PROJECT_ID/joewatermelon-dot-com:$COMMIT_SHA'
 

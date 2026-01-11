@@ -1,6 +1,6 @@
-import firestore from "./db/firestore";
+import firestore, { isFirestoreAvailable } from "./db/firestore";
 
-const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY!;
+const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 const YOUTUBE_CHANNEL_HANDLE = "@JoeWatermelon";
 
 export interface YouTubeVideo {
@@ -50,6 +50,7 @@ function parseDurationToSeconds(duration: string): number {
 let cachedChannelId: string | null = null;
 
 async function getChannelId(): Promise<string | null> {
+  if (!YOUTUBE_API_KEY) return null;
   if (cachedChannelId) return cachedChannelId;
 
   try {
@@ -132,6 +133,8 @@ export async function getLatestVideo(): Promise<YouTubeVideo | null> {
 }
 
 export async function getVideoById(videoId: string): Promise<YouTubeVideo | null> {
+  if (!YOUTUBE_API_KEY) return null;
+
   try {
     const response = await fetch(
       `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${YOUTUBE_API_KEY}`,
@@ -168,6 +171,8 @@ export interface FeaturedVideoSettings {
 }
 
 export async function getFeaturedVideoSettings(): Promise<FeaturedVideoSettings> {
+  if (!isFirestoreAvailable) return { featuredVideoId: null };
+
   try {
     const doc = await firestore.collection("settings").doc("youtube").get();
 
@@ -186,6 +191,8 @@ export async function getFeaturedVideoSettings(): Promise<FeaturedVideoSettings>
 }
 
 export async function setFeaturedVideoId(videoId: string | null): Promise<boolean> {
+  if (!isFirestoreAvailable) return false;
+
   try {
     await firestore.collection("settings").doc("youtube").set(
       { featuredVideoId: videoId },

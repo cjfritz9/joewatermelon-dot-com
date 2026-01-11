@@ -1,9 +1,9 @@
 import firestore from "./db/firestore";
 import { DBUser } from "@/@types/firestore";
 
-const TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID!;
-const TWITCH_CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET!;
-const TWITCH_REDIRECT_URI = process.env.TWITCH_REDIRECT_URI!;
+const TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID || "";
+const TWITCH_CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET || "";
+const TWITCH_REDIRECT_URI = process.env.TWITCH_REDIRECT_URI || "";
 
 export interface TwitchTokenResponse {
   access_token: string;
@@ -170,6 +170,10 @@ export interface LiveStatus {
 }
 
 export async function checkIfLive(username: string): Promise<LiveStatus> {
+  if (!TWITCH_CLIENT_ID || !TWITCH_CLIENT_SECRET) {
+    return { isLive: false, stream: null };
+  }
+
   try {
     const token = await getAppAccessToken();
 
@@ -206,6 +210,7 @@ export async function checkIfLive(username: string): Promise<LiveStatus> {
 let cachedUserId: string | null = null;
 
 async function getUserId(username: string): Promise<string | null> {
+  if (!TWITCH_CLIENT_ID || !TWITCH_CLIENT_SECRET) return null;
   if (cachedUserId) return cachedUserId;
 
   try {
@@ -252,6 +257,10 @@ export interface TwitchVideo {
 }
 
 export async function getLatestVod(username: string): Promise<TwitchVideo | null> {
+  if (!TWITCH_CLIENT_ID || !TWITCH_CLIENT_SECRET) {
+    return null;
+  }
+
   try {
     const userId = await getUserId(username);
     if (!userId) return null;

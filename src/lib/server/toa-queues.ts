@@ -1,10 +1,12 @@
 import { APIToaQueueEntrant } from "@/@types/api";
 import { DBToaQueueEntrant } from "@/@types/firestore";
 import { Timestamp } from "@google-cloud/firestore";
-import firestore from "../db/firestore";
+import firestore, { isFirestoreAvailable } from "../db/firestore";
 import { getToaQueueEntryIsValid } from "../db/validation";
 
 export const getToa8SpeedQueue = async (): Promise<APIToaQueueEntrant[]> => {
+  if (!isFirestoreAvailable) return [];
+
   try {
     const queueSnapshot = await firestore.collection("toa-queue").get();
 
@@ -45,6 +47,8 @@ export interface EventSettings {
 }
 
 export const getToa8SpeedSettings = async (): Promise<EventSettings> => {
+  if (!isFirestoreAvailable) return { status: "inactive", nextRunTime: null };
+
   try {
     const doc = await firestore
       .collection("settings")

@@ -5,7 +5,7 @@ import { Badge, Card, Group, SimpleGrid, Stack, Text, Title } from "@mantine/cor
 import { IconDroplet, IconPlayerPlay, IconPlayerStop, IconPyramid } from "@tabler/icons-react";
 import Link from "next/link";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function QueuesPage() {
   const [toaSettings, tobSettings] = await Promise.all([

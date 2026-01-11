@@ -3,6 +3,16 @@
 @import "@mantine/dates/styles.css";
 @import "./theme.css";
 
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
 .mantine-Notifications-root {
   top: 70px;
   pointer-events: none;

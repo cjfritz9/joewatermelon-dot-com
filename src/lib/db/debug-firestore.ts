@@ -14,14 +14,12 @@ async function debugFirestore() {
 
     const dummyDocRef = firestore.collection("debug").doc("test-doc");
 
-    // Test write
     await dummyDocRef.set({
       timestamp: new Date().toISOString(),
       message: "Cloud Run Firestore debug test",
     });
     console.log("✅ Successfully wrote dummy document.");
 
-    // Test read
     const docSnap = await dummyDocRef.get();
     if (!docSnap.exists) {
       console.error("🚨 Dummy document not found after write.");
@@ -29,7 +27,6 @@ async function debugFirestore() {
       console.log("✅ Successfully read dummy document:", docSnap.data());
     }
 
-    // Cleanup
     await dummyDocRef.delete();
     console.log("🧹 Cleaned up dummy document.");
 

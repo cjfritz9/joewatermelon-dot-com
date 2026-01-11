@@ -33,7 +33,7 @@ export default function AdminQueue({ players }: AdminQueueProps) {
   const router = useRouter();
 
   const handleRemove = async (id: string, rsn: string) => {
-    const res = await fetch(`/api/queues/toa/8-man-speed/${id}`, {
+    const res = await fetch(`/api/queues/toa-speed/${id}`, {
       method: "DELETE",
       credentials: "include",
     });
@@ -57,7 +57,7 @@ export default function AdminQueue({ players }: AdminQueueProps) {
   };
 
   const handleNotify = async (id: string, rsn: string) => {
-    const res = await fetch(`/api/queues/toa/8-man-speed/${id}/notify`, {
+    const res = await fetch(`/api/queues/toa-speed/${id}/notify`, {
       method: "POST",
       credentials: "include",
     });

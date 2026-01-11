@@ -10,7 +10,7 @@ import { Stack, Title } from "@mantine/core";
 
 export const revalidate = 0;
 
-const TOA8ManPage = async () => {
+const ToaSpeedQueuePage = async () => {
   const [queue, isUserAdmin, settings] = await Promise.all([
     getToa8SpeedQueue(),
     isAdmin(),
@@ -39,4 +39,4 @@ const TOA8ManPage = async () => {
   );
 };
 
-export default TOA8ManPage;
+export default ToaSpeedQueuePage;

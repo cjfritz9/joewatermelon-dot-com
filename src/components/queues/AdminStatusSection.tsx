@@ -71,7 +71,7 @@ export default function AdminStatusSection({
     setSaving(true);
 
     try {
-      const res = await fetch("/api/queues/toa/8-man-speed/settings", {
+      const res = await fetch("/api/queues/toa-speed/settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

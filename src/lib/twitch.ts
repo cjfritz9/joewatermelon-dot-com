@@ -115,3 +115,173 @@ export function generateState(): string {
     ""
   );
 }
+
+// App access token cache
+let appAccessToken: string | null = null;
+let appTokenExpiry: number = 0;
+
+async function getAppAccessToken(): Promise<string> {
+  // Return cached token if still valid (with 5 min buffer)
+  if (appAccessToken && Date.now() < appTokenExpiry - 300000) {
+    return appAccessToken;
+  }
+
+  const params = new URLSearchParams({
+    client_id: TWITCH_CLIENT_ID,
+    client_secret: TWITCH_CLIENT_SECRET,
+    grant_type: "client_credentials",
+  });
+
+  const response = await fetch("https://id.twitch.tv/oauth2/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: params.toString(),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to get app access token");
+  }
+
+  const data = await response.json();
+  appAccessToken = data.access_token;
+  appTokenExpiry = Date.now() + data.expires_in * 1000;
+
+  return appAccessToken;
+}
+
+export interface TwitchStream {
+  id: string;
+  user_id: string;
+  user_login: string;
+  user_name: string;
+  game_name: string;
+  title: string;
+  viewer_count: number;
+  started_at: string;
+  thumbnail_url: string;
+}
+
+export interface LiveStatus {
+  isLive: boolean;
+  stream: TwitchStream | null;
+}
+
+export async function checkIfLive(username: string): Promise<LiveStatus> {
+  try {
+    const token = await getAppAccessToken();
+
+    const response = await fetch(
+      `https://api.twitch.tv/helix/streams?user_login=${username}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Client-Id": TWITCH_CLIENT_ID,
+        },
+        next: { revalidate: 60 }, // Cache for 60 seconds
+      }
+    );
+
+    if (!response.ok) {
+      console.error("Failed to check live status:", await response.text());
+      return { isLive: false, stream: null };
+    }
+
+    const data = await response.json();
+
+    if (data.data && data.data.length > 0) {
+      return { isLive: true, stream: data.data[0] };
+    }
+
+    return { isLive: false, stream: null };
+  } catch (error) {
+    console.error("Error checking live status:", error);
+    return { isLive: false, stream: null };
+  }
+}
+
+// Cache user ID
+let cachedUserId: string | null = null;
+
+async function getUserId(username: string): Promise<string | null> {
+  if (cachedUserId) return cachedUserId;
+
+  try {
+    const token = await getAppAccessToken();
+
+    const response = await fetch(
+      `https://api.twitch.tv/helix/users?login=${username}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Client-Id": TWITCH_CLIENT_ID,
+        },
+      }
+    );
+
+    if (!response.ok) return null;
+
+    const data = await response.json();
+    if (data.data && data.data.length > 0) {
+      cachedUserId = data.data[0].id;
+      return cachedUserId;
+    }
+
+    return null;
+  } catch (error) {
+    console.error("Error getting user ID:", error);
+    return null;
+  }
+}
+
+export interface TwitchVideo {
+  id: string;
+  user_id: string;
+  user_name: string;
+  title: string;
+  description: string;
+  created_at: string;
+  published_at: string;
+  url: string;
+  thumbnail_url: string;
+  duration: string;
+  view_count: number;
+  type: string;
+}
+
+export async function getLatestVod(username: string): Promise<TwitchVideo | null> {
+  try {
+    const userId = await getUserId(username);
+    if (!userId) return null;
+
+    const token = await getAppAccessToken();
+
+    const response = await fetch(
+      `https://api.twitch.tv/helix/videos?user_id=${userId}&first=1&type=archive`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Client-Id": TWITCH_CLIENT_ID,
+        },
+        next: { revalidate: 300 }, // Cache for 5 minutes
+      }
+    );
+
+    if (!response.ok) {
+      console.error("Failed to get latest VOD:", await response.text());
+      return null;
+    }
+
+    const data = await response.json();
+
+    if (data.data && data.data.length > 0) {
+      return data.data[0];
+    }
+
+    return null;
+  } catch (error) {
+    console.error("Error getting latest VOD:", error);
+    return null;
+  }
+}

@@ -24,7 +24,6 @@ export const POST = async (req: Request) => {
     const userDoc = querySnap.docs[0];
     const userData = userDoc.data() as DBUser;
 
-    // Check if this is a Twitch-only account (no password)
     if (!userData.passwordHash) {
       return APIResponse.error(
         "This account was created with Twitch. Please log in with Twitch.",

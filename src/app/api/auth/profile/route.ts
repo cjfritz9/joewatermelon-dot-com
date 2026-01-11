@@ -23,17 +23,14 @@ export async function PUT(req: Request) {
 
     const userData = userDoc.data() as DBUser;
 
-    // Build update object
     const updates: Record<string, unknown> = {
       updatedAt: new Date(),
     };
 
-    // Always allow RSN updates
     if (rsn !== undefined) {
       updates.rsn = rsn || null;
     }
 
-    // Only allow twitchUsername updates if not OAuth-linked
     if (twitchUsername !== undefined && !userData.twitchId) {
       updates.twitchUsername = twitchUsername || null;
     }

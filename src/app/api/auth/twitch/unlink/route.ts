@@ -21,7 +21,6 @@ export const POST = async () => {
 
     const userData = userDoc.data() as DBUser;
 
-    // Check if user has a password - prevent orphaning OAuth-only accounts
     if (!userData.passwordHash) {
       return APIResponse.error(
         "Cannot unlink Twitch. Please set a password first.",
@@ -29,12 +28,10 @@ export const POST = async () => {
       );
     }
 
-    // Check if Twitch is actually linked
     if (!userData.twitchId) {
       return APIResponse.error("No Twitch account is linked", 400);
     }
 
-    // Remove Twitch fields
     await userRef.update({
       twitchId: FieldValue.delete(),
       twitchUsername: FieldValue.delete(),
@@ -42,7 +39,6 @@ export const POST = async () => {
       updatedAt: new Date(),
     });
 
-    // Update session
     delete session.twitchUsername;
     await session.save();
 

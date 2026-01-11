@@ -251,7 +251,7 @@ function InfoPageContent() {
             unsure about anything, just ask.
           </Text>
           <Link
-            href="/toa/gm-time-8"
+            href="/queues/toa-speed"
             style={{
               color: theme.colors.warning[4],
               fontWeight: 600,
@@ -273,7 +273,7 @@ function InfoPageContent() {
   );
 }
 
-export default function TOA8ManInfoPage() {
+export default function ToaSpeedInfoPage() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <InfoPageContent />

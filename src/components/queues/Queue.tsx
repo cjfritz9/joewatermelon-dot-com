@@ -40,9 +40,9 @@ const getGearIcon = (hasItem: boolean) =>
   );
 
 export default function Queue({ players: initialPlayers }: QueueProps) {
-  const { data: players } = useSWR("/api/queues/toa/8-man-speed", fetcher, {
+  const { data: players } = useSWR("/api/queues/toa-speed", fetcher, {
     fallbackData: initialPlayers,
-    refreshInterval: 10000, // Poll every 10 seconds
+    refreshInterval: 10000,
   });
 
   const rows = players.map((player) => (

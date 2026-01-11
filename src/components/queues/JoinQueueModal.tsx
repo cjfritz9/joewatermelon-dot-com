@@ -51,7 +51,6 @@ export default function JoinQueueModal() {
 
   const [submitting, setSubmitting] = useState(false);
 
-  // Auto-populate from user account when modal opens
   useEffect(() => {
     if (opened && user) {
       setFormData((prev) => ({
@@ -121,7 +120,7 @@ export default function JoinQueueModal() {
 
     setSubmitting(true);
     try {
-      const res = await fetch("/api/queues/toa/8-man-speed", {
+      const res = await fetch("/api/queues/toa-speed", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ data: formData }),
@@ -130,7 +129,6 @@ export default function JoinQueueModal() {
       const data = (await res.json()) as APIResponse<{ id: string }>;
 
       if (data.success && data.data?.id) {
-        // Store the queue entry ID for notification polling
         localStorage.setItem("toaQueueEntryId", data.data.id);
         close();
         notifications.show({

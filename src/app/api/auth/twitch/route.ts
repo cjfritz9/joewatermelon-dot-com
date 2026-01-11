@@ -10,19 +10,16 @@ export const GET = async (req: NextRequest) => {
 
     const session = await getSession();
 
-    // For linking, user must be logged in
     if (action === "link" && !session.userId) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
 
-    // Generate state for CSRF protection
     const state = generateState();
     session.oauthState = state;
     session.oauthAction = action || "login";
     session.oauthReturnUrl = returnUrl;
     await session.save();
 
-    // Redirect to Twitch OAuth
     const authUrl = generateOAuthUrl(state);
     return NextResponse.redirect(authUrl);
   } catch (err) {

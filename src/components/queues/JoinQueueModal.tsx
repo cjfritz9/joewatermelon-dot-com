@@ -27,6 +27,7 @@ interface FormData {
   redKeris: boolean;
   bgs: boolean;
   zcb: boolean;
+  eye: boolean;
   notes: string;
 }
 
@@ -42,6 +43,7 @@ export default function JoinQueueModal() {
     redKeris: false,
     bgs: false,
     zcb: false,
+    eye: false,
     notes: "",
   });
 
@@ -169,6 +171,12 @@ export default function JoinQueueModal() {
             required
             label="ZCB"
             onChange={(e) => handleUpdateFormData("zcb", e.target.checked)}
+          />
+
+          <Checkbox
+            required
+            label="Eye of Ayak"
+            onChange={(e) => handleUpdateFormData("eye", e.target.checked)}
           />
 
           <Text>Ready Check</Text>

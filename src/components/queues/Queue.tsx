@@ -1,7 +1,7 @@
 "use client";
 
 import { APIToaQueueEntrant } from "@/@types/api";
-import { Badge, Card, Group, Stack, Table, Text, Title } from "@mantine/core";
+import { Badge, Card, Group, Stack, Table, Text, Title, Tooltip } from "@mantine/core";
 import { IconSquareCheck, IconSquareX } from "@tabler/icons-react";
 import JoinQueueModal from "./JoinQueueModal";
 
@@ -33,14 +33,13 @@ const getGearIcon = (hasItem: boolean) =>
 
 export default function Queue({ players }: QueueProps) {
   const rows = players.map((player) => (
-    <Table.Tr key={player.id} >
+    <Table.Tr key={player.id}>
       <Table.Td>{player.rsn ?? "-"}</Table.Td>
       <Table.Td>{player.expertKC ?? "-"}</Table.Td>
-      <Table.Td>
-        {getGearIcon(player.redKeris) ?? "-"}
-      </Table.Td>
-      <Table.Td>{getGearIcon(player.bgs) ?? "-"}</Table.Td>
-      <Table.Td>{getGearIcon(player.zcb) ?? "-"}</Table.Td>
+      <Table.Td>{getGearIcon(player.redKeris)}</Table.Td>
+      <Table.Td>{getGearIcon(player.bgs)}</Table.Td>
+      <Table.Td>{getGearIcon(player.zcb)}</Table.Td>
+      <Table.Td>{getGearIcon(player.eye)}</Table.Td>
       <Table.Td>{getStatusBadge(player.ready)}</Table.Td>
     </Table.Tr>
   ));
@@ -69,9 +68,26 @@ export default function Queue({ players }: QueueProps) {
               <Table.Tr>
                 <Table.Th>RSN</Table.Th>
                 <Table.Th>KC</Table.Th>
-                <Table.Th>Keris</Table.Th>
-                <Table.Th>BGS</Table.Th>
-                <Table.Th>ZCB</Table.Th>
+                <Table.Th>
+                  <Tooltip label="Keris Partisan of Corruption">
+                    <span>Keris</span>
+                  </Tooltip>
+                </Table.Th>
+                <Table.Th>
+                  <Tooltip label="Bandos Godsword">
+                    <span>BGS</span>
+                  </Tooltip>
+                </Table.Th>
+                <Table.Th>
+                  <Tooltip label="Zaryte Crossbow">
+                    <span>ZCB</span>
+                  </Tooltip>
+                </Table.Th>
+                <Table.Th>
+                  <Tooltip label="Eye of Ayak">
+                    <span>Eye</span>
+                  </Tooltip>
+                </Table.Th>
                 <Table.Th>Status</Table.Th>
               </Table.Tr>
             </Table.Thead>

@@ -30,5 +30,6 @@ export interface DBToaQueueEntrant {
   redKeris: boolean;
   bgs: boolean;
   zcb: boolean;
+  eye: boolean;
   notes: string;
 }

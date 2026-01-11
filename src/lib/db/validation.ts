@@ -11,8 +11,9 @@ export const getToaQueueEntryIsValid = (body: any) => {
     "ready",
     "redKeris",
     "bgs",
-    "notes",
     "zcb",
+    "eye",
+    "notes",
   ];
 
   return requiredFields.every((field) => field in body);

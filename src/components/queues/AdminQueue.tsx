@@ -64,6 +64,7 @@ export default function AdminQueue({ players }: AdminQueueProps) {
       <Table.Td>{getGearIcon(player.redKeris)}</Table.Td>
       <Table.Td>{getGearIcon(player.bgs)}</Table.Td>
       <Table.Td>{getGearIcon(player.zcb)}</Table.Td>
+      <Table.Td>{getGearIcon(player.eye)}</Table.Td>
       <Table.Td>{getStatusBadge(player.ready)}</Table.Td>
       <Table.Td>
         <Tooltip label={player.notes || "No notes"} multiline maw={300}>
@@ -105,9 +106,26 @@ export default function AdminQueue({ players }: AdminQueueProps) {
                 <Table.Th>RSN</Table.Th>
                 <Table.Th>Twitch</Table.Th>
                 <Table.Th>KC</Table.Th>
-                <Table.Th>Keris</Table.Th>
-                <Table.Th>BGS</Table.Th>
-                <Table.Th>ZCB</Table.Th>
+                <Table.Th>
+                  <Tooltip label="Keris Partisan of Corruption">
+                    <span>Keris</span>
+                  </Tooltip>
+                </Table.Th>
+                <Table.Th>
+                  <Tooltip label="Bandos Godsword">
+                    <span>BGS</span>
+                  </Tooltip>
+                </Table.Th>
+                <Table.Th>
+                  <Tooltip label="Zaryte Crossbow">
+                    <span>ZCB</span>
+                  </Tooltip>
+                </Table.Th>
+                <Table.Th>
+                  <Tooltip label="Eye of Ayak">
+                    <span>Eye</span>
+                  </Tooltip>
+                </Table.Th>
                 <Table.Th>Status</Table.Th>
                 <Table.Th>Notes</Table.Th>
                 <Table.Th></Table.Th>

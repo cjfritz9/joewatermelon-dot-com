@@ -262,7 +262,7 @@ export default function AdminQueue({ players, config }: AdminQueueProps) {
                 <Table.Th>Status</Table.Th>
                 <Table.Th>Notes</Table.Th>
                 <Table.Th>Notify</Table.Th>
-                <Table.Th></Table.Th>
+                <Table.Th>Remove</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>{rows}</Table.Tbody>

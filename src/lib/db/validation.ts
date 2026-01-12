@@ -1,4 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
+export const MAX_NOTES_LENGTH = 200;
+
 export const getToaQueueEntryIsValid = (body: any) => {
   if (typeof body !== "object" || !body) {
     return false;
@@ -17,7 +19,15 @@ export const getToaQueueEntryIsValid = (body: any) => {
     "notificationsEnabled",
   ];
 
-  return requiredFields.every((field) => field in body);
+  if (!requiredFields.every((field) => field in body)) {
+    return false;
+  }
+
+  if (typeof body.notes === "string" && body.notes.length > MAX_NOTES_LENGTH) {
+    return false;
+  }
+
+  return true;
 };
 
 export const getTobQueueEntryIsValid = (body: any) => {
@@ -37,5 +47,13 @@ export const getTobQueueEntryIsValid = (body: any) => {
     "notificationsEnabled",
   ];
 
-  return requiredFields.every((field) => field in body);
+  if (!requiredFields.every((field) => field in body)) {
+    return false;
+  }
+
+  if (typeof body.notes === "string" && body.notes.length > MAX_NOTES_LENGTH) {
+    return false;
+  }
+
+  return true;
 };

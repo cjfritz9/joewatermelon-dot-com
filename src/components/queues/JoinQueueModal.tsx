@@ -2,6 +2,7 @@
 
 import APIResponse from "@/lib/classes/APIResponse";
 import { useUser } from "@/lib/context/UserContext";
+import { MAX_NOTES_LENGTH } from "@/lib/db/validation";
 import { QueueConfig } from "@/lib/queue-config";
 import { getBrandColor } from "@/lib/theme";
 import {
@@ -221,6 +222,7 @@ export default function JoinQueueModal({ config }: JoinQueueModalProps) {
             label="Notes (optional)"
             placeholder="Anything you'd like to add?"
             value={formData.notes}
+            maxLength={MAX_NOTES_LENGTH}
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, notes: e.target.value }))
             }

@@ -15,9 +15,19 @@
   }
 }
 
+.leftSpacer {
+  flex: 1;
+}
+
 .links {
   @media (max-width: $mantine-breakpoint-sm) {
     margin-top: var(--mantine-spacing-lg);
     margin-bottom: var(--mantine-spacing-sm);
   }
+}
+
+.socials {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
 }

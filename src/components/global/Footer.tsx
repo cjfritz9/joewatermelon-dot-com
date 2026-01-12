@@ -23,11 +23,11 @@ export function Footer() {
   return (
     <div className={classes.footer}>
       <div className={`${classes.inner} container`}>
-        <div />
+        <div className={classes.leftSpacer} />
 
         <Group className={classes.links}>{items}</Group>
 
-        <Group gap="xs" justify="flex-end" wrap="nowrap">
+        <Group gap="xs" wrap="nowrap" className={classes.socials}>
           <Link href="https://twitch.tv/joewatermelon" target="_blank">
             <ActionIcon size="lg" variant="default" radius="xl">
               <IconBrandTwitch size={18} stroke={1.5} />

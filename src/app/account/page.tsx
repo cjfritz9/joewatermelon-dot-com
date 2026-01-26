@@ -1,5 +1,6 @@
 "use client";
 
+import ContentFilterManager from "@/components/admin/ContentFilterManager";
 import RoleManager from "@/components/admin/RoleManager";
 import { useUser } from "@/lib/context/UserContext";
 import {
@@ -255,7 +256,13 @@ function AccountContent() {
         </Stack>
       </Card>
 
-      {user.isAdmin && <RoleManager />}
+      {user.isAdmin && (
+        <Stack align="center" w="100%" mt="xl" gap="md">
+          <Title order={3} c="dimmed">Admin</Title>
+          <RoleManager />
+          <ContentFilterManager />
+        </Stack>
+      )}
     </Stack>
   );
 }

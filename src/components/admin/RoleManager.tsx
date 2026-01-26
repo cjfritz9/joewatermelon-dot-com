@@ -110,7 +110,7 @@ export default function RoleManager() {
   };
 
   return (
-    <Card withBorder radius="md" p="lg" maw={700} w="100%">
+    <Card withBorder radius="md" p="lg" maw={500} w="100%">
       <Stack gap="md">
         <Title order={3}>Role Manager</Title>
 

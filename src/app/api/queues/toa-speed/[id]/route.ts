@@ -1,5 +1,6 @@
 import { DBToaQueueEntrant } from "@/@types/firestore";
 import APIResponse from "@/lib/classes/APIResponse";
+import { validatePublicFields } from "@/lib/content-filter";
 import firestore from "@/lib/db/firestore";
 import { MAX_NOTES_LENGTH } from "@/lib/db/validation";
 import { canEditQueue, getSession } from "@/lib/session";
@@ -113,6 +114,16 @@ export async function PATCH(
     // Validate notes length
     if (typeof updates.notes === "string" && updates.notes.length > MAX_NOTES_LENGTH) {
       return APIResponse.error("Notes too long");
+    }
+
+    // Validate public fields for hate speech
+    const contentError = await validatePublicFields({
+      twitchUsername: updates.twitchUsername as string | undefined,
+      rsn: updates.rsn as string | undefined,
+    });
+
+    if (contentError) {
+      return APIResponse.error(contentError);
     }
 
     // If RSN is being changed, check for duplicates

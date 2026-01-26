@@ -1,5 +1,6 @@
 import { DBToaQueueEntrant } from "@/@types/firestore";
 import APIResponse from "@/lib/classes/APIResponse";
+import { validatePublicFields } from "@/lib/content-filter";
 import firestore from "@/lib/db/firestore";
 import { getToaQueueEntryIsValid } from "@/lib/db/validation";
 import { getSession } from "@/lib/session";
@@ -46,6 +47,15 @@ export async function POST(req: Request) {
 
     if (!isValid) {
       return APIResponse.error("Missing required fields");
+    }
+
+    const contentError = await validatePublicFields({
+      twitchUsername: data.twitchUsername,
+      rsn: data.rsn,
+    });
+
+    if (contentError) {
+      return APIResponse.error(contentError);
     }
 
     const existingEntry = await firestore

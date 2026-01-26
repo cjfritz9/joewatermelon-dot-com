@@ -2,7 +2,7 @@ import theme from "@/app/theme";
 import { getToa8SpeedSettings } from "@/lib/server/toa-queues";
 import { getTobSpeedSettings } from "@/lib/server/tob-queues";
 import { Badge, Card, Group, SimpleGrid, Stack, Text, Title } from "@mantine/core";
-import { IconDroplet, IconPlayerPlay, IconPlayerStop, IconPyramid } from "@tabler/icons-react";
+import { IconBooks, IconDroplet, IconPlayerPlay, IconPlayerStop, IconPyramid } from "@tabler/icons-react";
 import { Metadata } from "next";
 import Link from "next/link";
 
@@ -35,6 +35,13 @@ export default async function QueuesPage() {
       href: "/queues/tob-speed",
       status: tobSettings.status,
     },
+    {
+      title: "The Fractured Archive",
+      description: "Guthix's ancient repository — Coming Soon",
+      icon: <IconBooks size={32} color="#2F5D3A" />,
+      href: "#",
+      status: "coming_soon" as const,
+    },
   ];
   return (
     <Stack align="center" my="xl" maw={1040} w="100%" mx="auto">
@@ -47,15 +54,16 @@ export default async function QueuesPage() {
       </Text>
 
       <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="lg" mt="xl" w="100%" maw={800}>
-        {queues.map((queue) => (
-          <Link key={queue.title} href={queue.href} style={{ textDecoration: "none" }}>
+        {queues.map((queue, index) => {
+          const isComingSoon = queue.status === "coming_soon";
+          const card = (
             <Card
               shadow="md"
               radius="md"
               p="lg"
               withBorder
-              className="hover-card"
-              style={{ height: "100%" }}
+              className={isComingSoon ? undefined : "hover-card"}
+              style={{ height: "100%", opacity: isComingSoon ? 0.7 : 1 }}
             >
               <Group gap="md" align="flex-start">
                 {queue.icon}
@@ -63,11 +71,11 @@ export default async function QueuesPage() {
                   <Group justify="space-between" align="center">
                     <Text fw={600} size="lg">{queue.title}</Text>
                     <Badge
-                      color={queue.status === "active" ? "green" : "gray"}
+                      color={queue.status === "active" ? "green" : isComingSoon ? "teal" : "gray"}
                       variant="light"
-                      leftSection={queue.status === "active" ? <IconPlayerPlay size={12} /> : <IconPlayerStop size={12} />}
+                      leftSection={queue.status === "active" ? <IconPlayerPlay size={12} /> : isComingSoon ? null : <IconPlayerStop size={12} />}
                     >
-                      {queue.status === "active" ? "Active" : "Inactive"}
+                      {queue.status === "active" ? "Active" : isComingSoon ? "Coming Soon" : "Inactive"}
                     </Badge>
                   </Group>
                   <Text size="sm" c="dimmed">
@@ -76,8 +84,18 @@ export default async function QueuesPage() {
                 </Stack>
               </Group>
             </Card>
-          </Link>
-        ))}
+          );
+
+          if (isComingSoon) {
+            return <div key={index}>{card}</div>;
+          }
+
+          return (
+            <Link key={index} href={queue.href} style={{ textDecoration: "none" }}>
+              {card}
+            </Link>
+          );
+        })}
       </SimpleGrid>
     </Stack>
   );

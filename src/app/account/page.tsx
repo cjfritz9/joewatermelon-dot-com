@@ -1,5 +1,6 @@
 "use client";
 
+import RoleManager from "@/components/admin/RoleManager";
 import { useUser } from "@/lib/context/UserContext";
 import {
   Badge,
@@ -167,10 +168,27 @@ function AccountContent() {
           </Group>
 
           <Group justify="space-between">
-            <Text fw={500}>Role</Text>
-            <Badge color={user.isAdmin ? "green" : "blue"}>
-              {user.isAdmin ? "Admin" : "User"}
-            </Badge>
+            <Text fw={500}>Roles</Text>
+            <Group gap="xs">
+              {user.roles.length > 0 ? (
+                user.roles.map((role) => (
+                  <Badge
+                    key={role}
+                    color={
+                      role === "admin"
+                        ? "green"
+                        : role === "queue_admin"
+                          ? "orange"
+                          : "blue"
+                    }
+                  >
+                    {role === "queue_admin" ? "Queue Admin" : role.charAt(0).toUpperCase() + role.slice(1)}
+                  </Badge>
+                ))
+              ) : (
+                <Badge color="gray">No roles</Badge>
+              )}
+            </Group>
           </Group>
         </Stack>
       </Card>
@@ -236,6 +254,8 @@ function AccountContent() {
           )}
         </Stack>
       </Card>
+
+      {user.isAdmin && <RoleManager />}
     </Stack>
   );
 }

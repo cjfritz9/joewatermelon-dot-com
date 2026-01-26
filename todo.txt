@@ -1,0 +1,14 @@
+[DONE] queue should poll or auto update (depending on
+   remaining free for gcp free tier)
+
+[DONE] users should be able to update their own entries
+  (edit, delete, etc.)
+
+[DONE] admin can give queue_admin to other users
+  - admins can search users by email/twitch/rsn
+  - admins can add/remove queue_admin role
+  - queue_admin can edit queue but not event settings
+
+related: (nightbot command - move this to
+  wanderbaut actually) fix !newvid command
+  endpoint to filter shorts or try to

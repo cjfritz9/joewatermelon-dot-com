@@ -6,7 +6,10 @@ import useSWR, { mutate as globalMutate } from "swr";
 type User = {
   id: string;
   email: string;
+  roles: string[];
   isAdmin: boolean;
+  isQueueAdmin: boolean;
+  canEditQueue: boolean;
   rsn: string | null;
   twitchUsername: string | null;
   hasTwitchLinked: boolean;

@@ -60,12 +60,24 @@ export default function JoinQueueModal({ config }: JoinQueueModalProps) {
   }, [config]);
 
   useEffect(() => {
-    if (opened && user) {
-      setFormData((prev) => ({
-        ...prev,
-        twitchUsername: user.twitchUsername || prev.twitchUsername,
-        rsn: user.rsn || prev.rsn,
-      }));
+    if (opened) {
+      if (user) {
+        setFormData((prev) => ({
+          ...prev,
+          twitchUsername: user.twitchUsername || prev.twitchUsername,
+          rsn: user.rsn || prev.rsn,
+        }));
+      } else {
+        const savedTwitch = localStorage.getItem("anonTwitchUsername");
+        const savedRsn = localStorage.getItem("anonRsn");
+        if (savedTwitch || savedRsn) {
+          setFormData((prev) => ({
+            ...prev,
+            twitchUsername: savedTwitch || prev.twitchUsername,
+            rsn: savedRsn || prev.rsn,
+          }));
+        }
+      }
     }
   }, [opened, user]);
 
@@ -132,10 +144,20 @@ export default function JoinQueueModal({ config }: JoinQueueModalProps) {
         body: JSON.stringify({ data: formData }),
       });
 
-      const data = (await res.json()) as APIResponse<{ id: string }>;
+      const data = (await res.json()) as APIResponse<{ id: string; editToken?: string }>;
 
       if (data.success && data.data?.id) {
         localStorage.setItem(config.storageKey, data.data.id);
+
+        if (data.data.editToken) {
+          localStorage.setItem(`${config.storageKey}_editToken`, data.data.editToken);
+        }
+
+        if (!user) {
+          localStorage.setItem("anonTwitchUsername", formData.twitchUsername);
+          localStorage.setItem("anonRsn", formData.rsn);
+        }
+
         close();
         notifications.show({
           title: "You're in!",

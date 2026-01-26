@@ -1,5 +1,6 @@
 "use client";
 
+import { useQueueRealtime } from "@/hooks/useQueueRealtime";
 import { QueueConfig } from "@/lib/queue-config";
 import {
   ActionIcon,
@@ -15,7 +16,6 @@ import {
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconArrowDown, IconArrowUp, IconBell, IconSquareCheck, IconSquareX, IconTrash } from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
 interface AdminQueueProps {
@@ -33,8 +33,11 @@ const getStatusBadge = (status: boolean) =>
 const getGearIcon = (hasItem: boolean) =>
   hasItem ? <IconSquareCheck color="green" /> : <IconSquareX color="red" />;
 
-export default function AdminQueue({ players, config }: AdminQueueProps) {
-  const router = useRouter();
+export default function AdminQueue({ players: initialPlayers, config }: AdminQueueProps) {
+  const { players } = useQueueRealtime({
+    collectionName: config.collectionName,
+    initialData: initialPlayers,
+  });
   const [sortBy, setSortBy] = useState<string>("default");
 
   const sortOptions = useMemo(() => {
@@ -83,7 +86,6 @@ export default function AdminQueue({ players, config }: AdminQueueProps) {
         position: "top-right",
         color: "green",
       });
-      router.refresh();
     } else {
       notifications.show({
         title: "Error",
@@ -125,9 +127,7 @@ export default function AdminQueue({ players, config }: AdminQueueProps) {
       body: JSON.stringify({ id, direction }),
     });
 
-    if (res.ok) {
-      router.refresh();
-    } else {
+    if (!res.ok) {
       notifications.show({
         title: "Error",
         message: "Failed to reorder queue.",

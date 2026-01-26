@@ -5,6 +5,18 @@ steps:
       - 'build'
       - '-t'
       - 'gcr.io/$PROJECT_ID/joewatermelon-dot-com:$COMMIT_SHA'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyDqAT3LN4uGFRJUFTKOiS7T_39fi2Ldc4Y'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=eighth-surfer-483919-v8.firebaseapp.com'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FIREBASE_PROJECT_ID=eighth-surfer-483919-v8'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=eighth-surfer-483919-v8.firebasestorage.app'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=712955721050'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FIREBASE_APP_ID=1:712955721050:web:efcf2c3b87dd5660caef63'
       - '.'
 
   # Push the container image to Container Registry

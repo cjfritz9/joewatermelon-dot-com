@@ -2,7 +2,9 @@ import { DBTobQueueEntrant } from "@/@types/firestore";
 import APIResponse from "@/lib/classes/APIResponse";
 import firestore from "@/lib/db/firestore";
 import { getTobQueueEntryIsValid } from "@/lib/db/validation";
+import { getSession } from "@/lib/session";
 import { Timestamp } from "@google-cloud/firestore";
+import crypto from "crypto";
 
 export async function GET() {
   try {
@@ -56,12 +58,18 @@ export async function POST(req: Request) {
       return APIResponse.error("This RSN is already in the queue");
     }
 
+    const session = await getSession();
+    const userId = session.userId;
+    const editToken = userId ? null : crypto.randomBytes(32).toString("hex");
+
     const docRef = await firestore.collection("tob-queue").add({
       createdAt: Timestamp.now(),
       ...data,
+      ...(userId && { userId }),
+      ...(editToken && { editToken }),
     });
 
-    return APIResponse.success("Document added to queue", { id: docRef.id }, 201);
+    return APIResponse.success("Document added to queue", { id: docRef.id, editToken }, 201);
   } catch (err) {
     console.error(err);
     return APIResponse.error("Internal Server Error", 500);

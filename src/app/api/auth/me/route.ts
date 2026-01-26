@@ -32,7 +32,10 @@ export async function GET() {
     user: {
       id: session.userId,
       email: userData?.email,
+      roles: dbRoles,
       isAdmin: dbRoles.includes("admin"),
+      isQueueAdmin: dbRoles.includes("queue_admin"),
+      canEditQueue: dbRoles.includes("admin") || dbRoles.includes("queue_admin"),
       rsn: userData?.rsn ?? null,
       twitchUsername: userData?.twitchUsername ?? null,
       hasTwitchLinked: !!userData?.twitchId,

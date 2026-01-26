@@ -1,6 +1,6 @@
 import APIResponse from "@/lib/classes/APIResponse";
 import firestore from "@/lib/db/firestore";
-import { isAdmin } from "@/lib/session";
+import { canEditQueue } from "@/lib/session";
 import { Timestamp } from "@google-cloud/firestore";
 
 export async function POST(
@@ -8,9 +8,9 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const isUserAdmin = await isAdmin();
+    const userCanEditQueue = await canEditQueue();
 
-    if (!isUserAdmin) {
+    if (!userCanEditQueue) {
       return APIResponse.error("Unauthorized", 401);
     }
 

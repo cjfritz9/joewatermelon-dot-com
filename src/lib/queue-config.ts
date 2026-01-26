@@ -8,6 +8,7 @@ export interface QueueColumn {
 export interface QueueConfig {
   id: string;
   apiBasePath: string;
+  collectionName: string;
   storageKey: string;
   kcField: string;
   kcLabel: string;
@@ -18,6 +19,7 @@ export interface QueueConfig {
 export const toaQueueConfig: QueueConfig = {
   id: "toa",
   apiBasePath: "/api/queues/toa-speed",
+  collectionName: "toa-queue",
   storageKey: "toaQueueEntryId",
   kcField: "expertKC",
   kcLabel: "Expert Mode KC",
@@ -33,6 +35,7 @@ export const toaQueueConfig: QueueConfig = {
 export const tobQueueConfig: QueueConfig = {
   id: "tob",
   apiBasePath: "/api/queues/tob-speed",
+  collectionName: "tob-queue",
   storageKey: "tobQueueEntryId",
   kcField: "kc",
   kcLabel: "ToB KC",

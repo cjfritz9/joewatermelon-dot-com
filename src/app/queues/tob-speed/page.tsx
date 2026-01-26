@@ -6,7 +6,7 @@ import Queue from "@/components/queues/Queue";
 import StatusSection from "@/components/queues/StatusSection";
 import { tobQueueConfig } from "@/lib/queue-config";
 import { getTobSpeedQueue, getTobSpeedSettings } from "@/lib/server/tob-queues";
-import { isAdmin } from "@/lib/session";
+import { canEditQueue, isAdmin } from "@/lib/session";
 import { Stack, Text, Title } from "@mantine/core";
 import { Metadata } from "next";
 
@@ -18,9 +18,10 @@ export const metadata: Metadata = {
 export const revalidate = 0;
 
 export default async function TobSpeedQueuePage() {
-  const [queue, isUserAdmin, settings] = await Promise.all([
+  const [queue, isUserAdmin, userCanEditQueue, settings] = await Promise.all([
     getTobSpeedQueue(),
     isAdmin(),
+    canEditQueue(),
     getTobSpeedSettings(),
   ]);
 
@@ -46,7 +47,7 @@ export default async function TobSpeedQueuePage() {
           nextRunTime={settings.nextRunTime ?? undefined}
         />
       )}
-      {isUserAdmin ? (
+      {userCanEditQueue ? (
         <AdminQueue players={queue as unknown as Record<string, unknown>[]} config={tobQueueConfig} />
       ) : (
         <Queue

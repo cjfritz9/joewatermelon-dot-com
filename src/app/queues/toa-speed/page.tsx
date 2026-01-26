@@ -7,7 +7,7 @@ import Queue from "@/components/queues/Queue";
 import StatusSection from "@/components/queues/StatusSection";
 import { toaQueueConfig } from "@/lib/queue-config";
 import { getToa8SpeedQueue, getToa8SpeedSettings } from "@/lib/server/toa-queues";
-import { isAdmin } from "@/lib/session";
+import { canEditQueue, isAdmin } from "@/lib/session";
 import { Stack, Text, Title } from "@mantine/core";
 import { Metadata } from "next";
 
@@ -19,9 +19,10 @@ export const metadata: Metadata = {
 export const revalidate = 0;
 
 const ToaSpeedQueuePage = async () => {
-  const [queue, isUserAdmin, settings] = await Promise.all([
+  const [queue, isUserAdmin, userCanEditQueue, settings] = await Promise.all([
     getToa8SpeedQueue(),
     isAdmin(),
+    canEditQueue(),
     getToa8SpeedSettings(),
   ]);
 
@@ -46,7 +47,7 @@ const ToaSpeedQueuePage = async () => {
           nextRunTime={settings.nextRunTime ?? undefined}
         />
       )}
-      {isUserAdmin ? (
+      {userCanEditQueue ? (
         <AdminQueue players={queue as unknown as Record<string, unknown>[]} config={toaQueueConfig} />
       ) : (
         <Queue

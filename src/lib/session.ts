@@ -28,3 +28,14 @@ export const isAdmin = async (): Promise<boolean> => {
   const session = await getSession();
   return session.roles?.includes("admin") ?? false;
 };
+
+export const isQueueAdmin = async (): Promise<boolean> => {
+  const session = await getSession();
+  return session.roles?.includes("queue_admin") ?? false;
+};
+
+export const canEditQueue = async (): Promise<boolean> => {
+  const session = await getSession();
+  const roles = session.roles ?? [];
+  return roles.includes("admin") || roles.includes("queue_admin");
+};

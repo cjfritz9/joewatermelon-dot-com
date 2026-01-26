@@ -1,12 +1,12 @@
 import APIResponse from "@/lib/classes/APIResponse";
 import firestore from "@/lib/db/firestore";
-import { isAdmin } from "@/lib/session";
+import { canEditQueue } from "@/lib/session";
 
 export async function POST(req: Request) {
   try {
-    const isUserAdmin = await isAdmin();
+    const userCanEditQueue = await canEditQueue();
 
-    if (!isUserAdmin) {
+    if (!userCanEditQueue) {
       return APIResponse.error("Unauthorized", 401);
     }
 

@@ -1,6 +1,6 @@
 import { Timestamp } from "@google-cloud/firestore";
 
-export type UserRoles = 'user' | 'admin' | 'moderator';
+export type UserRoles = 'user' | 'admin' | 'moderator' | 'queue_admin';
 
 export interface DBRegistrant {
   email: string;
@@ -35,6 +35,8 @@ export interface DBToaQueueEntrant {
   notificationsEnabled: boolean;
   notifiedAt?: Timestamp;
   order?: number;
+  userId?: string;
+  editToken?: string;
 }
 
 export interface DBTobQueueEntrant {
@@ -50,4 +52,6 @@ export interface DBTobQueueEntrant {
   notificationsEnabled: boolean;
   notifiedAt?: Timestamp;
   order?: number;
+  userId?: string;
+  editToken?: string;
 }

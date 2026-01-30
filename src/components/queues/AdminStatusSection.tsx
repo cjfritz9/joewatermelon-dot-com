@@ -29,7 +29,9 @@ export default function AdminStatusSection({
   apiEndpoint = "/api/queues/toa-speed/settings",
 }: AdminStatusSectionProps) {
   const [status, setStatus] = useState<Status>(initialStatus);
-  const [nextRunTime, setNextRunTime] = useState<Date | null>(initialNextRunTime);
+  const [nextRunTime, setNextRunTime] = useState<Date | null>(
+    initialNextRunTime,
+  );
   const [saving, setSaving] = useState(false);
   const router = useRouter();
 
@@ -79,7 +81,9 @@ export default function AdminStatusSection({
         credentials: "include",
         body: JSON.stringify({
           status,
-          nextRunTime: isValidDate(nextRunTime) ? nextRunTime?.toISOString() : null,
+          nextRunTime: isValidDate(nextRunTime)
+            ? nextRunTime?.toISOString()
+            : null,
         }),
       });
 
@@ -125,7 +129,15 @@ export default function AdminStatusSection({
   };
 
   return (
-    <Card shadow="md" mb="xl" radius="md" p="lg" maw={{ base: "100%", sm: 500 }} w="100%" withBorder>
+    <Card
+      shadow="md"
+      mb="xl"
+      radius="md"
+      p="lg"
+      maw={{ base: "100%", sm: 500 }}
+      w="100%"
+      withBorder
+    >
       <Stack gap="md" align="center">
         <Group align="center">
           <Text fw={700} size="lg">

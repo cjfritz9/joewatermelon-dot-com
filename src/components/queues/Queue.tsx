@@ -2,10 +2,25 @@
 
 import { useQueueRealtime } from "@/hooks/useQueueRealtime";
 import { QueueConfig } from "@/lib/queue-config";
-import { ActionIcon, Badge, Card, Group, Stack, Table, Text, Title, Tooltip } from "@mantine/core";
+import {
+  ActionIcon,
+  Badge,
+  Card,
+  Group,
+  Stack,
+  Table,
+  Text,
+  Title,
+  Tooltip,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { IconPencil, IconSquareCheck, IconSquareX, IconTrash } from "@tabler/icons-react";
+import {
+  IconPencil,
+  IconSquareCheck,
+  IconSquareX,
+  IconTrash,
+} from "@tabler/icons-react";
 import { ReactNode, useEffect, useState } from "react";
 import EditQueueEntryModal from "./EditQueueEntryModal";
 import QueueNotificationListener from "./QueueNotificationListener";
@@ -38,14 +53,19 @@ const getGearIcon = (hasItem: boolean) =>
     </Group>
   );
 
-export default function Queue({ players: initialPlayers, config, joinModal }: QueueProps) {
+export default function Queue({
+  players: initialPlayers,
+  config,
+  joinModal,
+}: QueueProps) {
   const { players } = useQueueRealtime({
     collectionName: config.collectionName,
     initialData: initialPlayers,
   });
 
   const [myEntryId, setMyEntryId] = useState<string | null>(null);
-  const [editModalOpened, { open: openEditModal, close: closeEditModal }] = useDisclosure(false);
+  const [editModalOpened, { open: openEditModal, close: closeEditModal }] =
+    useDisclosure(false);
 
   useEffect(() => {
     const storedId = localStorage.getItem(config.storageKey);
@@ -100,12 +120,22 @@ export default function Queue({ players: initialPlayers, config, joinModal }: Qu
             {isMyEntry && (
               <ActionIcon.Group>
                 <Tooltip label="Edit">
-                  <ActionIcon variant="subtle" color="blue" size="sm" onClick={openEditModal}>
+                  <ActionIcon
+                    variant="subtle"
+                    color="blue"
+                    size="sm"
+                    onClick={openEditModal}
+                  >
                     <IconPencil size={16} />
                   </ActionIcon>
                 </Tooltip>
                 <Tooltip label="Leave queue">
-                  <ActionIcon variant="subtle" color="red" size="sm" onClick={handleDelete}>
+                  <ActionIcon
+                    variant="subtle"
+                    color="red"
+                    size="sm"
+                    onClick={handleDelete}
+                  >
                     <IconTrash size={16} />
                   </ActionIcon>
                 </Tooltip>
@@ -115,7 +145,9 @@ export default function Queue({ players: initialPlayers, config, joinModal }: Qu
         </Table.Td>
         <Table.Td>{(player[config.kcField] as number) ?? "-"}</Table.Td>
         {config.columns.map((col) => (
-          <Table.Td key={col.key}>{getGearIcon(player[col.key] as boolean)}</Table.Td>
+          <Table.Td key={col.key}>
+            {getGearIcon(player[col.key] as boolean)}
+          </Table.Td>
         ))}
         <Table.Td>{getStatusBadge(ready)}</Table.Td>
       </Table.Tr>
@@ -124,7 +156,11 @@ export default function Queue({ players: initialPlayers, config, joinModal }: Qu
 
   return (
     <Stack gap="md" w="100%" maw={1040} mb="xl">
-      <QueueNotificationListener players={players} storageKey={config.storageKey} apiBasePath={config.apiBasePath} />
+      <QueueNotificationListener
+        players={players}
+        storageKey={config.storageKey}
+        apiBasePath={config.apiBasePath}
+      />
       <Group justify="space-between" align="center">
         <Title fw={700} order={3}>
           Current Queue

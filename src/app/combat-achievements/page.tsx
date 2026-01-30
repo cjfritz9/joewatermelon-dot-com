@@ -42,7 +42,8 @@ interface QueueCard {
 const speedRunQueues: QueueCard[] = [
   {
     title: "ToA Speed Queue",
-    description: "Tombs of Amascut 8-man Grandmaster Time runs. Join the queue and get your GM time with experienced runners.",
+    description:
+      "Tombs of Amascut 8-man Grandmaster Time runs. Join the queue and get your GM time with experienced runners.",
     icon: <IconPyramid size={32} />,
     href: "/queues/toa-speed",
     color: theme.colors.warning[4],
@@ -50,7 +51,8 @@ const speedRunQueues: QueueCard[] = [
   },
   {
     title: "ToB Speed Queue",
-    description: "Theatre of Blood 4 & 5 man Grandmaster Time runs. Sign up for the team size you need.",
+    description:
+      "Theatre of Blood 4 & 5 man Grandmaster Time runs. Sign up for the team size you need.",
     icon: <IconDroplet size={32} />,
     href: "/queues/tob-speed",
     color: "#DC143C",
@@ -76,7 +78,8 @@ interface Guide {
 const guideSections: GuideSection[] = [
   {
     title: "Raid Speed Times",
-    description: "Guides and tips for getting Grandmaster speed times in raids.",
+    description:
+      "Guides and tips for getting Grandmaster speed times in raids.",
     icon: <IconClock size={24} />,
     color: theme.colors.brand[6],
     guides: [
@@ -100,7 +103,8 @@ const guideSections: GuideSection[] = [
     guides: [
       {
         title: "More guides coming soon!",
-        description: "Check back later or join the Discord for the latest updates.",
+        description:
+          "Check back later or join the Discord for the latest updates.",
       },
     ],
   },
@@ -123,8 +127,9 @@ export default function CombatAchievementsPage() {
           </Title>
         </Group>
         <Text c="dimmed" ta="center" maw={600}>
-          Get help with your Combat Achievement grind. Join speed run queues for Grandmaster times
-          or check out guides for various bosses and challenges.
+          Get help with your Combat Achievement grind. Join speed run queues for
+          Grandmaster times or check out guides for various bosses and
+          challenges.
         </Text>
       </Stack>
 
@@ -136,8 +141,8 @@ export default function CombatAchievementsPage() {
         w="100%"
       >
         <Text size="sm">
-          Joe runs free Grandmaster speed time carries for ToA and ToB on stream.
-          Join a queue below and get notified when it&apos;s your turn!
+          Joe runs free Grandmaster speed time carries for ToA and ToB on
+          stream. Join a queue below and get notified when it&apos;s your turn!
         </Text>
       </Alert>
 
@@ -147,12 +152,17 @@ export default function CombatAchievementsPage() {
           <Title order={2}>Speed Run Queues</Title>
         </Group>
         <Text size="sm" c="dimmed">
-          Sign up for a queue to join stream speed runs. You&apos;ll be notified when it&apos;s your turn.
+          Sign up for a queue to join stream speed runs. You&apos;ll be notified
+          when it&apos;s your turn.
         </Text>
 
         <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="lg">
           {speedRunQueues.map((queue) => (
-            <Link key={queue.title} href={queue.href} style={{ textDecoration: "none" }}>
+            <Link
+              key={queue.title}
+              href={queue.href}
+              style={{ textDecoration: "none" }}
+            >
               <Card
                 shadow="md"
                 radius="md"
@@ -163,14 +173,26 @@ export default function CombatAchievementsPage() {
               >
                 <Stack gap="md">
                   <Group gap="md" align="flex-start">
-                    <ThemeIcon size={48} radius="md" variant="light" color="gray">
+                    <ThemeIcon
+                      size={48}
+                      radius="md"
+                      variant="light"
+                      color="gray"
+                    >
                       <div style={{ color: queue.color }}>{queue.icon}</div>
                     </ThemeIcon>
                     <Stack gap={4} style={{ flex: 1 }}>
-                      <Text fw={600} size="lg">{queue.title}</Text>
+                      <Text fw={600} size="lg">
+                        {queue.title}
+                      </Text>
                       <Group gap="xs">
                         {queue.times.map((time) => (
-                          <Badge key={time} color="green" variant="light" size="sm">
+                          <Badge
+                            key={time}
+                            color="green"
+                            variant="light"
+                            size="sm"
+                          >
                             {time}
                           </Badge>
                         ))}
@@ -181,7 +203,9 @@ export default function CombatAchievementsPage() {
                     {queue.description}
                   </Text>
                   <Group gap="xs" c={queue.color}>
-                    <Text size="sm" fw={500}>Join Queue</Text>
+                    <Text size="sm" fw={500}>
+                      Join Queue
+                    </Text>
                     <IconExternalLink size={14} />
                   </Group>
                 </Stack>
@@ -206,31 +230,51 @@ export default function CombatAchievementsPage() {
                 </ThemeIcon>
                 <div>
                   <Text fw={600}>{section.title}</Text>
-                  <Text size="xs" c="dimmed">{section.description}</Text>
+                  <Text size="xs" c="dimmed">
+                    {section.description}
+                  </Text>
                 </div>
               </Group>
 
               <Stack gap="sm">
                 {section.guides.map((guide) => (
-                  <Card key={guide.title} withBorder radius="sm" p="md" bg="dark.7">
+                  <Card
+                    key={guide.title}
+                    withBorder
+                    radius="sm"
+                    p="md"
+                    bg="dark.7"
+                  >
                     <Group justify="space-between" align="flex-start">
                       <Stack gap={4} style={{ flex: 1 }}>
                         <Text fw={500}>{guide.title}</Text>
                         {guide.description && (
-                          <Text size="sm" c="dimmed">{guide.description}</Text>
+                          <Text size="sm" c="dimmed">
+                            {guide.description}
+                          </Text>
                         )}
                       </Stack>
                       <Group gap="xs">
                         {guide.youtubeUrl && (
                           <Link href={guide.youtubeUrl} target="_blank">
-                            <ThemeIcon size={28} radius="md" color="red" variant="light">
+                            <ThemeIcon
+                              size={28}
+                              radius="md"
+                              color="red"
+                              variant="light"
+                            >
                               <IconBrandYoutube size={16} />
                             </ThemeIcon>
                           </Link>
                         )}
                         {guide.infoUrl && (
                           <Link href={guide.infoUrl}>
-                            <ThemeIcon size={28} radius="md" color="blue" variant="light">
+                            <ThemeIcon
+                              size={28}
+                              radius="md"
+                              color="blue"
+                              variant="light"
+                            >
                               <IconExternalLink size={16} />
                             </ThemeIcon>
                           </Link>
@@ -252,8 +296,9 @@ export default function CombatAchievementsPage() {
             Need More Help?
           </Title>
           <Text ta="center" c="dimmed" maw={500}>
-            Join the Discord community for live help, announcements about upcoming speed runs,
-            and to connect with other players working on Combat Achievements.
+            Join the Discord community for live help, announcements about
+            upcoming speed runs, and to connect with other players working on
+            Combat Achievements.
           </Text>
           <Link
             href="https://discord.com/invite/BrJfA6q"

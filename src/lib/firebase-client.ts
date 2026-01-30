@@ -1,5 +1,5 @@
-import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
-import { getFirestore, Firestore, Timestamp } from 'firebase/firestore';
+import { initializeApp, getApps, FirebaseApp } from "firebase/app";
+import { getFirestore, Firestore, Timestamp } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,10 +14,10 @@ let app: FirebaseApp | undefined;
 let db: Firestore | undefined;
 
 export function getFirebaseApp(): FirebaseApp | undefined {
-  if (typeof window === 'undefined') return undefined;
+  if (typeof window === "undefined") return undefined;
 
   if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
-    console.warn('Firebase client config not set. Realtime updates disabled.');
+    console.warn("Firebase client config not set. Realtime updates disabled.");
     return undefined;
   }
 
@@ -31,13 +31,13 @@ export function getFirebaseApp(): FirebaseApp | undefined {
 }
 
 export function getClientFirestore(): Firestore | undefined {
-  if (typeof window === 'undefined') return undefined;
+  if (typeof window === "undefined") return undefined;
 
   const firebaseApp = getFirebaseApp();
   if (!firebaseApp) return undefined;
 
   if (!db) {
-    db = getFirestore(firebaseApp, 'joewatermelon-backend');
+    db = getFirestore(firebaseApp, "joewatermelon-backend");
   }
 
   return db;

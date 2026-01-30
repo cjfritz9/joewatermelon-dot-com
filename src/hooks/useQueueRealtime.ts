@@ -9,7 +9,10 @@ interface UseQueueRealtimeOptions {
   initialData: Record<string, unknown>[];
 }
 
-function processDocument(doc: { id: string; data: () => Record<string, unknown> }): Record<string, unknown> {
+function processDocument(doc: {
+  id: string;
+  data: () => Record<string, unknown>;
+}): Record<string, unknown> {
   const data = doc.data();
   const processed: Record<string, unknown> = { id: doc.id };
 
@@ -20,7 +23,9 @@ function processDocument(doc: { id: string; data: () => Record<string, unknown> 
   return processed;
 }
 
-function sortPlayers(players: Record<string, unknown>[]): Record<string, unknown>[] {
+function sortPlayers(
+  players: Record<string, unknown>[],
+): Record<string, unknown>[] {
   return [...players].sort((a, b) => {
     const orderA = (a.order as number) ?? Number.MAX_SAFE_INTEGER;
     const orderB = (b.order as number) ?? Number.MAX_SAFE_INTEGER;
@@ -32,8 +37,12 @@ function sortPlayers(players: Record<string, unknown>[]): Record<string, unknown
   });
 }
 
-export function useQueueRealtime({ collectionName, initialData }: UseQueueRealtimeOptions) {
-  const [players, setPlayers] = useState<Record<string, unknown>[]>(initialData);
+export function useQueueRealtime({
+  collectionName,
+  initialData,
+}: UseQueueRealtimeOptions) {
+  const [players, setPlayers] =
+    useState<Record<string, unknown>[]>(initialData);
   const [isRealtime, setIsRealtime] = useState(false);
 
   useEffect(() => {
@@ -56,7 +65,7 @@ export function useQueueRealtime({ collectionName, initialData }: UseQueueRealti
       (error) => {
         console.error("Firestore realtime error:", error);
         // On error, keep current data
-      }
+      },
     );
 
     return () => unsubscribe();

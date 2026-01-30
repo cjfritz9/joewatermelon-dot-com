@@ -24,9 +24,24 @@ export const toaQueueConfig: QueueConfig = {
   kcField: "expertKC",
   kcLabel: "Expert Mode KC",
   columns: [
-    { key: "redKeris", label: "Keris", tooltip: "Keris Partisan of Corruption", section: "Gear Check" },
-    { key: "bgs", label: "BGS", tooltip: "Bandos Godsword", section: "Gear Check" },
-    { key: "zcb", label: "ZCB", tooltip: "Zaryte Crossbow", section: "Gear Check" },
+    {
+      key: "redKeris",
+      label: "Keris",
+      tooltip: "Keris Partisan of Corruption",
+      section: "Gear Check",
+    },
+    {
+      key: "bgs",
+      label: "BGS",
+      tooltip: "Bandos Godsword",
+      section: "Gear Check",
+    },
+    {
+      key: "zcb",
+      label: "ZCB",
+      tooltip: "Zaryte Crossbow",
+      section: "Gear Check",
+    },
     { key: "eye", label: "Eye", tooltip: "Eye of Ayak", section: "Gear Check" },
   ],
   buttonColor: "yellow",
@@ -40,9 +55,24 @@ export const tobQueueConfig: QueueConfig = {
   kcField: "kc",
   kcLabel: "ToB KC",
   columns: [
-    { key: "scythe", label: "Scythe", tooltip: "Scythe of Vitur", section: "Gear Check" },
-    { key: "needs4Man", label: "4-Man", tooltip: "Need 4-Man GM Time", section: "Which times do you need?" },
-    { key: "needs5Man", label: "5-Man", tooltip: "Need 5-Man GM Time", section: "Which times do you need?" },
+    {
+      key: "scythe",
+      label: "Scythe",
+      tooltip: "Scythe of Vitur",
+      section: "Gear Check",
+    },
+    {
+      key: "needs4Man",
+      label: "4-Man",
+      tooltip: "Need 4-Man GM Time",
+      section: "Which times do you need?",
+    },
+    {
+      key: "needs5Man",
+      label: "5-Man",
+      tooltip: "Need 5-Man GM Time",
+      section: "Which times do you need?",
+    },
   ],
   buttonColor: "red",
 };

@@ -41,7 +41,8 @@ export default function QueueNotificationListener({
 
       notifications.show({
         title: "It's your turn!",
-        message: "An admin has marked you as ready. Check Discord for world info!",
+        message:
+          "An admin has marked you as ready. Check Discord for world info!",
         color: "yellow",
         autoClose: false,
         withCloseButton: true,

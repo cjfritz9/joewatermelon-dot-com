@@ -51,7 +51,10 @@ function formatStreamUptime(startedAt: string): string {
   return `${minutes}m`;
 }
 
-export default function TwitchLiveSection({ liveStatus, latestVod }: TwitchLiveSectionProps) {
+export default function TwitchLiveSection({
+  liveStatus,
+  latestVod,
+}: TwitchLiveSectionProps) {
   const { isLive, stream } = liveStatus;
 
   if (!isLive && latestVod) {
@@ -75,7 +78,9 @@ export default function TwitchLiveSection({ liveStatus, latestVod }: TwitchLiveS
           </Stack>
         </Group>
 
-        <div style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}>
+        <div
+          style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}
+        >
           <iframe
             src={`https://player.twitch.tv/?video=${latestVod.id}&parent=localhost&parent=joewatermelon.com&autoplay=false`}
             frameBorder="0"
@@ -138,9 +143,19 @@ export default function TwitchLiveSection({ liveStatus, latestVod }: TwitchLiveS
           </Stack>
         </Group>
 
-        <Card withBorder radius="md" p="xl" bg="dark.7" style={{ textAlign: "center" }}>
+        <Card
+          withBorder
+          radius="md"
+          p="xl"
+          bg="dark.7"
+          style={{ textAlign: "center" }}
+        >
           <Stack align="center" gap="sm">
-            <IconBrandTwitch size={48} color="#9146FF" style={{ opacity: 0.5 }} />
+            <IconBrandTwitch
+              size={48}
+              color="#9146FF"
+              style={{ opacity: 0.5 }}
+            />
             <Text c="dimmed" size="sm">
               Check back later or follow to get notified!
             </Text>

@@ -154,7 +154,9 @@ export function HeaderNav() {
               </HoverCard.Target>
 
               <HoverCard.Dropdown style={{ overflow: "hidden" }}>
-                <Text fw={500} px="md">Features</Text>
+                <Text fw={500} px="md">
+                  Features
+                </Text>
 
                 <Divider my="sm" />
 
@@ -213,19 +215,42 @@ export function HeaderNav() {
           <Group justify="center" grow pb="xl" px="md">
             {user ? (
               <>
-                <Button variant="default" component={Link} href="/account" fullWidth onClick={closeDrawer}>
+                <Button
+                  variant="default"
+                  component={Link}
+                  href="/account"
+                  fullWidth
+                  onClick={closeDrawer}
+                >
                   Account
                 </Button>
-                <Button color="brand.8" onClick={handleLogout} fullWidth loading={loggingOut}>
+                <Button
+                  color="brand.8"
+                  onClick={handleLogout}
+                  fullWidth
+                  loading={loggingOut}
+                >
                   Log out
                 </Button>
               </>
             ) : (
               <>
-                <Button variant="default" component={Link} href={`/login?redirect=${encodeURIComponent(pathname)}`} fullWidth onClick={closeDrawer}>
+                <Button
+                  variant="default"
+                  component={Link}
+                  href={`/login?redirect=${encodeURIComponent(pathname)}`}
+                  fullWidth
+                  onClick={closeDrawer}
+                >
                   Log in
                 </Button>
-                <Button color="brand.8" component={Link} href="/register" fullWidth onClick={closeDrawer}>
+                <Button
+                  color="brand.8"
+                  component={Link}
+                  href="/register"
+                  fullWidth
+                  onClick={closeDrawer}
+                >
                   Sign up
                 </Button>
               </>

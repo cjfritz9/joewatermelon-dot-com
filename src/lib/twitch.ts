@@ -33,7 +33,7 @@ export function generateOAuthUrl(state: string): string {
 }
 
 export async function exchangeCodeForToken(
-  code: string
+  code: string,
 ): Promise<TwitchTokenResponse> {
   const params = new URLSearchParams({
     client_id: TWITCH_CLIENT_ID,
@@ -60,7 +60,7 @@ export async function exchangeCodeForToken(
 }
 
 export async function fetchTwitchUser(
-  accessToken: string
+  accessToken: string,
 ): Promise<TwitchUser> {
   const response = await fetch("https://api.twitch.tv/helix/users", {
     headers: {
@@ -79,7 +79,7 @@ export async function fetchTwitchUser(
 }
 
 export async function findUserByTwitchId(
-  twitchId: string
+  twitchId: string,
 ): Promise<(DBUser & { id: string }) | null> {
   if (!isFirestoreAvailable) return null;
 
@@ -98,7 +98,7 @@ export async function findUserByTwitchId(
 }
 
 export async function findUserByEmail(
-  email: string
+  email: string,
 ): Promise<(DBUser & { id: string }) | null> {
   if (!isFirestoreAvailable) return null;
 
@@ -116,7 +116,7 @@ export function generateState(): string {
   const array = new Uint8Array(32);
   crypto.getRandomValues(array);
   return Array.from(array, (byte) => byte.toString(16).padStart(2, "0")).join(
-    ""
+    "",
   );
 }
 
@@ -189,7 +189,7 @@ export async function checkIfLive(username: string): Promise<LiveStatus> {
           "Client-Id": TWITCH_CLIENT_ID,
         },
         next: { revalidate: 60 },
-      }
+      },
     );
 
     if (!response.ok) {
@@ -227,7 +227,7 @@ async function getUserId(username: string): Promise<string | null> {
           Authorization: `Bearer ${token}`,
           "Client-Id": TWITCH_CLIENT_ID,
         },
-      }
+      },
     );
 
     if (!response.ok) return null;
@@ -260,7 +260,9 @@ export interface TwitchVideo {
   type: string;
 }
 
-export async function getLatestVod(username: string): Promise<TwitchVideo | null> {
+export async function getLatestVod(
+  username: string,
+): Promise<TwitchVideo | null> {
   if (!TWITCH_CLIENT_ID || !TWITCH_CLIENT_SECRET) {
     return null;
   }
@@ -279,7 +281,7 @@ export async function getLatestVod(username: string): Promise<TwitchVideo | null
           "Client-Id": TWITCH_CLIENT_ID,
         },
         next: { revalidate: 300 },
-      }
+      },
     );
 
     if (!response.ok) {

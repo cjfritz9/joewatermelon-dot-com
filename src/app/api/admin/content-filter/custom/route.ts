@@ -16,7 +16,7 @@ export async function GET() {
       .doc("content-filter-custom")
       .get();
 
-    const terms = doc.exists ? (doc.data()?.terms as string[]) ?? [] : [];
+    const terms = doc.exists ? ((doc.data()?.terms as string[]) ?? []) : [];
 
     return APIResponse.success("Custom terms retrieved", { terms });
   } catch (err) {
@@ -42,11 +42,13 @@ export async function POST(req: Request) {
 
     const normalizedTerm = term.trim().toLowerCase();
 
-    const docRef = firestore.collection("settings").doc("content-filter-custom");
+    const docRef = firestore
+      .collection("settings")
+      .doc("content-filter-custom");
     const doc = await docRef.get();
 
     const currentTerms = doc.exists
-      ? (doc.data()?.terms as string[]) ?? []
+      ? ((doc.data()?.terms as string[]) ?? [])
       : [];
 
     if (currentTerms.includes(normalizedTerm)) {
@@ -84,7 +86,9 @@ export async function DELETE(req: Request) {
 
     const normalizedTerm = term.trim().toLowerCase();
 
-    const docRef = firestore.collection("settings").doc("content-filter-custom");
+    const docRef = firestore
+      .collection("settings")
+      .doc("content-filter-custom");
     const doc = await docRef.get();
 
     if (!doc.exists) {

@@ -59,25 +59,29 @@ const features: FeatureCard[] = [
   {
     icon: <IconUsersGroup size={24} />,
     title: "Team-Based Competition",
-    description: "Players are divided into teams with designated captains. Work together to complete tiles and climb the leaderboard.",
+    description:
+      "Players are divided into teams with designated captains. Work together to complete tiles and climb the leaderboard.",
     color: theme.colors.brand[6],
   },
   {
     icon: <IconGrid4x4 size={24} />,
     title: "Interactive Bingo Boards",
-    description: "Each team gets their own board. Tiles can be highlighted for focus, marked in progress, or crossed out when complete.",
+    description:
+      "Each team gets their own board. Tiles can be highlighted for focus, marked in progress, or crossed out when complete.",
     color: theme.colors.warning[4],
   },
   {
     icon: <IconCrown size={24} />,
     title: "Captain Controls",
-    description: "Team captains can manage their board, assign tiles to members, and coordinate strategy for maximum points.",
+    description:
+      "Team captains can manage their board, assign tiles to members, and coordinate strategy for maximum points.",
     color: theme.colors.error[5],
   },
   {
     icon: <IconEye size={24} />,
     title: "Live Progress Tracking",
-    description: "Watch your team's progress in real-time. Admins can view all boards while teams focus on their own competition.",
+    description:
+      "Watch your team's progress in real-time. Admins can view all boards while teams focus on their own competition.",
     color: theme.colors.success[6],
   },
 ];
@@ -98,12 +102,17 @@ export default function BingoPage() {
             Clan Bingos
           </Title>
         </Group>
-        <Badge size="lg" color="yellow" variant="light" leftSection={<IconSparkles size={14} />}>
+        <Badge
+          size="lg"
+          color="yellow"
+          variant="light"
+          leftSection={<IconSparkles size={14} />}
+        >
           Coming Soon
         </Badge>
         <Text c="dimmed" ta="center" maw={600} mt="xs">
-          Compete in clan-wide bingo events with your team. Complete tiles, track progress,
-          and climb the leaderboard together.
+          Compete in clan-wide bingo events with your team. Complete tiles,
+          track progress, and climb the leaderboard together.
         </Text>
       </Stack>
 
@@ -115,7 +124,8 @@ export default function BingoPage() {
         w="100%"
       >
         <Text size="sm">
-          Join the Discord to be notified when the next bingo event starts and to find a team!
+          Join the Discord to be notified when the next bingo event starts and
+          to find a team!
         </Text>
         <Link
           href="https://discord.com/invite/BrJfA6q"
@@ -141,27 +151,35 @@ export default function BingoPage() {
                     withBorder
                     radius="sm"
                     p="xs"
-                    bg={tile.completed ? "green.9" : tile.highlighted ? "yellow.9" : "dark.6"}
+                    bg={
+                      tile.completed
+                        ? "green.9"
+                        : tile.highlighted
+                          ? "yellow.9"
+                          : "dark.6"
+                    }
                     style={{
                       aspectRatio: "1",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       opacity: tile.completed ? 0.8 : 1,
-                      borderColor: tile.highlighted ? theme.colors.warning[5] : undefined,
+                      borderColor: tile.highlighted
+                        ? theme.colors.warning[5]
+                        : undefined,
                       borderWidth: tile.highlighted ? 2 : 1,
                     }}
                   >
                     <Stack gap={2} align="center">
-                      {tile.completed && (
-                        <IconCheck size={16} color="white" />
-                      )}
+                      {tile.completed && <IconCheck size={16} color="white" />}
                       <Text
                         size="xs"
                         ta="center"
                         fw={500}
                         style={{
-                          textDecoration: tile.completed ? "line-through" : "none",
+                          textDecoration: tile.completed
+                            ? "line-through"
+                            : "none",
                         }}
                       >
                         {tile.text}
@@ -187,42 +205,70 @@ export default function BingoPage() {
               <ListItem
                 icon={
                   <ThemeIcon size={24} radius="xl" color="brand.7">
-                    <Text size="xs" fw={700}>1</Text>
+                    <Text size="xs" fw={700}>
+                      1
+                    </Text>
                   </ThemeIcon>
                 }
               >
-                <Text fw={500} c="white">Teams are formed</Text>
-                <Text size="sm">Players sign up and are assigned to teams with a captain who coordinates strategy.</Text>
+                <Text fw={500} c="white">
+                  Teams are formed
+                </Text>
+                <Text size="sm">
+                  Players sign up and are assigned to teams with a captain who
+                  coordinates strategy.
+                </Text>
               </ListItem>
               <ListItem
                 icon={
                   <ThemeIcon size={24} radius="xl" color="brand.7">
-                    <Text size="xs" fw={700}>2</Text>
+                    <Text size="xs" fw={700}>
+                      2
+                    </Text>
                   </ThemeIcon>
                 }
               >
-                <Text fw={500} c="white">Bingo boards are revealed</Text>
-                <Text size="sm">Each team gets the same board with various OSRS challenges to complete.</Text>
+                <Text fw={500} c="white">
+                  Bingo boards are revealed
+                </Text>
+                <Text size="sm">
+                  Each team gets the same board with various OSRS challenges to
+                  complete.
+                </Text>
               </ListItem>
               <ListItem
                 icon={
                   <ThemeIcon size={24} radius="xl" color="brand.7">
-                    <Text size="xs" fw={700}>3</Text>
+                    <Text size="xs" fw={700}>
+                      3
+                    </Text>
                   </ThemeIcon>
                 }
               >
-                <Text fw={500} c="white">Complete tiles together</Text>
-                <Text size="sm">Work as a team to complete tiles. Captains can highlight focus tiles and track progress.</Text>
+                <Text fw={500} c="white">
+                  Complete tiles together
+                </Text>
+                <Text size="sm">
+                  Work as a team to complete tiles. Captains can highlight focus
+                  tiles and track progress.
+                </Text>
               </ListItem>
               <ListItem
                 icon={
                   <ThemeIcon size={24} radius="xl" color="brand.7">
-                    <Text size="xs" fw={700}>4</Text>
+                    <Text size="xs" fw={700}>
+                      4
+                    </Text>
                   </ThemeIcon>
                 }
               >
-                <Text fw={500} c="white">Compete for the win</Text>
-                <Text size="sm">Score points for completed tiles, lines, and full boards. Top teams win prizes!</Text>
+                <Text fw={500} c="white">
+                  Compete for the win
+                </Text>
+                <Text size="sm">
+                  Score points for completed tiles, lines, and full boards. Top
+                  teams win prizes!
+                </Text>
               </ListItem>
             </List>
           </Stack>
@@ -242,7 +288,9 @@ export default function BingoPage() {
                 </ThemeIcon>
                 <Stack gap={4} style={{ flex: 1 }}>
                   <Text fw={600}>{feature.title}</Text>
-                  <Text size="sm" c="dimmed">{feature.description}</Text>
+                  <Text size="sm" c="dimmed">
+                    {feature.description}
+                  </Text>
                 </Stack>
               </Group>
             </Card>
@@ -261,23 +309,35 @@ export default function BingoPage() {
               <Stack gap={4}>
                 <Group gap="xs">
                   <IconUsers size={16} color={theme.colors.brand[5]} />
-                  <Text size="sm" fw={500}>Team Members</Text>
+                  <Text size="sm" fw={500}>
+                    Team Members
+                  </Text>
                 </Group>
-                <Text size="xs" c="dimmed">View and interact with your team&apos;s board only</Text>
+                <Text size="xs" c="dimmed">
+                  View and interact with your team&apos;s board only
+                </Text>
               </Stack>
               <Stack gap={4}>
                 <Group gap="xs">
                   <IconCrown size={16} color={theme.colors.warning[4]} />
-                  <Text size="sm" fw={500}>Captains</Text>
+                  <Text size="sm" fw={500}>
+                    Captains
+                  </Text>
                 </Group>
-                <Text size="xs" c="dimmed">Manage your team&apos;s board, highlight tiles, mark progress</Text>
+                <Text size="xs" c="dimmed">
+                  Manage your team&apos;s board, highlight tiles, mark progress
+                </Text>
               </Stack>
               <Stack gap={4}>
                 <Group gap="xs">
                   <IconEye size={16} color={theme.colors.error[5]} />
-                  <Text size="sm" fw={500}>Admins</Text>
+                  <Text size="sm" fw={500}>
+                    Admins
+                  </Text>
                 </Group>
-                <Text size="xs" c="dimmed">View all team boards and manage the event</Text>
+                <Text size="xs" c="dimmed">
+                  View all team boards and manage the event
+                </Text>
               </Stack>
             </SimpleGrid>
           </Stack>
@@ -291,8 +351,8 @@ export default function BingoPage() {
             Ready to Compete?
           </Title>
           <Text ta="center" c="dimmed" maw={500}>
-            Bingo events are announced in the Discord. Join to find a team,
-            get event notifications, and be part of the next competition!
+            Bingo events are announced in the Discord. Join to find a team, get
+            event notifications, and be part of the next competition!
           </Text>
           <Link
             href="https://discord.com/invite/BrJfA6q"

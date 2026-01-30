@@ -31,12 +31,7 @@ function TwitchConflictContent() {
             >
               Log in with Email
             </Button>
-            <Button
-              component={Link}
-              href="/"
-              variant="outline"
-              fullWidth
-            >
+            <Button component={Link} href="/" variant="outline" fullWidth>
               Go Home
             </Button>
           </Stack>

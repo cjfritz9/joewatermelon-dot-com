@@ -1,5 +1,5 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 class APIResponse<T = any> {
   success: boolean;
@@ -13,7 +13,9 @@ class APIResponse<T = any> {
   }
 
   static success<T>(message: string, data?: T, status = 200): NextResponse {
-    return NextResponse.json(new APIResponse<T>(true, message, data ?? null), { status });
+    return NextResponse.json(new APIResponse<T>(true, message, data ?? null), {
+      status,
+    });
   }
 
   static error(message: string, status = 400): NextResponse {

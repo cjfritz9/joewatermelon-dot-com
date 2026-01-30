@@ -34,7 +34,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <MantineProvider defaultColorScheme="dark" theme={theme}>
-        <DevBanner />
+          <DevBanner />
           <DatesProvider settings={{ firstDayOfWeek: 0 }}>
             <Notifications />
             <UserProvider>

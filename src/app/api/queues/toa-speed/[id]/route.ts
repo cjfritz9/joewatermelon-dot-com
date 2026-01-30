@@ -112,7 +112,10 @@ export async function PATCH(
     }
 
     // Validate notes length
-    if (typeof updates.notes === "string" && updates.notes.length > MAX_NOTES_LENGTH) {
+    if (
+      typeof updates.notes === "string" &&
+      updates.notes.length > MAX_NOTES_LENGTH
+    ) {
       return APIResponse.error("Notes too long");
     }
 

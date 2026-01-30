@@ -24,7 +24,7 @@ export const POST = async () => {
     if (!userData.passwordHash) {
       return APIResponse.error(
         "Cannot unlink Twitch. Please set a password first.",
-        400
+        400,
       );
     }
 

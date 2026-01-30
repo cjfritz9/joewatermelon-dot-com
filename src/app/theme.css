@@ -39,12 +39,18 @@
 
   /* colors - variant specific */
 
-  --color-brand-filled: rgb(from var(--mantine-color-brand-filled) r g b / <alpha-value>);
+  --color-brand-filled: rgb(
+    from var(--mantine-color-brand-filled) r g b / <alpha-value>
+  );
   --color-brand-filled-hover: var(--mantine-color-brand-filled-hover);
   --color-brand-light: var(--mantine-color-brand-light);
   --color-brand-light-hover: var(--mantine-color-brand-light-hover);
-  --color-brand-light-color: rgb(from var(--mantine-color-brand-light-color) r g b / <alpha-value>);
-  --color-brand-outline: rgb(from var(--mantine-color-brand-outline) r g b / <alpha-value>);
+  --color-brand-light-color: rgb(
+    from var(--mantine-color-brand-light-color) r g b / <alpha-value>
+  );
+  --color-brand-outline: rgb(
+    from var(--mantine-color-brand-outline) r g b / <alpha-value>
+  );
   --color-brand-outline-hover: var(--mantine-color-brand-outline-hover);
 
   /* breakpoints */

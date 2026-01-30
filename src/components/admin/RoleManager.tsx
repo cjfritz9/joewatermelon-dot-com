@@ -175,7 +175,8 @@ export default function RoleManager() {
                               >
                                 {role === "queue_admin"
                                   ? "Queue Admin"
-                                  : role.charAt(0).toUpperCase() + role.slice(1)}
+                                  : role.charAt(0).toUpperCase() +
+                                    role.slice(1)}
                               </Badge>
                             ))
                           ) : (
@@ -196,9 +197,13 @@ export default function RoleManager() {
                             variant={isQueueAdmin ? "outline" : "filled"}
                             color={isQueueAdmin ? "red" : "orange"}
                             loading={updatingUserId === user.id}
-                            onClick={() => handleRoleToggle(user.id, isQueueAdmin)}
+                            onClick={() =>
+                              handleRoleToggle(user.id, isQueueAdmin)
+                            }
                           >
-                            {isQueueAdmin ? "Remove Queue Admin" : "Make Queue Admin"}
+                            {isQueueAdmin
+                              ? "Remove Queue Admin"
+                              : "Make Queue Admin"}
                           </Button>
                         )}
                       </Table.Td>

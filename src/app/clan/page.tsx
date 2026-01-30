@@ -30,7 +30,8 @@ const features = [
   {
     icon: IconGrid4x4,
     title: "Clan Bingos",
-    description: "Team-based bingo competitions with prizes and bragging rights.",
+    description:
+      "Team-based bingo competitions with prizes and bragging rights.",
     color: theme.colors.brand[5],
   },
   {
@@ -42,7 +43,8 @@ const features = [
   {
     icon: IconCamera,
     title: "Dink Integration",
-    description: "Share your drops, achievements, and progress automatically in Discord.",
+    description:
+      "Share your drops, achievements, and progress automatically in Discord.",
     color: theme.colors.success[5],
   },
 ];
@@ -75,7 +77,9 @@ export default function ClanPage() {
               <IconHome size={28} />
             </ThemeIcon>
             <Stack gap={4} style={{ flex: 1 }}>
-              <Text fw={600} size="lg">Home World 495</Text>
+              <Text fw={600} size="lg">
+                Home World 495
+              </Text>
               <Text size="sm" c="dimmed">
                 Find us hanging out on World 495. Stop by and say hi!
               </Text>
@@ -87,10 +91,13 @@ export default function ClanPage() {
               <IconUserPlus size={28} />
             </ThemeIcon>
             <Stack gap={4} style={{ flex: 1 }}>
-              <Text fw={600} size="lg">How to Join</Text>
+              <Text fw={600} size="lg">
+                How to Join
+              </Text>
               <Text size="sm" c="dimmed">
-                Anyone is welcome! Simply join as a guest in the clan chat and ask for an invite.
-                There are no requirements - we&apos;re a social clan open to all players.
+                Anyone is welcome! Simply join as a guest in the clan chat and
+                ask for an invite. There are no requirements - we&apos;re a
+                social clan open to all players.
               </Text>
             </Stack>
           </Group>
@@ -109,7 +116,9 @@ export default function ClanPage() {
                   <feature.icon size={24} color={feature.color} />
                 </ThemeIcon>
                 <Text fw={600}>{feature.title}</Text>
-                <Text size="sm" c="dimmed">{feature.description}</Text>
+                <Text size="sm" c="dimmed">
+                  {feature.description}
+                </Text>
               </Stack>
             </Card>
           ))}
@@ -123,7 +132,8 @@ export default function ClanPage() {
             Join the Community
           </Title>
           <Text ta="center" c="dimmed" maw={400}>
-            Connect with clan members, get notifications for events, and share your progress.
+            Connect with clan members, get notifications for events, and share
+            your progress.
           </Text>
           <Link
             href="https://discord.com/invite/BrJfA6q"

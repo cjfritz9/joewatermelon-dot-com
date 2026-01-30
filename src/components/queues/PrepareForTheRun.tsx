@@ -12,7 +12,11 @@ interface PrepareForRunProps {
   };
 }
 
-export default function PrepareForRun({ basePath, description, colors }: PrepareForRunProps) {
+export default function PrepareForRun({
+  basePath,
+  description,
+  colors,
+}: PrepareForRunProps) {
   const infoLinks = [
     {
       title: "Requirements",

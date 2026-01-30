@@ -163,7 +163,8 @@ export default function YouTubeSection({
           <Stack gap={4}>
             <Title order={3}>YouTube</Title>
             <Text size="sm" c="dimmed">
-              Check out JoeWatermelon&apos;s YouTube channel for guides and content!
+              Check out JoeWatermelon&apos;s YouTube channel for guides and
+              content!
             </Text>
           </Stack>
         </Group>
@@ -198,13 +199,20 @@ export default function YouTubeSection({
             </Text>
           </Stack>
           {isAdmin && (
-            <ActionIcon variant="subtle" color="gray" onClick={open} style={{ alignSelf: 'flex-start'}} >
+            <ActionIcon
+              variant="subtle"
+              color="gray"
+              onClick={open}
+              style={{ alignSelf: "flex-start" }}
+            >
               <IconEdit size={18} />
             </ActionIcon>
           )}
         </Group>
 
-        <div style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}>
+        <div
+          style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}
+        >
           <iframe
             src={`https://www.youtube.com/embed/${video.id}`}
             frameBorder="0"
@@ -253,11 +261,17 @@ export default function YouTubeSection({
         </Group>
       </Card>
 
-      <Modal opened={opened} onClose={close} title="Feature YouTube Video" centered>
+      <Modal
+        opened={opened}
+        onClose={close}
+        title="Feature YouTube Video"
+        centered
+      >
         <Stack>
           <Text size="sm" c="dimmed">
-            Enter a YouTube video URL or ID to feature it on the home page. Leave empty and
-            click &quot;Show Latest&quot; to display the most recent upload.
+            Enter a YouTube video URL or ID to feature it on the home page.
+            Leave empty and click &quot;Show Latest&quot; to display the most
+            recent upload.
           </Text>
 
           <TextInput

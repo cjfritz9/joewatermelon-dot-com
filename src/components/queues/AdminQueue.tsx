@@ -15,7 +15,14 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { IconArrowDown, IconArrowUp, IconBell, IconSquareCheck, IconSquareX, IconTrash } from "@tabler/icons-react";
+import {
+  IconArrowDown,
+  IconArrowUp,
+  IconBell,
+  IconSquareCheck,
+  IconSquareX,
+  IconTrash,
+} from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 
 interface AdminQueueProps {
@@ -33,7 +40,23 @@ const getStatusBadge = (status: boolean) =>
 const getGearIcon = (hasItem: boolean) =>
   hasItem ? <IconSquareCheck color="green" /> : <IconSquareX color="red" />;
 
-export default function AdminQueue({ players: initialPlayers, config }: AdminQueueProps) {
+const formatJoinedDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  const yy = String(date.getFullYear()).slice(-2);
+  return `${mm}/${dd}/${yy}`;
+};
+
+const formatFullDateTime = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleString();
+};
+
+export default function AdminQueue({
+  players: initialPlayers,
+  config,
+}: AdminQueueProps) {
   const { players } = useQueueRealtime({
     collectionName: config.collectionName,
     initialData: initialPlayers,
@@ -144,6 +167,7 @@ export default function AdminQueue({ players: initialPlayers, config }: AdminQue
     const ready = player.ready as boolean;
     const notes = player.notes as string;
     const notificationsEnabled = player.notificationsEnabled as boolean;
+    const createdAt = player.createdAt as string;
 
     return (
       <Table.Tr key={id}>
@@ -177,9 +201,16 @@ export default function AdminQueue({ players: initialPlayers, config }: AdminQue
         <Table.Td>{twitchUsername ?? "-"}</Table.Td>
         <Table.Td>{(player[config.kcField] as number) ?? "-"}</Table.Td>
         {config.columns.map((col) => (
-          <Table.Td key={col.key}>{getGearIcon(player[col.key] as boolean)}</Table.Td>
+          <Table.Td key={col.key}>
+            {getGearIcon(player[col.key] as boolean)}
+          </Table.Td>
         ))}
         <Table.Td>{getStatusBadge(ready)}</Table.Td>
+        <Table.Td>
+          <Tooltip label={formatFullDateTime(createdAt)}>
+            <Text size="sm">{formatJoinedDate(createdAt)}</Text>
+          </Tooltip>
+        </Table.Td>
         <Table.Td>
           <Tooltip label={notes || "No notes"} multiline maw={300}>
             <Text size="sm" truncate maw={150}>
@@ -260,6 +291,7 @@ export default function AdminQueue({ players: initialPlayers, config }: AdminQue
                   </Table.Th>
                 ))}
                 <Table.Th>Status</Table.Th>
+                <Table.Th>Joined</Table.Th>
                 <Table.Th>Notes</Table.Th>
                 <Table.Th>Notify</Table.Th>
                 <Table.Th>Remove</Table.Th>

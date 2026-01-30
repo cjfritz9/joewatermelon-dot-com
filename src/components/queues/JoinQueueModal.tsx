@@ -4,6 +4,7 @@ import APIResponse from "@/lib/classes/APIResponse";
 import { useUser } from "@/lib/context/UserContext";
 import { MAX_NOTES_LENGTH } from "@/lib/db/validation";
 import { QueueConfig } from "@/lib/queue-config";
+import { EventStatus } from "@/lib/server/toa-queues";
 import { getBrandColor } from "@/lib/theme";
 import {
   Button,
@@ -15,6 +16,7 @@ import {
   Text,
   TextInput,
   Textarea,
+  Tooltip,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
@@ -22,17 +24,23 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 interface JoinQueueModalProps {
+  status: EventStatus;
   config: QueueConfig;
 }
 
-export default function JoinQueueModal({ config }: JoinQueueModalProps) {
+export default function JoinQueueModal({
+  status,
+  config,
+}: JoinQueueModalProps) {
   const [opened, { open, close }] = useDisclosure(false);
   const router = useRouter();
   const { user } = useUser();
 
+  const isActive = status === "active";
+
   const initialColumnState = config.columns.reduce(
     (acc, col) => ({ ...acc, [col.key]: false }),
-    {} as Record<string, boolean>
+    {} as Record<string, boolean>,
   );
 
   const [formData, setFormData] = useState({
@@ -126,10 +134,15 @@ export default function JoinQueueModal({ config }: JoinQueueModalProps) {
   };
 
   const handleSubmit = async () => {
-    if (!formData.rsn.trim() || !formData.twitchUsername.trim() || !formData.ready) {
+    if (
+      !formData.rsn.trim() ||
+      !formData.twitchUsername.trim() ||
+      !formData.ready
+    ) {
       notifications.show({
         title: "Missing fields",
-        message: "Please fill out all required fields and confirm you are ready.",
+        message:
+          "Please fill out all required fields and confirm you are ready.",
         position: "top-right",
         color: "red",
       });
@@ -144,13 +157,19 @@ export default function JoinQueueModal({ config }: JoinQueueModalProps) {
         body: JSON.stringify({ data: formData }),
       });
 
-      const data = (await res.json()) as APIResponse<{ id: string; editToken?: string }>;
+      const data = (await res.json()) as APIResponse<{
+        id: string;
+        editToken?: string;
+      }>;
 
       if (data.success && data.data?.id) {
         localStorage.setItem(config.storageKey, data.data.id);
 
         if (data.data.editToken) {
-          localStorage.setItem(`${config.storageKey}_editToken`, data.data.editToken);
+          localStorage.setItem(
+            `${config.storageKey}_editToken`,
+            data.data.editToken,
+          );
         }
 
         if (!user) {
@@ -179,11 +198,33 @@ export default function JoinQueueModal({ config }: JoinQueueModalProps) {
     }
   };
 
+  const JoinButton = () => {
+    if (isActive) {
+      return (
+        <Button color={config.buttonColor} onClick={open}>
+          Join
+        </Button>
+      );
+    }
+
+    return (
+      <Tooltip label="Queue is not open">
+        <span>
+          <Button
+            color={config.buttonColor}
+            onClick={open}
+            disabled={!isActive}
+          >
+            Join
+          </Button>
+        </span>
+      </Tooltip>
+    );
+  };
+
   return (
     <>
-      <Button color={config.buttonColor} onClick={open}>
-        Join
-      </Button>
+      <JoinButton />
 
       <Modal opened={opened} onClose={close} title="Join the Queue" centered>
         <Stack>
@@ -225,7 +266,9 @@ export default function JoinQueueModal({ config }: JoinQueueModalProps) {
                   key={col.key}
                   label={col.tooltip}
                   checked={formData[col.key] as boolean}
-                  onChange={(e) => handleUpdateFormData(col.key, e.target.checked)}
+                  onChange={(e) =>
+                    handleUpdateFormData(col.key, e.target.checked)
+                  }
                 />
               ))}
             </Stack>

@@ -53,8 +53,8 @@ function InfoPageContent() {
         radius="md"
       >
         <Text size="sm">
-          Don&apos;t meet all the requirements? <strong>Ask anyway!</strong> Almost
-          anyone can join and successfully get the combat achievement.
+          Don&apos;t meet all the requirements? <strong>Ask anyway!</strong>{" "}
+          Almost anyone can join and successfully get the combat achievement.
         </Text>
       </Alert>
 
@@ -82,7 +82,9 @@ function InfoPageContent() {
           <Card withBorder radius="sm" p="md" bg="dark.7">
             <Group justify="space-between" mb="xs">
               <Text fw={600}>Keris Partisan of Corruption</Text>
-              <Badge color="yellow" visibleFrom="sm">Recommended</Badge>
+              <Badge color="yellow" visibleFrom="sm">
+                Recommended
+              </Badge>
             </Group>
             <Text size="sm" c="dimmed">
               Two red keris are required for the run.
@@ -92,20 +94,27 @@ function InfoPageContent() {
           <Card withBorder radius="sm" p="md" bg="dark.7">
             <Group justify="space-between" mb="xs">
               <Text fw={600}>Bandos Godsword</Text>
-              <Badge color="yellow" visibleFrom="sm">Recommended</Badge>
+              <Badge color="yellow" visibleFrom="sm">
+                Recommended
+              </Badge>
             </Group>
             <Text size="sm" c="dimmed">
-              Required for the BGS role, unless the team is running the magic strategy.
+              Required for the BGS role, unless the team is running the magic
+              strategy.
             </Text>
           </Card>
 
           <Card withBorder radius="sm" p="md" bg="dark.7">
             <Group justify="space-between" mb="xs">
               <Text fw={600}>Zaryte Crossbow</Text>
-              <Badge color="yellow" visibleFrom="sm">Recommended</Badge>
+              <Badge color="yellow" visibleFrom="sm">
+                Recommended
+              </Badge>
             </Group>
             <Text size="sm" c="dimmed">
-              Best-in-slot spec weapon. If you don&apos;t have this you&apos;ll likely be placed on a keris/defence reduction role. Bring your best ToA spec weapon.
+              Best-in-slot spec weapon. If you don&apos;t have this you&apos;ll
+              likely be placed on a keris/defence reduction role. Bring your
+              best ToA spec weapon.
             </Text>
           </Card>
         </Stack>
@@ -123,7 +132,8 @@ function InfoPageContent() {
               <IconCheck size={14} />
             </ThemeIcon>
             <Text style={{ flex: 1 }}>
-              <strong>Expert Mode KC:</strong> You&apos;ll need to be comfy with the invocations we run, especially insanity.
+              <strong>Expert Mode KC:</strong> You&apos;ll need to be comfy with
+              the invocations we run, especially insanity.
             </Text>
           </Group>
           <Group gap="sm" align="flex-start">
@@ -131,7 +141,8 @@ function InfoPageContent() {
               <IconCheck size={14} />
             </ThemeIcon>
             <Text style={{ flex: 1 }}>
-              <strong>Discord:</strong> Being in voice chat helps coordinate all the specs and venges. This is a hard requirement.
+              <strong>Discord:</strong> Being in voice chat helps coordinate all
+              the specs and venges. This is a hard requirement.
             </Text>
           </Group>
           <Group gap="sm" align="flex-start">
@@ -139,7 +150,8 @@ function InfoPageContent() {
               <IconCheck size={14} />
             </ThemeIcon>
             <Text style={{ flex: 1 }}>
-              <strong>Supplies:</strong> Match the recommended inventory as closely as possible, ask questions.
+              <strong>Supplies:</strong> Match the recommended inventory as
+              closely as possible, ask questions.
             </Text>
           </Group>
         </Stack>
@@ -157,28 +169,36 @@ function InfoPageContent() {
 
         <Stack gap="md">
           <Card withBorder radius="sm" p="md" bg="dark.7">
-            <Text fw={600} mb="xs">Red Keris Role</Text>
+            <Text fw={600} mb="xs">
+              Red Keris Role
+            </Text>
             <Text size="sm" c="dimmed">
               Coming soon. Check Discord for current recommendations.
             </Text>
           </Card>
 
           <Card withBorder radius="sm" p="md" bg="dark.7">
-            <Text fw={600} mb="xs">BGS Role</Text>
+            <Text fw={600} mb="xs">
+              BGS Role
+            </Text>
             <Text size="sm" c="dimmed">
               Coming soon. Check Discord for current recommendations.
             </Text>
           </Card>
 
           <Card withBorder radius="sm" p="md" bg="dark.7">
-            <Text fw={600} mb="xs">Ayak Role</Text>
+            <Text fw={600} mb="xs">
+              Ayak Role
+            </Text>
             <Text size="sm" c="dimmed">
               Coming soon. Check Discord for current recommendations.
             </Text>
           </Card>
 
           <Card withBorder radius="sm" p="md" bg="dark.7">
-            <Text fw={600} mb="xs">DPS Role</Text>
+            <Text fw={600} mb="xs">
+              DPS Role
+            </Text>
             <Text size="sm" c="dimmed">
               Coming soon. Check Discord for current recommendations.
             </Text>

@@ -12,7 +12,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "ToB Speed Queue",
-  description: "Join the Theatre of Blood 4 & 5-man Grandmaster speed run queue. Sign up and get notified when it's your turn to raid.",
+  description:
+    "Join the Theatre of Blood 4 & 5-man Grandmaster speed run queue. Sign up and get notified when it's your turn to raid.",
 };
 
 export const revalidate = 0;
@@ -28,9 +29,7 @@ export default async function TobSpeedQueuePage() {
   return (
     <Stack align="center" my="xl" maw={1040} w="100%" mx="auto">
       <Stack align="center" gap={4}>
-        <Title c="#DC143C">
-          ToB Speed
-        </Title>
+        <Title c="#DC143C">ToB Speed</Title>
         <Text c="dimmed" size="sm">
           4 & 5 Man Grandmaster Times
         </Text>
@@ -48,12 +47,21 @@ export default async function TobSpeedQueuePage() {
         />
       )}
       {userCanEditQueue ? (
-        <AdminQueue players={queue as unknown as Record<string, unknown>[]} config={tobQueueConfig} />
+        <AdminQueue
+          players={queue as unknown as Record<string, unknown>[]}
+          config={tobQueueConfig}
+        />
       ) : (
         <Queue
           players={queue as unknown as Record<string, unknown>[]}
           config={tobQueueConfig}
-          joinModal={<JoinQueueModal key="join-modal" config={tobQueueConfig} />}
+          joinModal={
+            <JoinQueueModal
+              key="join-modal"
+              status={settings.status}
+              config={tobQueueConfig}
+            />
+          }
         />
       )}
       <PrepareForRun

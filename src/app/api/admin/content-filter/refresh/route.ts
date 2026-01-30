@@ -33,7 +33,7 @@ export async function POST() {
 
     const hateSpeechTerms = allTerms.filter(
       (entry) =>
-        entry.tags && entry.tags.some((tag) => HATE_SPEECH_TAGS.includes(tag))
+        entry.tags && entry.tags.some((tag) => HATE_SPEECH_TAGS.includes(tag)),
     );
 
     const docRef = firestore.collection("settings").doc("content-filter");

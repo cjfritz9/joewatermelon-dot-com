@@ -1,8 +1,8 @@
-import { NextRequest } from 'next/server';
-import bcrypt from 'bcrypt';
-import firestore from '@/lib/db/firestore';
-import { DBRegistrant } from '@/@types/firestore';
-import APIResponse from '@/lib/classes/APIResponse';
+import { NextRequest } from "next/server";
+import bcrypt from "bcrypt";
+import firestore from "@/lib/db/firestore";
+import { DBRegistrant } from "@/@types/firestore";
+import APIResponse from "@/lib/classes/APIResponse";
 
 function normalizeEmail(email: string): string {
   return email.trim().toLowerCase();
@@ -17,7 +17,7 @@ function isStrongEnoughPassword(password: string): boolean {
 }
 
 function emailToDocId(email: string): string {
-  return email.replace(/[.@]/g, '_');
+  return email.replace(/[.@]/g, "_");
 }
 
 export async function POST(req: NextRequest) {
@@ -25,21 +25,21 @@ export async function POST(req: NextRequest) {
   const { email, password, rsn, twitchUsername } = body as DBRegistrant;
 
   if (!email || !password) {
-    return APIResponse.error('Email and password are required.');
+    return APIResponse.error("Email and password are required.");
   }
 
   const normalizedEmail = normalizeEmail(email);
 
   if (!isValidEmail(normalizedEmail)) {
-    return APIResponse.error('Invalid email.');
+    return APIResponse.error("Invalid email.");
   }
 
   if (!isStrongEnoughPassword(password)) {
-    return APIResponse.error('Password must be at least 10 characters.');
+    return APIResponse.error("Password must be at least 10 characters.");
   }
 
   const userId = emailToDocId(normalizedEmail);
-  const userRef = firestore.collection('users').doc(userId);
+  const userRef = firestore.collection("users").doc(userId);
 
   try {
     const passwordHash = await bcrypt.hash(password, 12);
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
     await firestore.runTransaction(async (tx) => {
       tx.create(userRef, {
         email: normalizedEmail,
-        roles: ['user'],
+        roles: ["user"],
         passwordHash,
         ...(rsn && { rsn: rsn.trim() }),
         ...(twitchUsername && { twitchUsername: twitchUsername.trim() }),
@@ -56,18 +56,28 @@ export async function POST(req: NextRequest) {
       });
     });
 
-    return APIResponse.success('User registered successfully.', {
-      id: userId,
-      email: normalizedEmail,
-    }, 201);
+    return APIResponse.success(
+      "User registered successfully.",
+      {
+        id: userId,
+        email: normalizedEmail,
+      },
+      201,
+    );
   } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : '';
+    const msg = err instanceof Error ? err.message : "";
 
-    if (msg.includes('ALREADY_EXISTS') || msg.toLowerCase().includes('already exists')) {
-      return APIResponse.error('An account with this email already exists.', 409);
+    if (
+      msg.includes("ALREADY_EXISTS") ||
+      msg.toLowerCase().includes("already exists")
+    ) {
+      return APIResponse.error(
+        "An account with this email already exists.",
+        409,
+      );
     }
 
-    console.error('register error:', err);
-    return APIResponse.error('Internal Server Error', 500);
+    console.error("register error:", err);
+    return APIResponse.error("Internal Server Error", 500);
   }
 }

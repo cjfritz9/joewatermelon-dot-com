@@ -57,8 +57,8 @@ function InfoPageContent() {
         radius="md"
       >
         <Text size="sm">
-          Don&apos;t meet all the requirements? <strong>Ask anyway!</strong> Almost
-          anyone can join and successfully get the combat achievement.
+          Don&apos;t meet all the requirements? <strong>Ask anyway!</strong>{" "}
+          Almost anyone can join and successfully get the combat achievement.
         </Text>
       </Alert>
 
@@ -86,30 +86,39 @@ function InfoPageContent() {
           <Card withBorder radius="sm" p="md" bg="dark.7">
             <Group justify="space-between" mb="xs">
               <Text fw={600}>Scythe of Vitur</Text>
-              <Badge color="red" visibleFrom="sm">Recommended</Badge>
+              <Badge color="red" visibleFrom="sm">
+                Recommended
+              </Badge>
             </Group>
             <Text size="sm" c="dimmed">
-              Best-in-slot melee weapon for ToB. Essential for fast Nylocas and Verzik phases.
+              Best-in-slot melee weapon for ToB. Essential for fast Nylocas and
+              Verzik phases.
             </Text>
           </Card>
 
           <Card withBorder radius="sm" p="md" bg="dark.7">
             <Group justify="space-between" mb="xs">
               <Text fw={600}>Zaryte Crossbow</Text>
-              <Badge color="red" visibleFrom="sm">Recommended</Badge>
+              <Badge color="red" visibleFrom="sm">
+                Recommended
+              </Badge>
             </Group>
             <Text size="sm" c="dimmed">
-              Best spec weapon for Maiden and Verzik P2. Bring your best ranged spec weapon if you don&apos;t have ZCB.
+              Best spec weapon for Maiden and Verzik P2. Bring your best ranged
+              spec weapon if you don&apos;t have ZCB.
             </Text>
           </Card>
 
           <Card withBorder radius="sm" p="md" bg="dark.7">
             <Group justify="space-between" mb="xs">
               <Text fw={600}>Dragon Claws</Text>
-              <Badge color="red" visibleFrom="sm">Recommended</Badge>
+              <Badge color="red" visibleFrom="sm">
+                Recommended
+              </Badge>
             </Group>
             <Text size="sm" c="dimmed">
-              Essential for Verzik P3 specs. One of the most important items for speed runs.
+              Essential for Verzik P3 specs. One of the most important items for
+              speed runs.
             </Text>
           </Card>
         </Stack>
@@ -127,7 +136,8 @@ function InfoPageContent() {
               <IconCheck size={14} />
             </ThemeIcon>
             <Text style={{ flex: 1 }}>
-              <strong>ToB KC:</strong> You&apos;ll need to be comfortable with ToB mechanics and callouts.
+              <strong>ToB KC:</strong> You&apos;ll need to be comfortable with
+              ToB mechanics and callouts.
             </Text>
           </Group>
           <Group gap="sm" align="flex-start">
@@ -135,7 +145,8 @@ function InfoPageContent() {
               <IconCheck size={14} />
             </ThemeIcon>
             <Text style={{ flex: 1 }}>
-              <strong>Discord:</strong> Being in voice chat is essential for coordinating specs and callouts.
+              <strong>Discord:</strong> Being in voice chat is essential for
+              coordinating specs and callouts.
             </Text>
           </Group>
           <Group gap="sm" align="flex-start">
@@ -143,7 +154,8 @@ function InfoPageContent() {
               <IconCheck size={14} />
             </ThemeIcon>
             <Text style={{ flex: 1 }}>
-              <strong>Supplies:</strong> Match the recommended inventory as closely as possible, ask questions.
+              <strong>Supplies:</strong> Match the recommended inventory as
+              closely as possible, ask questions.
             </Text>
           </Group>
         </Stack>
@@ -161,14 +173,18 @@ function InfoPageContent() {
 
         <Stack gap="md">
           <Card withBorder radius="sm" p="md" bg="dark.7">
-            <Text fw={600} mb="xs">4-Man Setup</Text>
+            <Text fw={600} mb="xs">
+              4-Man Setup
+            </Text>
             <Text size="sm" c="dimmed">
               Coming soon. Check Discord for current recommendations.
             </Text>
           </Card>
 
           <Card withBorder radius="sm" p="md" bg="dark.7">
-            <Text fw={600} mb="xs">5-Man Setup</Text>
+            <Text fw={600} mb="xs">
+              5-Man Setup
+            </Text>
             <Text size="sm" c="dimmed">
               Coming soon. Check Discord for current recommendations.
             </Text>

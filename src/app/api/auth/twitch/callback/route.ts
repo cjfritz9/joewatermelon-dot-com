@@ -26,7 +26,9 @@ export const GET = async (req: NextRequest) => {
   try {
     if (!isFirestoreAvailable) {
       console.error("Firestore not available in Twitch callback");
-      return NextResponse.redirect(new URL("/login?error=service_unavailable", getBaseUrl(req)));
+      return NextResponse.redirect(
+        new URL("/login?error=service_unavailable", getBaseUrl(req)),
+      );
     }
 
     const baseUrl = getBaseUrl(req);
@@ -37,13 +39,13 @@ export const GET = async (req: NextRequest) => {
 
     if (error) {
       return NextResponse.redirect(
-        new URL(`/login?error=${encodeURIComponent(error)}`, baseUrl)
+        new URL(`/login?error=${encodeURIComponent(error)}`, baseUrl),
       );
     }
 
     if (!code || !state) {
       return NextResponse.redirect(
-        new URL("/login?error=missing_params", baseUrl)
+        new URL("/login?error=missing_params", baseUrl),
       );
     }
 
@@ -51,7 +53,7 @@ export const GET = async (req: NextRequest) => {
 
     if (state !== session.oauthState) {
       return NextResponse.redirect(
-        new URL("/login?error=invalid_state", baseUrl)
+        new URL("/login?error=invalid_state", baseUrl),
       );
     }
 
@@ -74,37 +76,31 @@ export const GET = async (req: NextRequest) => {
 
       if (existingTwitchUser && existingTwitchUser.id !== session.userId) {
         return NextResponse.redirect(
-          new URL("/account?error=twitch_already_linked", baseUrl)
+          new URL("/account?error=twitch_already_linked", baseUrl),
         );
       }
 
-      await firestore
-        .collection("users")
-        .doc(session.userId)
-        .update({
-          twitchId: twitchUser.id,
-          twitchUsername: twitchUser.display_name,
-          twitchLinkedAt: Timestamp.now(),
-          updatedAt: Timestamp.now(),
-        });
+      await firestore.collection("users").doc(session.userId).update({
+        twitchId: twitchUser.id,
+        twitchUsername: twitchUser.display_name,
+        twitchLinkedAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
+      });
 
       session.twitchUsername = twitchUser.display_name;
       await session.save();
 
       return NextResponse.redirect(
-        new URL("/account?success=twitch_linked", baseUrl)
+        new URL("/account?success=twitch_linked", baseUrl),
       );
     }
 
     if (existingTwitchUser) {
       if (existingTwitchUser.twitchUsername !== twitchUser.display_name) {
-        await firestore
-          .collection("users")
-          .doc(existingTwitchUser.id)
-          .update({
-            twitchUsername: twitchUser.display_name,
-            updatedAt: Timestamp.now(),
-          });
+        await firestore.collection("users").doc(existingTwitchUser.id).update({
+          twitchUsername: twitchUser.display_name,
+          updatedAt: Timestamp.now(),
+        });
       }
 
       session.userId = existingTwitchUser.id;
@@ -121,8 +117,8 @@ export const GET = async (req: NextRequest) => {
       return NextResponse.redirect(
         new URL(
           `/auth/twitch-conflict?email=${encodeURIComponent(twitchUser.email)}`,
-          req.url
-        )
+          req.url,
+        ),
       );
     }
 
@@ -148,10 +144,13 @@ export const GET = async (req: NextRequest) => {
 
     return NextResponse.redirect(new URL(returnUrl, baseUrl));
   } catch (err) {
-    console.error("Twitch OAuth callback error:", err instanceof Error ? err.message : err);
+    console.error(
+      "Twitch OAuth callback error:",
+      err instanceof Error ? err.message : err,
+    );
     console.error("Stack:", err instanceof Error ? err.stack : "N/A");
     return NextResponse.redirect(
-      new URL("/login?error=oauth_callback_failed", getBaseUrl(req))
+      new URL("/login?error=oauth_callback_failed", getBaseUrl(req)),
     );
   }
 };

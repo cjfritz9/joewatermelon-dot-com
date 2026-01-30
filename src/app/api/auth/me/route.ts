@@ -35,7 +35,8 @@ export async function GET() {
       roles: dbRoles,
       isAdmin: dbRoles.includes("admin"),
       isQueueAdmin: dbRoles.includes("queue_admin"),
-      canEditQueue: dbRoles.includes("admin") || dbRoles.includes("queue_admin"),
+      canEditQueue:
+        dbRoles.includes("admin") || dbRoles.includes("queue_admin"),
       rsn: userData?.rsn ?? null,
       twitchUsername: userData?.twitchUsername ?? null,
       hasTwitchLinked: !!userData?.twitchId,

@@ -63,10 +63,13 @@ export async function PUT(
 
     await userRef.update({ roles: newRoles });
 
-    return APIResponse.success(`Role ${action === "add" ? "added" : "removed"}`, {
-      userId: id,
-      roles: newRoles,
-    });
+    return APIResponse.success(
+      `Role ${action === "add" ? "added" : "removed"}`,
+      {
+        userId: id,
+        roles: newRoles,
+      },
+    );
   } catch (err) {
     console.error(err);
     return APIResponse.error("Internal Server Error", 500);

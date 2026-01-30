@@ -12,7 +12,10 @@ export async function GET() {
     const queueSnapshot = await firestore.collection("tob-queue").get();
 
     if (queueSnapshot.empty) {
-      return APIResponse.success("No documents found within queue, defaulting", []);
+      return APIResponse.success(
+        "No documents found within queue, defaulting",
+        [],
+      );
     }
 
     const docs = queueSnapshot.docs.map((doc) => {
@@ -79,7 +82,11 @@ export async function POST(req: Request) {
       ...(editToken && { editToken }),
     });
 
-    return APIResponse.success("Document added to queue", { id: docRef.id, editToken }, 201);
+    return APIResponse.success(
+      "Document added to queue",
+      { id: docRef.id, editToken },
+      201,
+    );
   } catch (err) {
     console.error(err);
     return APIResponse.error("Internal Server Error", 500);

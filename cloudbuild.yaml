@@ -1,51 +1,51 @@
 steps:
   # Build the container image
-  - name: 'gcr.io/cloud-builders/docker'
+  - name: "gcr.io/cloud-builders/docker"
     args:
-      - 'build'
-      - '-t'
-      - 'gcr.io/$PROJECT_ID/joewatermelon-dot-com:$COMMIT_SHA'
-      - '--build-arg'
-      - 'NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyDqAT3LN4uGFRJUFTKOiS7T_39fi2Ldc4Y'
-      - '--build-arg'
-      - 'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=eighth-surfer-483919-v8.firebaseapp.com'
-      - '--build-arg'
-      - 'NEXT_PUBLIC_FIREBASE_PROJECT_ID=eighth-surfer-483919-v8'
-      - '--build-arg'
-      - 'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=eighth-surfer-483919-v8.firebasestorage.app'
-      - '--build-arg'
-      - 'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=712955721050'
-      - '--build-arg'
-      - 'NEXT_PUBLIC_FIREBASE_APP_ID=1:712955721050:web:efcf2c3b87dd5660caef63'
-      - '.'
+      - "build"
+      - "-t"
+      - "gcr.io/$PROJECT_ID/joewatermelon-dot-com:$COMMIT_SHA"
+      - "--build-arg"
+      - "NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyDqAT3LN4uGFRJUFTKOiS7T_39fi2Ldc4Y"
+      - "--build-arg"
+      - "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=eighth-surfer-483919-v8.firebaseapp.com"
+      - "--build-arg"
+      - "NEXT_PUBLIC_FIREBASE_PROJECT_ID=eighth-surfer-483919-v8"
+      - "--build-arg"
+      - "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=eighth-surfer-483919-v8.firebasestorage.app"
+      - "--build-arg"
+      - "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=712955721050"
+      - "--build-arg"
+      - "NEXT_PUBLIC_FIREBASE_APP_ID=1:712955721050:web:efcf2c3b87dd5660caef63"
+      - "."
 
   # Push the container image to Container Registry
-  - name: 'gcr.io/cloud-builders/docker'
+  - name: "gcr.io/cloud-builders/docker"
     args:
-      - 'push'
-      - 'gcr.io/$PROJECT_ID/joewatermelon-dot-com:$COMMIT_SHA'
+      - "push"
+      - "gcr.io/$PROJECT_ID/joewatermelon-dot-com:$COMMIT_SHA"
 
   # Deploy container image to Cloud Run
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
     args:
-      - 'run'
-      - 'deploy'
-      - 'joewatermelon-dot-com'
-      - '--image'
-      - 'gcr.io/$PROJECT_ID/joewatermelon-dot-com:$COMMIT_SHA'
-      - '--region'
-      - 'us-central1'
-      - '--platform'
-      - 'managed'
-      - '--allow-unauthenticated'
-      - '--set-env-vars'
-      - 'NODE_ENV=production,TWITCH_REDIRECT_URI=https://joewatermelon.com/api/auth/twitch/callback,GCP_PROJECT_ID=$PROJECT_ID'
-      - '--set-secrets'
-      - 'SESSION_SECRET=secrets:latest,TWITCH_CLIENT_ID=TWITCH_CLIENT_ID:latest,TWITCH_CLIENT_SECRET=TWITCH_CLIENT_SECRET:latest,YOUTUBE_API_KEY=YOUTUBE_API_KEY:latest'
+      - "run"
+      - "deploy"
+      - "joewatermelon-dot-com"
+      - "--image"
+      - "gcr.io/$PROJECT_ID/joewatermelon-dot-com:$COMMIT_SHA"
+      - "--region"
+      - "us-central1"
+      - "--platform"
+      - "managed"
+      - "--allow-unauthenticated"
+      - "--set-env-vars"
+      - "NODE_ENV=production,TWITCH_REDIRECT_URI=https://joewatermelon.com/api/auth/twitch/callback,GCP_PROJECT_ID=$PROJECT_ID"
+      - "--set-secrets"
+      - "SESSION_SECRET=secrets:latest,TWITCH_CLIENT_ID=TWITCH_CLIENT_ID:latest,TWITCH_CLIENT_SECRET=TWITCH_CLIENT_SECRET:latest,YOUTUBE_API_KEY=YOUTUBE_API_KEY:latest"
 
 images:
-  - 'gcr.io/$PROJECT_ID/joewatermelon-dot-com:$COMMIT_SHA'
+  - "gcr.io/$PROJECT_ID/joewatermelon-dot-com:$COMMIT_SHA"
 
 options:
   logging: CLOUD_LOGGING_ONLY

@@ -2,7 +2,10 @@ import TwitchLiveSection from "@/components/home/TwitchLiveSection";
 import YouTubeSection from "@/components/home/YouTubeSection";
 import { isAdmin } from "@/lib/session";
 import { checkIfLive, getLatestVod } from "@/lib/twitch";
-import { getFeaturedOrLatestVideo, getFeaturedVideoSettings } from "@/lib/youtube";
+import {
+  getFeaturedOrLatestVideo,
+  getFeaturedVideoSettings,
+} from "@/lib/youtube";
 import {
   Badge,
   Card,
@@ -73,7 +76,9 @@ export default async function Home() {
     isAdmin(),
   ]);
 
-  const latestVod = !liveStatus.isLive ? await getLatestVod("JoeWatermelon") : null;
+  const latestVod = !liveStatus.isLive
+    ? await getLatestVod("JoeWatermelon")
+    : null;
 
   const isFeatured = !!featuredSettings.featuredVideoId;
 
@@ -91,14 +96,17 @@ export default async function Home() {
           JoeWatermelon
         </Title>
         <Text c="dimmed" ta="center" maw={500}>
-          OSRS content creator, GM Ironman, and community builder. Join the Melon clan today!
+          OSRS content creator, GM Ironman, and community builder. Join the
+          Melon clan today!
         </Text>
       </Stack>
 
       {liveStatus.isLive && <TwitchLiveSection liveStatus={liveStatus} />}
 
       <SimpleGrid cols={{ base: 1, md: 2 }} spacing="lg" w="100%">
-        {!liveStatus.isLive && <TwitchLiveSection liveStatus={liveStatus} latestVod={latestVod} />}
+        {!liveStatus.isLive && (
+          <TwitchLiveSection liveStatus={liveStatus} latestVod={latestVod} />
+        )}
 
         <YouTubeSection
           video={video}
@@ -109,11 +117,7 @@ export default async function Home() {
       </SimpleGrid>
 
       <Stack w="100%" gap="md">
-        <Title
-          order={2}
-          ta="center"
-          c={theme.colors.brand[7]}
-        >
+        <Title order={2} ta="center" c={theme.colors.brand[7]}>
           Explore
         </Title>
         <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing="md">

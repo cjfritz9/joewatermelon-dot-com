@@ -33,7 +33,7 @@ export default function EditQueueEntryModal({
 }: EditQueueEntryModalProps) {
   const initialColumnState = config.columns.reduce(
     (acc, col) => ({ ...acc, [col.key]: (entry[col.key] as boolean) ?? false }),
-    {} as Record<string, boolean>
+    {} as Record<string, boolean>,
   );
 
   const [formData, setFormData] = useState({
@@ -62,7 +62,7 @@ export default function EditQueueEntryModal({
 
   const handleUpdateFormData = (
     key: string,
-    value: string | number | boolean
+    value: string | number | boolean,
   ) => {
     setFormData((prev) => ({
       ...prev,

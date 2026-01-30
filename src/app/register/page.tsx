@@ -103,7 +103,11 @@ function RegisterForm() {
           </Button>
         </Group>
 
-        <Divider label="Or register with email" labelPosition="center" my="lg" />
+        <Divider
+          label="Or register with email"
+          labelPosition="center"
+          my="lg"
+        />
 
         {error && (
           <Alert

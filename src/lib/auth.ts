@@ -4,7 +4,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 export async function logout(
   refetchUser: () => Promise<void>,
   router: AppRouterInstance,
-  onComplete?: () => void
+  onComplete?: () => void,
 ) {
   await fetch("/api/auth/logout", { credentials: "include" });
   await refetchUser();

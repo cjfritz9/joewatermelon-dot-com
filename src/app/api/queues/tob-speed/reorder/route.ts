@@ -44,15 +44,20 @@ export async function POST(req: Request) {
       return APIResponse.error("Player not found in queue", 404);
     }
 
-    const targetIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+    const targetIndex =
+      direction === "up" ? currentIndex - 1 : currentIndex + 1;
 
     if (targetIndex < 0 || targetIndex >= docs.length) {
       return APIResponse.error("Cannot move player further in that direction");
     }
 
     const batch = firestore.batch();
-    const currentDoc = firestore.collection("tob-queue").doc(docs[currentIndex].id);
-    const targetDoc = firestore.collection("tob-queue").doc(docs[targetIndex].id);
+    const currentDoc = firestore
+      .collection("tob-queue")
+      .doc(docs[currentIndex].id);
+    const targetDoc = firestore
+      .collection("tob-queue")
+      .doc(docs[targetIndex].id);
 
     batch.update(currentDoc, { order: targetIndex });
     batch.update(targetDoc, { order: currentIndex });

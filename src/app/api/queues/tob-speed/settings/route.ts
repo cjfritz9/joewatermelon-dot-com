@@ -47,7 +47,9 @@ export async function PUT(req: Request) {
       .doc(SETTINGS_DOC)
       .set({
         status,
-        nextRunTime: nextRunTime ? Timestamp.fromDate(new Date(nextRunTime)) : null,
+        nextRunTime: nextRunTime
+          ? Timestamp.fromDate(new Date(nextRunTime))
+          : null,
         updatedAt: Timestamp.now(),
       });
 

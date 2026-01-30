@@ -183,7 +183,9 @@ function AccountContent() {
                           : "blue"
                     }
                   >
-                    {role === "queue_admin" ? "Queue Admin" : role.charAt(0).toUpperCase() + role.slice(1)}
+                    {role === "queue_admin"
+                      ? "Queue Admin"
+                      : role.charAt(0).toUpperCase() + role.slice(1)}
                   </Badge>
                 ))
               ) : (
@@ -196,7 +198,9 @@ function AccountContent() {
 
       <Card withBorder radius="md" p="lg" maw={500} w="100%">
         <Stack gap="md">
-          <Text fw={500} size="lg">Profile</Text>
+          <Text fw={500} size="lg">
+            Profile
+          </Text>
 
           <TextInput
             label="RSN (RuneScape Name)"
@@ -211,7 +215,11 @@ function AccountContent() {
             value={manualTwitchUsername}
             onChange={(e) => setManualTwitchUsername(e.currentTarget.value)}
             disabled={user.hasTwitchLinked}
-            description={user.hasTwitchLinked ? "Managed by linked Twitch account" : undefined}
+            description={
+              user.hasTwitchLinked
+                ? "Managed by linked Twitch account"
+                : undefined
+            }
           />
 
           <Button onClick={handleSaveProfile} loading={savingProfile}>
@@ -224,7 +232,10 @@ function AccountContent() {
         <Stack gap="md">
           <Group justify="space-between">
             <Group gap="xs">
-              <IconBrandTwitch size={20} color="var(--mantine-color-violet-6)" />
+              <IconBrandTwitch
+                size={20}
+                color="var(--mantine-color-violet-6)"
+              />
               <Text fw={500}>Twitch Account</Text>
             </Group>
             {user.twitchUsername ? (
@@ -258,7 +269,9 @@ function AccountContent() {
 
       {user.isAdmin && (
         <Stack align="center" w="100%" mt="xl" gap="md">
-          <Title order={3} c="dimmed">Admin</Title>
+          <Title order={3} c="dimmed">
+            Admin
+          </Title>
           <RoleManager />
           <ContentFilterManager />
         </Stack>
@@ -269,7 +282,13 @@ function AccountContent() {
 
 export default function AccountPage() {
   return (
-    <Suspense fallback={<Stack align="center" my="xl"><Loader /></Stack>}>
+    <Suspense
+      fallback={
+        <Stack align="center" my="xl">
+          <Loader />
+        </Stack>
+      }
+    >
       <AccountContent />
     </Suspense>
   );

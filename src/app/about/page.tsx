@@ -65,17 +65,18 @@ export default function AboutPage() {
       <Card withBorder radius="md" p="xl" w="100%">
         <Stack gap="md">
           <Text>
-            Hey, I&apos;m <strong>JoeWatermelon</strong> - an OSRS content creator,
-            speedrunner, and combat achiever.
+            Hey, I&apos;m <strong>JoeWatermelon</strong> - an OSRS content
+            creator, speedrunner, and combat achiever.
           </Text>
           <Text>
             I stream on Twitch where I help players get their Grandmaster Combat
-            Achievement speed times for raids like ToA and ToB. The queues on this
-            site let you sign up and get notified when it&apos;s your turn.
+            Achievement speed times for raids like ToA and ToB. The queues on
+            this site let you sign up and get notified when it&apos;s your turn.
           </Text>
           <Text>
-            When I&apos;m not running speeds, you&apos;ll find me making YouTube guides,
-            hanging out with friends in the Melon clan, or working on my end-game ironman goals.
+            When I&apos;m not running speeds, you&apos;ll find me making YouTube
+            guides, hanging out with friends in the Melon clan, or working on my
+            end-game ironman goals.
           </Text>
         </Stack>
       </Card>

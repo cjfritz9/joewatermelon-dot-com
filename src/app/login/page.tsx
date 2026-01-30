@@ -6,7 +6,8 @@ import React, { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Login",
-  description: "Sign in to your JoeWatermelon account to join queues, track your progress, and participate in clan events.",
+  description:
+    "Sign in to your JoeWatermelon account to join queues, track your progress, and participate in clan events.",
 };
 
 const LoginPage: React.FC = async () => {
@@ -14,7 +15,7 @@ const LoginPage: React.FC = async () => {
     <AuthWrapper>
       <Suspense fallback={<Loader />}>
         <LoginForm />
-        </Suspense>
+      </Suspense>
     </AuthWrapper>
   );
 };

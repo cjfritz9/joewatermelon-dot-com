@@ -1,6 +1,6 @@
 import { Timestamp } from "@google-cloud/firestore";
 
-export type UserRoles = 'user' | 'admin' | 'moderator' | 'queue_admin';
+export type UserRoles = "user" | "admin" | "moderator" | "queue_admin";
 
 export interface DBRegistrant {
   email: string;

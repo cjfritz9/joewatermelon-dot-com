@@ -1,8 +1,22 @@
 import theme from "@/app/theme";
 import { getToa8SpeedSettings } from "@/lib/server/toa-queues";
 import { getTobSpeedSettings } from "@/lib/server/tob-queues";
-import { Badge, Card, Group, SimpleGrid, Stack, Text, Title } from "@mantine/core";
-import { IconBooks, IconDroplet, IconPlayerPlay, IconPlayerStop, IconPyramid } from "@tabler/icons-react";
+import {
+  Badge,
+  Card,
+  Group,
+  SimpleGrid,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
+import {
+  IconBooks,
+  IconDroplet,
+  IconPlayerPlay,
+  IconPlayerStop,
+  IconPyramid,
+} from "@tabler/icons-react";
 import { Metadata } from "next";
 import Link from "next/link";
 
@@ -50,10 +64,17 @@ export default async function QueuesPage() {
       </Title>
 
       <Text c="dimmed" ta="center" maw={600}>
-        Join a queue for group content. Sign up, wait for your turn, and get notified when it&apos;s time to join.
+        Join a queue for group content. Sign up, wait for your turn, and get
+        notified when it&apos;s time to join.
       </Text>
 
-      <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="lg" mt="xl" w="100%" maw={800}>
+      <SimpleGrid
+        cols={{ base: 1, sm: 2 }}
+        spacing="lg"
+        mt="xl"
+        w="100%"
+        maw={800}
+      >
         {queues.map((queue, index) => {
           const isComingSoon = queue.status === "coming_soon";
           const card = (
@@ -69,13 +90,31 @@ export default async function QueuesPage() {
                 {queue.icon}
                 <Stack gap="xs" style={{ flex: 1 }}>
                   <Group justify="space-between" align="center">
-                    <Text fw={600} size="lg">{queue.title}</Text>
+                    <Text fw={600} size="lg">
+                      {queue.title}
+                    </Text>
                     <Badge
-                      color={queue.status === "active" ? "green" : isComingSoon ? "teal" : "gray"}
+                      color={
+                        queue.status === "active"
+                          ? "green"
+                          : isComingSoon
+                            ? "teal"
+                            : "gray"
+                      }
                       variant="light"
-                      leftSection={queue.status === "active" ? <IconPlayerPlay size={12} /> : isComingSoon ? null : <IconPlayerStop size={12} />}
+                      leftSection={
+                        queue.status === "active" ? (
+                          <IconPlayerPlay size={12} />
+                        ) : isComingSoon ? null : (
+                          <IconPlayerStop size={12} />
+                        )
+                      }
                     >
-                      {queue.status === "active" ? "Active" : isComingSoon ? "Coming Soon" : "Inactive"}
+                      {queue.status === "active"
+                        ? "Active"
+                        : isComingSoon
+                          ? "Coming Soon"
+                          : "Inactive"}
                     </Badge>
                   </Group>
                   <Text size="sm" c="dimmed">
@@ -91,7 +130,11 @@ export default async function QueuesPage() {
           }
 
           return (
-            <Link key={index} href={queue.href} style={{ textDecoration: "none" }}>
+            <Link
+              key={index}
+              href={queue.href}
+              style={{ textDecoration: "none" }}
+            >
               {card}
             </Link>
           );

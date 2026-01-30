@@ -7,7 +7,12 @@ import bcrypt from "bcrypt";
 export const POST = async (req: Request) => {
   try {
     if (!isFirestoreAvailable) {
-      console.error("Firestore not available. GCP_PROJECT_ID:", process.env.GCP_PROJECT_ID, "GOOGLE_CLOUD_PROJECT:", process.env.GOOGLE_CLOUD_PROJECT);
+      console.error(
+        "Firestore not available. GCP_PROJECT_ID:",
+        process.env.GCP_PROJECT_ID,
+        "GOOGLE_CLOUD_PROJECT:",
+        process.env.GOOGLE_CLOUD_PROJECT,
+      );
       return APIResponse.error("Service temporarily unavailable", 503);
     }
 
@@ -32,7 +37,7 @@ export const POST = async (req: Request) => {
     if (!userData.passwordHash) {
       return APIResponse.error(
         "This account was created with Twitch. Please log in with Twitch.",
-        401
+        401,
       );
     }
 

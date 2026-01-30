@@ -66,7 +66,7 @@ async function getChannelId(): Promise<string | null> {
 
   try {
     const response = await fetch(
-      `https://www.googleapis.com/youtube/v3/channels?part=id&forHandle=${YOUTUBE_CHANNEL_HANDLE}&key=${YOUTUBE_API_KEY}`
+      `https://www.googleapis.com/youtube/v3/channels?part=id&forHandle=${YOUTUBE_CHANNEL_HANDLE}&key=${YOUTUBE_API_KEY}`,
     );
 
     if (!response.ok) {
@@ -94,11 +94,14 @@ export async function getLatestVideo(): Promise<YouTubeVideo | null> {
 
     const searchResponse = await fetch(
       `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelId}&maxResults=10&order=date&type=video&key=${YOUTUBE_API_KEY}`,
-      { next: { revalidate: 300 } }
+      { next: { revalidate: 300 } },
     );
 
     if (!searchResponse.ok) {
-      console.error("Failed to get latest videos:", await searchResponse.text());
+      console.error(
+        "Failed to get latest videos:",
+        await searchResponse.text(),
+      );
       return null;
     }
 
@@ -111,11 +114,14 @@ export async function getLatestVideo(): Promise<YouTubeVideo | null> {
 
     const videosResponse = await fetch(
       `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics&id=${videoIds}&key=${YOUTUBE_API_KEY}`,
-      { next: { revalidate: 300 } }
+      { next: { revalidate: 300 } },
     );
 
     if (!videosResponse.ok) {
-      console.error("Failed to get video details:", await videosResponse.text());
+      console.error(
+        "Failed to get video details:",
+        await videosResponse.text(),
+      );
       return null;
     }
 
@@ -151,13 +157,15 @@ export async function getLatestVideo(): Promise<YouTubeVideo | null> {
   }
 }
 
-export async function getVideoById(videoId: string): Promise<YouTubeVideo | null> {
+export async function getVideoById(
+  videoId: string,
+): Promise<YouTubeVideo | null> {
   if (!YOUTUBE_API_KEY) return null;
 
   try {
     const response = await fetch(
       `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics&id=${videoId}&key=${YOUTUBE_API_KEY}`,
-      { next: { revalidate: 300 } }
+      { next: { revalidate: 300 } },
     );
 
     if (!response.ok) {
@@ -217,14 +225,16 @@ export async function getFeaturedVideoSettings(): Promise<FeaturedVideoSettings>
   }
 }
 
-export async function setFeaturedVideoId(videoId: string | null): Promise<boolean> {
+export async function setFeaturedVideoId(
+  videoId: string | null,
+): Promise<boolean> {
   if (!isFirestoreAvailable) return false;
 
   try {
-    await firestore.collection("settings").doc("youtube").set(
-      { featuredVideoId: videoId },
-      { merge: true }
-    );
+    await firestore
+      .collection("settings")
+      .doc("youtube")
+      .set({ featuredVideoId: videoId }, { merge: true });
     return true;
   } catch (error) {
     console.error("Error setting featured video:", error);

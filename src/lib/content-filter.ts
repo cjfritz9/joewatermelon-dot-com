@@ -32,7 +32,7 @@ async function refreshFromSource(): Promise<HateSpeechEntry[]> {
 
     const hateSpeechTerms = allTerms.filter(
       (entry) =>
-        entry.tags && entry.tags.some((tag) => HATE_SPEECH_TAGS.includes(tag))
+        entry.tags && entry.tags.some((tag) => HATE_SPEECH_TAGS.includes(tag)),
     );
 
     const docRef = firestore.collection("settings").doc("content-filter");
@@ -112,7 +112,7 @@ async function getCustomTerms(): Promise<string[]> {
       .get();
 
     cachedCustomTerms = doc.exists
-      ? (doc.data()?.terms as string[]) ?? []
+      ? ((doc.data()?.terms as string[]) ?? [])
       : [];
 
     return cachedCustomTerms;

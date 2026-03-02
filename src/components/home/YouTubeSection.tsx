@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   Group,
+  Image,
   Modal,
   Stack,
   Text,
@@ -30,6 +31,7 @@ interface YouTubeSectionProps {
   isFeatured: boolean;
   isAdmin?: boolean;
   currentFeaturedId?: string | null;
+  compact?: boolean;
 }
 
 function extractVideoId(input: string): string | null {
@@ -79,6 +81,7 @@ export default function YouTubeSection({
   isFeatured,
   isAdmin,
   currentFeaturedId,
+  compact,
 }: YouTubeSectionProps) {
   const [opened, { open, close }] = useDisclosure(false);
   const [videoInput, setVideoInput] = useState("");
@@ -179,6 +182,140 @@ export default function YouTubeSection({
           </a>
         </Group>
       </Card>
+    );
+  }
+
+  if (compact) {
+    return (
+      <>
+        <Card withBorder radius="md" p="md" w="100%">
+          <Group gap="md" wrap="nowrap" align="center">
+            <a
+              href={`https://youtube.com/watch?v=${video.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ flexShrink: 0 }}
+            >
+              <Image
+                src={`https://i.ytimg.com/vi/${video.id}/mqdefault.jpg`}
+                alt={video.title}
+                w={180}
+                h={101}
+                radius="md"
+                style={{ objectFit: "cover" }}
+              />
+            </a>
+            <Stack gap={4} style={{ flex: 1, minWidth: 0 }}>
+              <Group gap="xs">
+                <IconBrandYoutube size={20} color="#FF0000" />
+                <Title order={4}>YouTube</Title>
+                <Badge
+                  color={isFeatured ? "yellow" : "gray"}
+                  variant="light"
+                  size="sm"
+                >
+                  {isFeatured ? "Featured" : "Latest Upload"}
+                </Badge>
+                {isAdmin && (
+                  <ActionIcon
+                    variant="subtle"
+                    color="gray"
+                    onClick={open}
+                    size="sm"
+                  >
+                    <IconEdit size={14} />
+                  </ActionIcon>
+                )}
+              </Group>
+              <Text size="sm" fw={500} lineClamp={1}>
+                {video.title}
+              </Text>
+              <Group gap="md">
+                <Group gap={4}>
+                  <IconEye size={14} color="gray" />
+                  <Text size="xs" c="dimmed">
+                    {formatViewCount(video.viewCount)}
+                  </Text>
+                </Group>
+                <Group gap={4}>
+                  <IconThumbUp size={14} color="gray" />
+                  <Text size="xs" c="dimmed">
+                    {formatViewCount(video.likeCount)}
+                  </Text>
+                </Group>
+                <Group gap={4}>
+                  <IconClock size={14} color="gray" />
+                  <Text size="xs" c="dimmed">
+                    {formatDuration(video.durationSeconds)}
+                  </Text>
+                </Group>
+              </Group>
+            </Stack>
+            <a
+              href="https://youtube.com/@JoeWatermelon"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: "#FF0000",
+                fontWeight: 600,
+                fontSize: 12,
+                flexShrink: 0,
+                whiteSpace: "nowrap",
+              }}
+            >
+              More Videos
+            </a>
+          </Group>
+        </Card>
+
+        <Modal
+          opened={opened}
+          onClose={close}
+          title="Feature YouTube Video"
+          centered
+        >
+          <Stack>
+            <Text size="sm" c="dimmed">
+              Enter a YouTube video URL or ID to feature it on the home page.
+              Leave empty and click &quot;Show Latest&quot; to display the most
+              recent upload.
+            </Text>
+
+            <TextInput
+              label="YouTube Video URL or ID"
+              placeholder="https://youtube.com/watch?v=... or video ID"
+              value={videoInput}
+              onChange={(e) => setVideoInput(e.target.value)}
+            />
+
+            {currentFeaturedId && (
+              <Text size="xs" c="dimmed">
+                Currently featuring: {currentFeaturedId}
+              </Text>
+            )}
+
+            <Group justify="flex-end" mt="md">
+              {isFeatured && (
+                <Button
+                  variant="subtle"
+                  color="gray"
+                  onClick={handleClearFeatured}
+                  loading={saving}
+                >
+                  Show Latest
+                </Button>
+              )}
+              <Button
+                color="red"
+                onClick={handleFeatureVideo}
+                loading={saving}
+              >
+                Feature Video
+              </Button>
+            </Group>
+          </Stack>
+        </Modal>
+      </>
     );
   }
 

@@ -101,20 +101,30 @@ export default async function Home() {
         </Text>
       </Stack>
 
-      {liveStatus.isLive && <TwitchLiveSection liveStatus={liveStatus} />}
+      {liveStatus.isLive && (
+        <>
+          <TwitchLiveSection liveStatus={liveStatus} />
+          <YouTubeSection
+            video={video}
+            isFeatured={isFeatured}
+            isAdmin={isUserAdmin}
+            currentFeaturedId={featuredSettings.featuredVideoId}
+            compact
+          />
+        </>
+      )}
 
-      <SimpleGrid cols={{ base: 1, md: 2 }} spacing="lg" w="100%">
-        {!liveStatus.isLive && (
+      {!liveStatus.isLive && (
+        <SimpleGrid cols={{ base: 1, md: 2 }} spacing="lg" w="100%">
           <TwitchLiveSection liveStatus={liveStatus} latestVod={latestVod} />
-        )}
-
-        <YouTubeSection
-          video={video}
-          isFeatured={isFeatured}
-          isAdmin={isUserAdmin}
-          currentFeaturedId={featuredSettings.featuredVideoId}
-        />
-      </SimpleGrid>
+          <YouTubeSection
+            video={video}
+            isFeatured={isFeatured}
+            isAdmin={isUserAdmin}
+            currentFeaturedId={featuredSettings.featuredVideoId}
+          />
+        </SimpleGrid>
+      )}
 
       <Stack w="100%" gap="md">
         <Title order={2} ta="center" c={theme.colors.brand[7]}>

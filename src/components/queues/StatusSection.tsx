@@ -1,5 +1,8 @@
+"use client";
+
 import { getBrandColor } from "@/lib/theme";
 import { Badge, Button, Card, Group, Stack, Text } from "@mantine/core";
+import { useEffect, useState } from "react";
 
 type Status = "active" | "inactive";
 
@@ -14,6 +17,12 @@ export default function StatusSection({
   nextRunTime,
   onNotify,
 }: StatusSectionProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const getStatusBadge = () => {
     switch (status) {
       case "active":
@@ -23,7 +32,7 @@ export default function StatusSection({
     }
   };
 
-  const getFormattedLocalTime = (_date: Date) => {
+  const getFormattedLocalTime = (date: Date) => {
     return new Intl.DateTimeFormat("en-US", {
       weekday: "long",
       month: "long",
@@ -33,13 +42,13 @@ export default function StatusSection({
       minute: "numeric",
       hour12: true,
       timeZoneName: "short",
-    }).format(_date);
+    }).format(date);
   };
 
   const getNextRunText = () => {
     if (status === "active") return "Runs are currently in progress!";
     if (status === "inactive" && nextRunTime)
-      return getFormattedLocalTime(nextRunTime);
+      return mounted ? getFormattedLocalTime(nextRunTime) : " ";
     if (status === "inactive") return "Next run TBD";
   };
 

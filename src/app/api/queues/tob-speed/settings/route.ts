@@ -1,25 +1,16 @@
 import APIResponse from "@/lib/classes/APIResponse";
-import firestore from "@/lib/db/firestore";
+import { getEventSettings, updateEventSettings } from "@/lib/server/event-settings";
 import { isAdmin } from "@/lib/session";
-import { Timestamp } from "@google-cloud/firestore";
 
 const SETTINGS_DOC = "tob-speed-settings";
 
 export async function GET() {
   try {
-    const doc = await firestore.collection("settings").doc(SETTINGS_DOC).get();
+    const settings = await getEventSettings(SETTINGS_DOC);
 
-    if (!doc.exists) {
-      return APIResponse.success("No settings found", {
-        status: "inactive",
-        nextRunTime: null,
-      });
-    }
-
-    const data = doc.data();
     return APIResponse.success("Settings found", {
-      status: data?.status || "inactive",
-      nextRunTime: data?.nextRunTime?.toDate()?.toISOString() || null,
+      status: settings.status,
+      nextRunTime: settings.nextRunTime?.toISOString() || null,
     });
   } catch (err) {
     console.error(err);
@@ -42,16 +33,11 @@ export async function PUT(req: Request) {
       return APIResponse.error("Invalid status");
     }
 
-    await firestore
-      .collection("settings")
-      .doc(SETTINGS_DOC)
-      .set({
-        status,
-        nextRunTime: nextRunTime
-          ? Timestamp.fromDate(new Date(nextRunTime))
-          : null,
-        updatedAt: Timestamp.now(),
-      });
+    await updateEventSettings(
+      SETTINGS_DOC,
+      status,
+      nextRunTime ? new Date(nextRunTime) : null,
+    );
 
     return APIResponse.success("Settings updated");
   } catch (err) {

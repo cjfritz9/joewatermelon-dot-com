@@ -1,13 +1,11 @@
 import { APITobQueueEntrant } from "@/@types/api";
 import { DBTobQueueEntrant } from "@/@types/firestore";
 import firestore, { isFirestoreAvailable } from "../db/firestore";
+import { getEventSettings } from "./event-settings";
 
-export type EventStatus = "active" | "inactive";
+export type { EventSettings, EventStatus } from "./event-settings";
 
-export interface EventSettings {
-  status: EventStatus;
-  nextRunTime: Date | null;
-}
+const SETTINGS_DOC = "tob-speed-settings";
 
 export const getTobSpeedQueue = async (): Promise<APITobQueueEntrant[]> => {
   if (!isFirestoreAvailable) return [];
@@ -44,26 +42,4 @@ export const getTobSpeedQueue = async (): Promise<APITobQueueEntrant[]> => {
   }
 };
 
-export const getTobSpeedSettings = async (): Promise<EventSettings> => {
-  if (!isFirestoreAvailable) return { status: "inactive", nextRunTime: null };
-
-  try {
-    const doc = await firestore
-      .collection("settings")
-      .doc("tob-speed-settings")
-      .get();
-
-    if (!doc.exists) {
-      return { status: "inactive", nextRunTime: null };
-    }
-
-    const data = doc.data();
-    return {
-      status: data?.status || "inactive",
-      nextRunTime: data?.nextRunTime?.toDate() || null,
-    };
-  } catch (err) {
-    console.error(err);
-    return { status: "inactive", nextRunTime: null };
-  }
-};
+export const getTobSpeedSettings = () => getEventSettings(SETTINGS_DOC);

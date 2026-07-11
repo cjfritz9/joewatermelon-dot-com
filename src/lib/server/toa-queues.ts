@@ -3,6 +3,11 @@ import { DBToaQueueEntrant } from "@/@types/firestore";
 import { Timestamp } from "@google-cloud/firestore";
 import firestore, { isFirestoreAvailable } from "../db/firestore";
 import { getToaQueueEntryIsValid } from "../db/validation";
+import { getEventSettings } from "./event-settings";
+
+export type { EventSettings, EventStatus } from "./event-settings";
+
+const SETTINGS_DOC = "toa-8man-speed-settings";
 
 export const getToa8SpeedQueue = async (): Promise<APIToaQueueEntrant[]> => {
   if (!isFirestoreAvailable) return [];
@@ -39,36 +44,7 @@ export const getToa8SpeedQueue = async (): Promise<APIToaQueueEntrant[]> => {
   }
 };
 
-export type EventStatus = "active" | "inactive";
-
-export interface EventSettings {
-  status: EventStatus;
-  nextRunTime: Date | null;
-}
-
-export const getToa8SpeedSettings = async (): Promise<EventSettings> => {
-  if (!isFirestoreAvailable) return { status: "inactive", nextRunTime: null };
-
-  try {
-    const doc = await firestore
-      .collection("settings")
-      .doc("toa-8man-speed-settings")
-      .get();
-
-    if (!doc.exists) {
-      return { status: "inactive", nextRunTime: null };
-    }
-
-    const data = doc.data();
-    return {
-      status: data?.status || "inactive",
-      nextRunTime: data?.nextRunTime?.toDate() || null,
-    };
-  } catch (err) {
-    console.error(err);
-    return { status: "inactive", nextRunTime: null };
-  }
-};
+export const getToa8SpeedSettings = () => getEventSettings(SETTINGS_DOC);
 
 export const addToToa8SpeedQueue = async (entrantData: DBToaQueueEntrant) => {
   try {

@@ -163,7 +163,7 @@ export default function Queue({
       />
       <Group justify="space-between" align="center">
         <Title fw={700} order={3}>
-          Current Queue
+          Current Queue ({players.length})
         </Title>
         {joinModal}
       </Group>

@@ -11,7 +11,7 @@ const EDITABLE_FIELDS = [
   "expertKC",
   "ready",
   "redKeris",
-  "bgs",
+  "shadow",
   "zcb",
   "eye",
   "notes",

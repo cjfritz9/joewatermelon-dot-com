@@ -28,7 +28,7 @@ export interface DBToaQueueEntrant {
   expertKC: number;
   ready: boolean;
   redKeris: boolean;
-  bgs: boolean;
+  shadow: boolean;
   zcb: boolean;
   eye: boolean;
   notes: string;

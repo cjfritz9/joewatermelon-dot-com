@@ -39,14 +39,6 @@ export default function AdminStatusSection({
     return date !== null && !isNaN(date.getTime());
   };
 
-  const isWithinSixHours = (date: Date | null): boolean => {
-    if (!isValidDate(date)) return false;
-    const now = new Date();
-    const diffMs = date!.getTime() - now.getTime();
-    const sixHoursMs = 6 * 60 * 60 * 1000;
-    return diffMs <= sixHoursMs && diffMs >= -sixHoursMs;
-  };
-
   const handleStatusChange = (value: string) => {
     setStatus(value as Status);
   };
@@ -159,12 +151,6 @@ export default function AdminStatusSection({
 
         {status === "inactive" && (
           <>
-            {isWithinSixHours(nextRunTime) && (
-              <Text key="warning" size="xs" c="yellow">
-                Within 6 hours of run time - consider setting to Active
-              </Text>
-            )}
-
             <DateTimePicker
               key="datetime-picker"
               label="Next Run Time"

@@ -178,6 +178,7 @@ export default function EditQueueEntryModal({
         <NumberInput
           required
           label={config.kcLabel}
+          description={config.kcDescription}
           placeholder="0"
           value={formData[config.kcField] as number}
           allowNegative={false}

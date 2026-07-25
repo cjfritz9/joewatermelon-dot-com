@@ -12,7 +12,7 @@ export const getToaQueueEntryIsValid = (body: any) => {
     "expertKC",
     "ready",
     "redKeris",
-    "bgs",
+    "shadow",
     "zcb",
     "eye",
     "notes",

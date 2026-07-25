@@ -255,7 +255,7 @@ export default function AdminQueue({
       <Group justify="space-between" align="flex-end">
         <div>
           <Title fw={700} order={3}>
-            Queue Management
+            Queue Management ({players.length})
           </Title>
           <Text size="sm" c="dimmed">
             Admin view - Remove players or view their notes.
@@ -276,7 +276,12 @@ export default function AdminQueue({
       </Text>
       <Card withBorder shadow="sm" p={0}>
         <Table.ScrollContainer minWidth={700}>
-          <Table highlightOnHover withTableBorder withColumnBorders>
+          <Table
+            highlightOnHover
+            withTableBorder
+            withColumnBorders
+            horizontalSpacing={9}
+          >
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>Order</Table.Th>

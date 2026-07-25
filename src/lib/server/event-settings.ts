@@ -19,6 +19,12 @@ const isStale = (activatedAt: Date | null): boolean =>
   activatedAt !== null &&
   Date.now() - activatedAt.getTime() >= AUTO_DEACTIVATE_AFTER_MS;
 
+const isInRunWindow = (nextRunTime: Date): boolean => {
+  const start = nextRunTime.getTime();
+  const now = Date.now();
+  return now >= start && now < start + AUTO_DEACTIVATE_AFTER_MS;
+};
+
 export const getEventSettings = async (
   docId: string,
 ): Promise<EventSettings> => {
@@ -46,6 +52,18 @@ export const getEventSettings = async (
         { merge: true },
       );
       return { status: "inactive", nextRunTime };
+    }
+
+    if (status === "inactive" && nextRunTime && isInRunWindow(nextRunTime)) {
+      await ref.set(
+        {
+          status: "active",
+          activatedAt: Timestamp.fromDate(nextRunTime),
+          updatedAt: Timestamp.now(),
+        },
+        { merge: true },
+      );
+      return { status: "active", nextRunTime };
     }
 
     return { status, nextRunTime };

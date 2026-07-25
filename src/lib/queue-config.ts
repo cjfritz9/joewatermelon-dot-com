@@ -12,6 +12,7 @@ export interface QueueConfig {
   storageKey: string;
   kcField: string;
   kcLabel: string;
+  kcDescription?: string;
   columns: QueueColumn[];
   buttonColor: string;
 }
@@ -23,6 +24,7 @@ export const toaQueueConfig: QueueConfig = {
   storageKey: "toaQueueEntryId",
   kcField: "expertKC",
   kcLabel: "Expert Mode KC",
+  kcDescription: "Combined across all your accounts",
   columns: [
     {
       key: "redKeris",
@@ -31,9 +33,9 @@ export const toaQueueConfig: QueueConfig = {
       section: "Gear Check",
     },
     {
-      key: "bgs",
-      label: "BGS",
-      tooltip: "Bandos Godsword",
+      key: "shadow",
+      label: "Shadow",
+      tooltip: "Tumeken's Shadow",
       section: "Gear Check",
     },
     {

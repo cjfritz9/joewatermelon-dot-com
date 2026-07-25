@@ -33,7 +33,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AuthButtonGroup from "../auth/AuthButtonGroup";
 import { logout } from "@/lib/auth";
 
@@ -84,6 +84,10 @@ export function HeaderNav() {
     useDisclosure(false);
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
   const [loggingOut, setLoggingOut] = useState(false);
+
+  useEffect(() => {
+    closeDrawer();
+  }, [pathname, closeDrawer]);
 
   const handleLogout = async () => {
     setLoggingOut(true);

@@ -75,84 +75,126 @@ function InfoPageContent() {
         </Group>
 
         <Text c="dimmed" size="sm" mb="md">
-          These items help ensure smooth runs, but alternatives may work.
+          What you&apos;ll need to join, plus the gear we recommend bringing.
         </Text>
 
         <Stack gap="md">
-          <Card withBorder radius="sm" p="md" bg="dark.7">
-            <Group justify="space-between" mb="xs">
-              <Text fw={600}>Keris Partisan of Corruption</Text>
-              <Badge color="yellow" visibleFrom="sm">
-                Recommended
-              </Badge>
+          <Card
+            withBorder
+            radius="sm"
+            p="md"
+            bg="dark.7"
+            style={{ borderLeft: `3px solid ${theme.colors.success[6]}` }}
+          >
+            <Group gap="sm" align="flex-start" wrap="nowrap">
+              <ThemeIcon color="green" size={26} radius="xl">
+                <IconCheck size={16} />
+              </ThemeIcon>
+              <div style={{ flex: 1 }}>
+                <Text fw={600}>Expert Mode KC</Text>
+                <Text size="sm" c="dimmed">
+                  You&apos;ll need to be comfy with the invocations we run,
+                  especially insanity.
+                </Text>
+              </div>
             </Group>
-            <Text size="sm" c="dimmed">
-              Two red keris are required for the run.
-            </Text>
           </Card>
 
-          <Card withBorder radius="sm" p="md" bg="dark.7">
-            <Group justify="space-between" mb="xs">
-              <Text fw={600}>Bandos Godsword</Text>
-              <Badge color="yellow" visibleFrom="sm">
-                Recommended
-              </Badge>
+          <Card
+            withBorder
+            radius="sm"
+            p="md"
+            bg="dark.7"
+            style={{ borderLeft: `3px solid ${theme.colors.success[6]}` }}
+          >
+            <Group gap="sm" align="flex-start" wrap="nowrap">
+              <ThemeIcon color="green" size={26} radius="xl">
+                <IconCheck size={16} />
+              </ThemeIcon>
+              <div style={{ flex: 1 }}>
+                <Text fw={600}>Discord</Text>
+                <Text size="sm" c="dimmed">
+                  Being in voice chat helps coordinate all the specs and venges.
+                  This is a hard requirement.
+                </Text>
+              </div>
             </Group>
-            <Text size="sm" c="dimmed">
-              Required for the BGS role, unless the team is running the magic
-              strategy.
-            </Text>
           </Card>
 
-          <Card withBorder radius="sm" p="md" bg="dark.7">
-            <Group justify="space-between" mb="xs">
-              <Text fw={600}>Zaryte Crossbow</Text>
-              <Badge color="yellow" visibleFrom="sm">
-                Recommended
-              </Badge>
+          <Card
+            withBorder
+            radius="sm"
+            p="md"
+            bg="dark.7"
+            style={{ borderLeft: `3px solid ${theme.colors.success[6]}` }}
+          >
+            <Group gap="sm" align="flex-start" wrap="nowrap">
+              <ThemeIcon color="green" size={26} radius="xl">
+                <IconCheck size={16} />
+              </ThemeIcon>
+              <div style={{ flex: 1 }}>
+                <Text fw={600}>Supplies</Text>
+                <Text size="sm" c="dimmed">
+                  Match the recommended inventory as closely as possible, ask
+                  questions.
+                </Text>
+              </div>
             </Group>
-            <Text size="sm" c="dimmed">
-              Best-in-slot spec weapon. If you don&apos;t have this you&apos;ll
-              likely be placed on a keris/defence reduction role. Bring your
-              best ToA spec weapon.
-            </Text>
           </Card>
         </Stack>
 
         <Divider my="md" />
 
-        <Group gap="xs" mb="md">
-          <IconStar size={24} color={theme.colors.warning[4]} />
-          <Title order={4}>Other Requirements</Title>
+        <Group gap="xs" mb="sm">
+          <IconStar size={18} color={theme.colors.warning[4]} />
+          <Title order={5} c="dimmed">
+            Recommended Gear
+          </Title>
         </Group>
 
         <Stack gap="sm">
-          <Group gap="sm" align="flex-start">
-            <ThemeIcon color="green" size={20} radius="xl">
-              <IconCheck size={14} />
-            </ThemeIcon>
-            <Text style={{ flex: 1 }}>
-              <strong>Expert Mode KC:</strong> You&apos;ll need to be comfy with
-              the invocations we run, especially insanity.
-            </Text>
+          <Group justify="space-between" wrap="nowrap" align="flex-start">
+            <div style={{ flex: 1 }}>
+              <Text size="sm" fw={500}>
+                Keris Partisan of Corruption
+              </Text>
+              <Text size="xs" c="dimmed">
+                Two red keris are required for the run.
+              </Text>
+            </div>
+            <Badge size="sm" variant="light" color="gray" visibleFrom="sm">
+              Recommended
+            </Badge>
           </Group>
-          <Group gap="sm" align="flex-start">
-            <ThemeIcon color="green" size={20} radius="xl">
-              <IconCheck size={14} />
-            </ThemeIcon>
-            <Text style={{ flex: 1 }}>
-              <strong>Discord:</strong> Being in voice chat helps coordinate all
-              the specs and venges. This is a hard requirement.
-            </Text>
+
+          <Group justify="space-between" wrap="nowrap" align="flex-start">
+            <div style={{ flex: 1 }}>
+              <Text size="sm" fw={500}>
+                Tumeken&apos;s Shadow
+              </Text>
+              <Text size="xs" c="dimmed">
+                Optional, but recommended.
+              </Text>
+            </div>
+            <Badge size="sm" variant="light" color="gray" visibleFrom="sm">
+              Recommended
+            </Badge>
           </Group>
-          <Group gap="sm" align="flex-start">
-            <ThemeIcon color="green" size={20} radius="xl">
-              <IconCheck size={14} />
-            </ThemeIcon>
-            <Text style={{ flex: 1 }}>
-              <strong>Supplies:</strong> Match the recommended inventory as
-              closely as possible, ask questions.
-            </Text>
+
+          <Group justify="space-between" wrap="nowrap" align="flex-start">
+            <div style={{ flex: 1 }}>
+              <Text size="sm" fw={500}>
+                Zaryte Crossbow
+              </Text>
+              <Text size="xs" c="dimmed">
+                Best-in-slot spec weapon. If you don&apos;t have this you&apos;ll
+                likely be placed on a keris/defence reduction role. Bring your
+                best ToA spec weapon.
+              </Text>
+            </div>
+            <Badge size="sm" variant="light" color="gray" visibleFrom="sm">
+              Recommended
+            </Badge>
           </Group>
         </Stack>
       </Card>
@@ -179,7 +221,7 @@ function InfoPageContent() {
 
           <Card withBorder radius="sm" p="md" bg="dark.7">
             <Text fw={600} mb="xs">
-              BGS Role
+              Shadow Role
             </Text>
             <Text size="sm" c="dimmed">
               Coming soon. Check Discord for current recommendations.

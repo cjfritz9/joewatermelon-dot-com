@@ -23,7 +23,7 @@ import {
   IconSquareX,
   IconTrash,
 } from "@tabler/icons-react";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 interface AdminQueueProps {
   players: Record<string, unknown>[];
@@ -62,6 +62,7 @@ export default function AdminQueue({
     initialData: initialPlayers,
   });
   const [sortBy, setSortBy] = useState<string>("default");
+  const lastRemoveToastId = useRef<string | null>(null);
 
   const sortOptions = useMemo(() => {
     const options = [{ value: "default", label: "Queue Order (Join Time)" }];
@@ -103,7 +104,10 @@ export default function AdminQueue({
     });
 
     if (res.ok) {
-      notifications.show({
+      if (lastRemoveToastId.current) {
+        notifications.hide(lastRemoveToastId.current);
+      }
+      lastRemoveToastId.current = notifications.show({
         title: "Player Removed",
         message: `${rsn} has been removed from the queue.`,
         position: "top-right",
@@ -112,9 +116,10 @@ export default function AdminQueue({
     } else {
       notifications.show({
         title: "Error",
-        message: "Failed to remove player from queue.",
+        message: `Failed to remove ${rsn} from the queue.`,
         position: "top-right",
         color: "red",
+        autoClose: false,
       });
     }
   };

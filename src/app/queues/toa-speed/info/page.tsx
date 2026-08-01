@@ -133,10 +133,9 @@ function InfoPageContent() {
                 <IconCheck size={16} />
               </ThemeIcon>
               <div style={{ flex: 1 }}>
-                <Text fw={600}>Supplies</Text>
+                <Text fw={600}>Gear</Text>
                 <Text size="sm" c="dimmed">
-                  Match the recommended inventory as closely as possible, ask
-                  questions.
+                  Match the recommended inventory as closely as possible, downgrade where necessary.
                 </Text>
               </div>
             </Group>

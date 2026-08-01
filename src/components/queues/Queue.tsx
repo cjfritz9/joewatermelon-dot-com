@@ -4,7 +4,6 @@ import { useQueueRealtime } from "@/hooks/useQueueRealtime";
 import { QueueConfig } from "@/lib/queue-config";
 import {
   ActionIcon,
-  Badge,
   Card,
   Group,
   Stack,
@@ -30,17 +29,6 @@ interface QueueProps {
   config: QueueConfig;
   joinModal: ReactNode;
 }
-
-const getStatusBadge = (status: boolean) =>
-  status ? (
-    <Group justify="flex-end">
-      <Badge color="green">Ready</Badge>
-    </Group>
-  ) : (
-    <Group justify="flex-end">
-      <Badge color="red">Not Ready</Badge>
-    </Group>
-  );
 
 const getGearIcon = (hasItem: boolean) =>
   hasItem ? (
@@ -109,7 +97,6 @@ export default function Queue({
   const rows = players.map((player) => {
     const id = player.id as string;
     const rsn = player.rsn as string;
-    const ready = player.ready as boolean;
     const isMyEntry = id === myEntryId;
 
     return (
@@ -149,7 +136,6 @@ export default function Queue({
             {getGearIcon(player[col.key] as boolean)}
           </Table.Td>
         ))}
-        <Table.Td>{getStatusBadge(ready)}</Table.Td>
       </Table.Tr>
     );
   });
@@ -190,7 +176,6 @@ export default function Queue({
                     </Tooltip>
                   </Table.Th>
                 ))}
-                <Table.Th>Status</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>{rows}</Table.Tbody>

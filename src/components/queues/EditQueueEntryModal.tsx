@@ -40,7 +40,6 @@ export default function EditQueueEntryModal({
     twitchUsername: (entry.twitchUsername as string) || "",
     rsn: (entry.rsn as string) || "",
     [config.kcField]: (entry[config.kcField] as number) || 0,
-    ready: (entry.ready as boolean) || false,
     notes: (entry.notes as string) || "",
     notificationsEnabled: (entry.notificationsEnabled as boolean) || false,
     ...initialColumnState,
@@ -200,14 +199,6 @@ export default function EditQueueEntryModal({
             ))}
           </Stack>
         ))}
-
-        <Text>Ready Check</Text>
-
-        <Checkbox
-          label="I am Ready"
-          checked={formData.ready}
-          onChange={(e) => handleUpdateFormData("ready", e.target.checked)}
-        />
 
         <Textarea
           label="Notes (optional)"

@@ -9,7 +9,6 @@ const EDITABLE_FIELDS = [
   "twitchUsername",
   "rsn",
   "expertKC",
-  "ready",
   "redKeris",
   "shadow",
   "zcb",

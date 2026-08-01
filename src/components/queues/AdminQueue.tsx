@@ -4,9 +4,10 @@ import { useQueueRealtime } from "@/hooks/useQueueRealtime";
 import { QueueConfig } from "@/lib/queue-config";
 import {
   ActionIcon,
-  Badge,
+  Anchor,
   Card,
   Group,
+  Modal,
   Select,
   Stack,
   Table,
@@ -29,13 +30,6 @@ interface AdminQueueProps {
   players: Record<string, unknown>[];
   config: QueueConfig;
 }
-
-const getStatusBadge = (status: boolean) =>
-  status ? (
-    <Badge color="green">Ready</Badge>
-  ) : (
-    <Badge color="red">Not Ready</Badge>
-  );
 
 const getGearIcon = (hasItem: boolean) =>
   hasItem ? <IconSquareCheck color="green" /> : <IconSquareX color="red" />;
@@ -62,6 +56,10 @@ export default function AdminQueue({
     initialData: initialPlayers,
   });
   const [sortBy, setSortBy] = useState<string>("default");
+  const [openNotes, setOpenNotes] = useState<{
+    rsn: string;
+    notes: string;
+  } | null>(null);
   const lastRemoveToastId = useRef<string | null>(null);
 
   const sortOptions = useMemo(() => {
@@ -169,7 +167,6 @@ export default function AdminQueue({
     const id = player.id as string;
     const rsn = player.rsn as string;
     const twitchUsername = player.twitchUsername as string;
-    const ready = player.ready as boolean;
     const notes = player.notes as string;
     const notificationsEnabled = player.notificationsEnabled as boolean;
     const createdAt = player.createdAt as string;
@@ -210,18 +207,26 @@ export default function AdminQueue({
             {getGearIcon(player[col.key] as boolean)}
           </Table.Td>
         ))}
-        <Table.Td>{getStatusBadge(ready)}</Table.Td>
         <Table.Td>
           <Tooltip label={formatFullDateTime(createdAt)}>
             <Text size="sm">{formatJoinedDate(createdAt)}</Text>
           </Tooltip>
         </Table.Td>
         <Table.Td>
-          <Tooltip label={notes || "No notes"} multiline maw={300}>
-            <Text size="sm" truncate maw={150}>
-              {notes || "-"}
+          {notes ? (
+            <Anchor
+              component="button"
+              type="button"
+              size="sm"
+              onClick={() => setOpenNotes({ rsn, notes })}
+            >
+              View
+            </Anchor>
+          ) : (
+            <Text size="sm" c="dimmed">
+              -
             </Text>
-          </Tooltip>
+          )}
         </Table.Td>
         <Table.Td>
           {notificationsEnabled ? (
@@ -281,12 +286,7 @@ export default function AdminQueue({
       </Text>
       <Card withBorder shadow="sm" p={0}>
         <Table.ScrollContainer minWidth={700}>
-          <Table
-            highlightOnHover
-            withTableBorder
-            withColumnBorders
-            horizontalSpacing={9}
-          >
+          <Table highlightOnHover withTableBorder withColumnBorders>
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>Order</Table.Th>
@@ -300,7 +300,6 @@ export default function AdminQueue({
                     </Tooltip>
                   </Table.Th>
                 ))}
-                <Table.Th>Status</Table.Th>
                 <Table.Th>Joined</Table.Th>
                 <Table.Th>Notes</Table.Th>
                 <Table.Th>Notify</Table.Th>
@@ -311,6 +310,17 @@ export default function AdminQueue({
           </Table>
         </Table.ScrollContainer>
       </Card>
+
+      <Modal
+        opened={openNotes !== null}
+        onClose={() => setOpenNotes(null)}
+        title={openNotes ? `Notes - ${openNotes.rsn}` : "Notes"}
+        centered
+      >
+        <Text size="sm" style={{ whiteSpace: "pre-wrap" }}>
+          {openNotes?.notes}
+        </Text>
+      </Modal>
     </Stack>
   );
 }

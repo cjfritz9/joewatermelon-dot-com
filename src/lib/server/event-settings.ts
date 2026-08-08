@@ -3,38 +3,35 @@ import firestore, { isFirestoreAvailable } from "../db/firestore";
 import {
   isWeeklySchedule,
   nextOccurrenceAfter,
+  RUN_WINDOW_MS,
+  SIGNUP_LEAD_MS,
   WeeklySchedule,
 } from "../time";
 
 export type EventStatus = "active" | "inactive";
+export type EventPhase = "closed" | "open" | "in_progress";
+export type SignupOverride = "open" | "closed";
 
 export interface EventSettings {
   status: EventStatus;
+  phase: EventPhase;
+  override: SignupOverride | null;
   nextRunTime: Date | null;
   weeklySchedule: WeeklySchedule | null;
 }
 
-const AUTO_DEACTIVATE_AFTER_MS = 12 * 60 * 60 * 1000;
 const HALF_WEEK_MS = 3.5 * 24 * 60 * 60 * 1000;
 
 const DEFAULT_SETTINGS: EventSettings = {
   status: "inactive",
+  phase: "closed",
+  override: null,
   nextRunTime: null,
   weeklySchedule: null,
 };
 
-const isStale = (activatedAt: Date | null): boolean =>
-  activatedAt !== null &&
-  Date.now() - activatedAt.getTime() >= AUTO_DEACTIVATE_AFTER_MS;
-
-const isInRunWindow = (nextRunTime: Date): boolean => {
-  const start = nextRunTime.getTime();
-  const now = Date.now();
-  return now >= start && now < start + AUTO_DEACTIVATE_AFTER_MS;
-};
-
 const runWindowEnded = (nextRunTime: Date): boolean =>
-  Date.now() >= nextRunTime.getTime() + AUTO_DEACTIVATE_AFTER_MS;
+  Date.now() >= nextRunTime.getTime() + RUN_WINDOW_MS;
 
 const rollForward = (
   schedule: WeeklySchedule,
@@ -44,6 +41,31 @@ const rollForward = (
     ? Math.max(previousRunTime.getTime() + HALF_WEEK_MS, Date.now())
     : Date.now();
   return nextOccurrenceAfter(schedule, new Date(base));
+};
+
+const parseOverride = (value: unknown): SignupOverride | null =>
+  value === "open" || value === "closed" ? value : null;
+
+const derivePhase = (
+  nextRunTime: Date | null,
+  override: SignupOverride | null,
+): { status: EventStatus; phase: EventPhase } => {
+  const now = Date.now();
+  const start = nextRunTime?.getTime() ?? null;
+
+  const timeOpen =
+    start !== null &&
+    now >= start - SIGNUP_LEAD_MS &&
+    now < start + RUN_WINDOW_MS;
+  const open =
+    override === "open" ? true : override === "closed" ? false : timeOpen;
+  const inProgress =
+    open && start !== null && now >= start && now < start + RUN_WINDOW_MS;
+
+  return {
+    status: open ? "active" : "inactive",
+    phase: !open ? "closed" : inProgress ? "in_progress" : "open",
+  };
 };
 
 export const getEventSettings = async (
@@ -58,61 +80,35 @@ export const getEventSettings = async (
     if (!doc.exists) return DEFAULT_SETTINGS;
 
     const data = doc.data();
-    const status: EventStatus =
-      data?.status === "active" ? "active" : "inactive";
-    const nextRunTime: Date | null = data?.nextRunTime?.toDate() ?? null;
-    const activatedAt: Date | null = data?.activatedAt?.toDate() ?? null;
+    let nextRunTime: Date | null = data?.nextRunTime?.toDate() ?? null;
+    let override = parseOverride(data?.override);
     const weeklySchedule: WeeklySchedule | null = isWeeklySchedule(
       data?.weeklySchedule,
     )
       ? data.weeklySchedule
       : null;
 
-    if (status === "active" && isStale(activatedAt)) {
-      const rolled = weeklySchedule
-        ? rollForward(weeklySchedule, nextRunTime)
-        : nextRunTime;
+    if (override && nextRunTime && runWindowEnded(nextRunTime)) {
+      override = null;
+      await ref.set(
+        { override: null, updatedAt: Timestamp.now() },
+        { merge: true },
+      );
+    }
+
+    if (weeklySchedule && (!nextRunTime || runWindowEnded(nextRunTime))) {
+      nextRunTime = rollForward(weeklySchedule, nextRunTime);
       await ref.set(
         {
-          status: "inactive",
-          activatedAt: null,
-          nextRunTime: rolled ? Timestamp.fromDate(rolled) : null,
+          nextRunTime: Timestamp.fromDate(nextRunTime),
           updatedAt: Timestamp.now(),
         },
         { merge: true },
       );
-      return { status: "inactive", nextRunTime: rolled, weeklySchedule };
     }
 
-    if (status === "inactive" && nextRunTime && isInRunWindow(nextRunTime)) {
-      await ref.set(
-        {
-          status: "active",
-          activatedAt: Timestamp.fromDate(nextRunTime),
-          updatedAt: Timestamp.now(),
-        },
-        { merge: true },
-      );
-      return { status: "active", nextRunTime, weeklySchedule };
-    }
-
-    if (
-      status === "inactive" &&
-      weeklySchedule &&
-      (!nextRunTime || runWindowEnded(nextRunTime))
-    ) {
-      const rolled = rollForward(weeklySchedule, nextRunTime);
-      await ref.set(
-        {
-          nextRunTime: Timestamp.fromDate(rolled),
-          updatedAt: Timestamp.now(),
-        },
-        { merge: true },
-      );
-      return { status: "inactive", nextRunTime: rolled, weeklySchedule };
-    }
-
-    return { status, nextRunTime, weeklySchedule };
+    const { status, phase } = derivePhase(nextRunTime, override);
+    return { status, phase, override, nextRunTime, weeklySchedule };
   } catch (err) {
     console.error(err);
     return DEFAULT_SETTINGS;
@@ -121,29 +117,15 @@ export const getEventSettings = async (
 
 export const updateEventSettings = async (
   docId: string,
-  status: EventStatus,
+  override: SignupOverride | null,
   nextRunTime: Date | null,
   weeklySchedule?: WeeklySchedule | null,
 ): Promise<void> => {
   const ref = firestore.collection("settings").doc(docId);
 
-  let activatedAt: Timestamp | null = null;
-  if (status === "active") {
-    const existing = await ref.get();
-    const existingData = existing.data();
-    const existingActivatedAt = existingData?.activatedAt as
-      | Timestamp
-      | undefined;
-    activatedAt =
-      existingData?.status === "active" && existingActivatedAt
-        ? existingActivatedAt
-        : Timestamp.now();
-  }
-
   const payload: Record<string, unknown> = {
-    status,
+    override,
     nextRunTime: nextRunTime ? Timestamp.fromDate(nextRunTime) : null,
-    activatedAt,
     updatedAt: Timestamp.now(),
   };
 

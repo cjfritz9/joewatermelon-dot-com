@@ -7,6 +7,9 @@ dayjs.extend(timezone);
 
 export const EVENT_TIMEZONE = "America/Chicago";
 
+export const RUN_WINDOW_MS = 12 * 60 * 60 * 1000;
+export const SIGNUP_LEAD_MS = 2 * 60 * 60 * 1000;
+
 export interface WeeklySchedule {
   dayOfWeek: number;
   hour: number;

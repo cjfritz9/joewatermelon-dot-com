@@ -36,14 +36,15 @@ export default async function TobSpeedQueuePage() {
       </Stack>
       {isUserAdmin ? (
         <AdminStatusSection
-          initialStatus={settings.status}
+          initialPhase={settings.phase}
+          initialOverride={settings.override}
           initialNextRunTime={settings.nextRunTime}
           initialWeeklySchedule={settings.weeklySchedule}
           apiEndpoint="/api/queues/tob-speed/settings"
         />
       ) : (
         <StatusSection
-          status={settings.status}
+          phase={settings.phase}
           nextRunTime={settings.nextRunTime ?? undefined}
         />
       )}

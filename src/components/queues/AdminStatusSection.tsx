@@ -1,5 +1,6 @@
 "use client";
 
+import type { EventPhase, SignupOverride } from "@/lib/server/event-settings";
 import { getBrandColor } from "@/lib/theme";
 import {
   formatWeeklySchedule,
@@ -21,22 +22,32 @@ import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-type Status = "active" | "inactive";
+type OverrideValue = "auto" | "open" | "closed";
 
 interface AdminStatusSectionProps {
-  initialStatus: Status;
+  initialPhase: EventPhase;
+  initialOverride: SignupOverride | null;
   initialNextRunTime: Date | null;
   initialWeeklySchedule: WeeklySchedule | null;
   apiEndpoint?: string;
 }
 
+const PHASE_BADGE: Record<EventPhase, { color: string; label: string }> = {
+  closed: { color: "gray", label: "Sign-ups closed" },
+  open: { color: "green", label: "Sign-ups open" },
+  in_progress: { color: "green", label: "Runs in progress" },
+};
+
 export default function AdminStatusSection({
-  initialStatus,
+  initialPhase,
+  initialOverride,
   initialNextRunTime,
   initialWeeklySchedule,
   apiEndpoint = "/api/queues/toa-speed/settings",
 }: AdminStatusSectionProps) {
-  const [status, setStatus] = useState<Status>(initialStatus);
+  const [override, setOverride] = useState<OverrideValue>(
+    initialOverride ?? "auto",
+  );
   const [nextRunTime, setNextRunTime] = useState<Date | null>(
     initialNextRunTime,
   );
@@ -46,10 +57,6 @@ export default function AdminStatusSection({
 
   const isValidDate = (date: Date | null): boolean => {
     return date !== null && !isNaN(date.getTime());
-  };
-
-  const handleStatusChange = (value: string) => {
-    setStatus(value as Status);
   };
 
   const handleDateChange = (value: unknown) => {
@@ -81,7 +88,7 @@ export default function AdminStatusSection({
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
-          status,
+          override,
           nextRunTime: isValidDate(nextRunTime)
             ? nextRunTime?.toISOString()
             : null,
@@ -132,6 +139,8 @@ export default function AdminStatusSection({
     }).format(date);
   };
 
+  const badge = PHASE_BADGE[initialPhase];
+
   return (
     <Card
       shadow="md"
@@ -145,61 +154,59 @@ export default function AdminStatusSection({
       <Stack gap="md" align="center">
         <Group align="center">
           <Text fw={700} size="lg">
-            Event Status:
+            Sign-ups:
           </Text>
-          <Badge color={status === "active" ? "green" : "red"}>
-            {status === "active" ? "Active" : "Inactive"}
-          </Badge>
+          <Badge color={badge.color}>{badge.label}</Badge>
         </Group>
 
-        <SegmentedControl
-          value={status}
-          onChange={handleStatusChange}
-          data={[
-            { label: "Active", value: "active" },
-            { label: "Inactive", value: "inactive" },
-          ]}
+        <Stack gap={4} w="100%" align="center">
+          <SegmentedControl
+            value={override}
+            onChange={(value) => setOverride(value as OverrideValue)}
+            data={[
+              { label: "Auto", value: "auto" },
+              { label: "Open", value: "open" },
+              { label: "Closed", value: "closed" },
+            ]}
+          />
+          <Text size="xs" c="dimmed" ta="center">
+            {override === "auto"
+              ? "Sign-ups open automatically 2h before the run and close 12h after."
+              : override === "open"
+                ? "Sign-ups forced open. Reverts to Auto after the run window."
+                : "Sign-ups forced closed. Reverts to Auto after the run window."}
+          </Text>
+        </Stack>
+
+        <DateTimePicker
+          key="datetime-picker"
+          label="Next Run Time"
+          value={nextRunTime}
+          onChange={handleDateChange}
+          placeholder="Select date and time"
+          valueFormat="MM/DD/YYYY hh:mm A"
+          clearable
+          w="100%"
         />
 
-        {status === "inactive" && (
-          <>
-            <DateTimePicker
-              key="datetime-picker"
-              label="Next Run Time"
-              value={nextRunTime}
-              onChange={handleDateChange}
-              placeholder="Select date and time"
-              valueFormat="MM/DD/YYYY hh:mm A"
-              clearable
-              w="100%"
-            />
-
-            {isValidDate(nextRunTime) && (
-              <Text key="formatted-time" size="sm" c={getBrandColor(7)}>
-                {getFormattedLocalTime(nextRunTime!)}
-              </Text>
-            )}
-
-            <Stack gap={4} w="100%">
-              <Checkbox
-                label="Repeat this time weekly"
-                checked={repeatWeekly}
-                onChange={(e) => setRepeatWeekly(e.currentTarget.checked)}
-              />
-              {initialWeeklySchedule && (
-                <Text size="xs" c="dimmed">
-                  Currently repeating: {formatWeeklySchedule(initialWeeklySchedule)}
-                </Text>
-              )}
-            </Stack>
-          </>
-        )}
-
-        {status === "active" && (
-          <Text size="sm" c="green">
-            Event is currently active
+        {isValidDate(nextRunTime) && (
+          <Text key="formatted-time" size="sm" c={getBrandColor(7)}>
+            {getFormattedLocalTime(nextRunTime!)}
           </Text>
         )}
+
+        <Stack gap={4} w="100%">
+          <Checkbox
+            label="Repeat this time weekly"
+            checked={repeatWeekly}
+            onChange={(e) => setRepeatWeekly(e.currentTarget.checked)}
+          />
+          {initialWeeklySchedule && (
+            <Text size="xs" c="dimmed">
+              Currently repeating: {formatWeeklySchedule(initialWeeklySchedule)}
+            </Text>
+          )}
+        </Stack>
 
         <Button
           mt="md"

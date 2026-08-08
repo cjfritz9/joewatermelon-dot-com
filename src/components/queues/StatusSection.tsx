@@ -1,24 +1,28 @@
 "use client";
 
+import type { EventPhase } from "@/lib/server/event-settings";
 import { getBrandColor } from "@/lib/theme";
-import { EVENT_TIMEZONE } from "@/lib/time";
+import { EVENT_TIMEZONE, RUN_WINDOW_MS, SIGNUP_LEAD_MS } from "@/lib/time";
 import { Badge, Button, Card, Group, Stack, Text } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-type Status = "active" | "inactive";
-
 interface StatusSectionProps {
-  status: Status;
+  phase: EventPhase;
   nextRunTime?: Date;
   onNotify?: () => void;
 }
 
 const FOUR_HOURS_MS = 4 * 60 * 60 * 1000;
-const RUN_WINDOW_MS = 12 * 60 * 60 * 1000;
+
+const PHASE_BADGE: Record<EventPhase, { color: string; label: string }> = {
+  closed: { color: "gray", label: "Closed" },
+  open: { color: "green", label: "Sign-ups open" },
+  in_progress: { color: "green", label: "In progress" },
+};
 
 export default function StatusSection({
-  status,
+  phase,
   nextRunTime,
   onNotify,
 }: StatusSectionProps) {
@@ -33,31 +37,25 @@ export default function StatusSection({
   }, []);
 
   const start = nextRunTime?.getTime() ?? null;
-  const inRunWindow =
-    now !== null &&
-    start !== null &&
-    now >= start &&
-    now < start + RUN_WINDOW_MS;
+
+  const displayPhase: EventPhase =
+    now !== null && phase === "open" && start !== null && now >= start
+      ? "in_progress"
+      : phase;
 
   useEffect(() => {
-    if (status !== "inactive" || !inRunWindow) {
+    if (now === null || start === null) return;
+    const shouldBeOpen = now >= start - SIGNUP_LEAD_MS && now < start + RUN_WINDOW_MS;
+    const serverOpen = phase !== "closed";
+    if (shouldBeOpen !== serverOpen) {
+      if (!refreshedRef.current) {
+        refreshedRef.current = true;
+        router.refresh();
+      }
+    } else {
       refreshedRef.current = false;
-      return;
     }
-    if (!refreshedRef.current) {
-      refreshedRef.current = true;
-      router.refresh();
-    }
-  }, [status, inRunWindow, router]);
-
-  const getStatusBadge = () => {
-    switch (status) {
-      case "active":
-        return <Badge color="green">Active</Badge>;
-      case "inactive":
-        return <Badge color="red">Inactive</Badge>;
-    }
-  };
+  }, [now, start, phase, router]);
 
   const getAdvertisedTime = (date: Date) =>
     new Intl.DateTimeFormat("en-US", {
@@ -93,23 +91,19 @@ export default function StatusSection({
     return `Starts in ${hours}h ${minutes}m`;
   };
 
-  const getNextRunText = () => {
-    if (status === "active") return "Runs are currently in progress!";
-    if (status === "inactive" && nextRunTime)
-      return getAdvertisedTime(nextRunTime);
-    if (status === "inactive") return "Next run TBD";
-  };
+  const getNextRunText = () =>
+    nextRunTime ? getAdvertisedTime(nextRunTime) : "Next run TBD";
 
   const viewerIsCentral =
     now !== null &&
     Intl.DateTimeFormat().resolvedOptions().timeZone === EVENT_TIMEZONE;
   const viewerTime =
-    status === "inactive" && nextRunTime && now !== null && !viewerIsCentral
+    nextRunTime && now !== null && !viewerIsCentral
       ? getViewerTime(nextRunTime)
       : null;
 
-  const relativeTime = status === "inactive" ? getRelativeTime() : null;
-  const showStartingNow = status === "inactive" && inRunWindow;
+  const relativeTime = getRelativeTime();
+  const badge = PHASE_BADGE[displayPhase];
 
   return (
     <Card
@@ -126,7 +120,7 @@ export default function StatusSection({
           <Text fw={700} size="lg">
             Current Status:
           </Text>
-          {getStatusBadge()}
+          <Badge color={badge.color}>{badge.label}</Badge>
         </Group>
 
         <Text>Next planned runs:</Text>
@@ -140,16 +134,22 @@ export default function StatusSection({
           </Text>
         )}
 
-        {showStartingNow ? (
+        {displayPhase === "in_progress" && (
           <Text fw={700} c="yellow">
-            Starting now…
+            Runs in progress!
           </Text>
-        ) : (
-          relativeTime && (
-            <Text fw={700} c="yellow">
-              {relativeTime}
-            </Text>
-          )
+        )}
+
+        {displayPhase === "open" && (
+          <Text fw={700} c="yellow">
+            Sign-ups open{relativeTime ? ` · ${relativeTime}` : ""}
+          </Text>
+        )}
+
+        {displayPhase === "closed" && (
+          <Text size="xs" c="dimmed" ta="center">
+            Sign-ups typically open ~2 hours before the run.
+          </Text>
         )}
 
         <Button

@@ -40,13 +40,14 @@ const ToaSpeedQueuePage = async () => {
       </Stack>
       {isUserAdmin ? (
         <AdminStatusSection
-          initialStatus={settings.status}
+          initialPhase={settings.phase}
+          initialOverride={settings.override}
           initialNextRunTime={settings.nextRunTime}
           initialWeeklySchedule={settings.weeklySchedule}
         />
       ) : (
         <StatusSection
-          status={settings.status}
+          phase={settings.phase}
           nextRunTime={settings.nextRunTime ?? undefined}
         />
       )}

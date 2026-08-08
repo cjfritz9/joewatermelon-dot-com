@@ -20,6 +20,8 @@ import {
   IconArrowDown,
   IconArrowUp,
   IconBell,
+  IconChevronsDown,
+  IconChevronsUp,
   IconSquareCheck,
   IconSquareX,
   IconTrash,
@@ -145,7 +147,10 @@ export default function AdminQueue({
     }
   };
 
-  const handleReorder = async (id: string, direction: "up" | "down") => {
+  const handleReorder = async (
+    id: string,
+    direction: "up" | "down" | "top" | "bottom",
+  ) => {
     const res = await fetch(`${config.apiBasePath}/reorder`, {
       method: "POST",
       credentials: "include",
@@ -175,6 +180,17 @@ export default function AdminQueue({
       <Table.Tr key={id}>
         <Table.Td>
           <ActionIcon.Group>
+            <Tooltip label="Move to top">
+              <ActionIcon
+                variant="subtle"
+                color="gray"
+                size="sm"
+                disabled={index === 0}
+                onClick={() => handleReorder(id, "top")}
+              >
+                <IconChevronsUp size={14} />
+              </ActionIcon>
+            </Tooltip>
             <Tooltip label="Move up">
               <ActionIcon
                 variant="subtle"
@@ -195,6 +211,17 @@ export default function AdminQueue({
                 onClick={() => handleReorder(id, "down")}
               >
                 <IconArrowDown size={14} />
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip label="Move to bottom">
+              <ActionIcon
+                variant="subtle"
+                color="gray"
+                size="sm"
+                disabled={index === sortedPlayers.length - 1}
+                onClick={() => handleReorder(id, "bottom")}
+              >
+                <IconChevronsDown size={14} />
               </ActionIcon>
             </Tooltip>
           </ActionIcon.Group>

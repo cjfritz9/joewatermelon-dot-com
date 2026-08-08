@@ -17,8 +17,11 @@ export async function POST(req: Request) {
       return APIResponse.error("Missing id or direction");
     }
 
-    if (direction !== "up" && direction !== "down") {
-      return APIResponse.error("Invalid direction. Use 'up' or 'down'");
+    const validDirections = ["up", "down", "top", "bottom"];
+    if (!validDirections.includes(direction)) {
+      return APIResponse.error(
+        "Invalid direction. Use 'up', 'down', 'top', or 'bottom'",
+      );
     }
 
     const queueSnapshot = await firestore.collection("tob-queue").get();
@@ -42,6 +45,34 @@ export async function POST(req: Request) {
 
     if (currentIndex === -1) {
       return APIResponse.error("Player not found in queue", 404);
+    }
+
+    if (direction === "top" || direction === "bottom") {
+      const alreadyThere =
+        direction === "top"
+          ? currentIndex === 0
+          : currentIndex === docs.length - 1;
+
+      if (alreadyThere) {
+        return APIResponse.success("Queue order updated");
+      }
+
+      const others = docs.filter((_, index) => index !== currentIndex);
+      const reordered =
+        direction === "top"
+          ? [docs[currentIndex], ...others]
+          : [...others, docs[currentIndex]];
+
+      const batch = firestore.batch();
+      reordered.forEach((doc, index) => {
+        batch.update(firestore.collection("tob-queue").doc(doc.id), {
+          order: index,
+        });
+      });
+
+      await batch.commit();
+
+      return APIResponse.success("Queue order updated");
     }
 
     const targetIndex =

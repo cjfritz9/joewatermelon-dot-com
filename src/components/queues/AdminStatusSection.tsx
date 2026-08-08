@@ -2,9 +2,15 @@
 
 import { getBrandColor } from "@/lib/theme";
 import {
+  formatWeeklySchedule,
+  scheduleFromDate,
+  WeeklySchedule,
+} from "@/lib/time";
+import {
   Badge,
   Button,
   Card,
+  Checkbox,
   Group,
   SegmentedControl,
   Stack,
@@ -20,18 +26,21 @@ type Status = "active" | "inactive";
 interface AdminStatusSectionProps {
   initialStatus: Status;
   initialNextRunTime: Date | null;
+  initialWeeklySchedule: WeeklySchedule | null;
   apiEndpoint?: string;
 }
 
 export default function AdminStatusSection({
   initialStatus,
   initialNextRunTime,
+  initialWeeklySchedule,
   apiEndpoint = "/api/queues/toa-speed/settings",
 }: AdminStatusSectionProps) {
   const [status, setStatus] = useState<Status>(initialStatus);
   const [nextRunTime, setNextRunTime] = useState<Date | null>(
     initialNextRunTime,
   );
+  const [repeatWeekly, setRepeatWeekly] = useState(false);
   const [saving, setSaving] = useState(false);
   const router = useRouter();
 
@@ -76,6 +85,9 @@ export default function AdminStatusSection({
           nextRunTime: isValidDate(nextRunTime)
             ? nextRunTime?.toISOString()
             : null,
+          ...(repeatWeekly && isValidDate(nextRunTime)
+            ? { weeklySchedule: scheduleFromDate(nextRunTime!) }
+            : {}),
         }),
       });
 
@@ -157,6 +169,7 @@ export default function AdminStatusSection({
               value={nextRunTime}
               onChange={handleDateChange}
               placeholder="Select date and time"
+              valueFormat="MM/DD/YYYY hh:mm A"
               clearable
               w="100%"
             />
@@ -166,6 +179,19 @@ export default function AdminStatusSection({
                 {getFormattedLocalTime(nextRunTime!)}
               </Text>
             )}
+
+            <Stack gap={4} w="100%">
+              <Checkbox
+                label="Repeat this time weekly"
+                checked={repeatWeekly}
+                onChange={(e) => setRepeatWeekly(e.currentTarget.checked)}
+              />
+              {initialWeeklySchedule && (
+                <Text size="xs" c="dimmed">
+                  Currently repeating: {formatWeeklySchedule(initialWeeklySchedule)}
+                </Text>
+              )}
+            </Stack>
           </>
         )}
 

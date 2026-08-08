@@ -1,5 +1,6 @@
 import APIResponse from "@/lib/classes/APIResponse";
 import { getEventSettings, updateEventSettings } from "@/lib/server/event-settings";
+import { isWeeklySchedule, WeeklySchedule } from "@/lib/time";
 import { isAdmin } from "@/lib/session";
 
 const SETTINGS_DOC = "tob-speed-settings";
@@ -11,6 +12,7 @@ export async function GET() {
     return APIResponse.success("Settings found", {
       status: settings.status,
       nextRunTime: settings.nextRunTime?.toISOString() || null,
+      weeklySchedule: settings.weeklySchedule,
     });
   } catch (err) {
     console.error(err);
@@ -27,16 +29,28 @@ export async function PUT(req: Request) {
     }
 
     const body = await req.json();
-    const { status, nextRunTime } = body;
+    const { status, nextRunTime, weeklySchedule } = body;
 
     if (!status || !["active", "inactive"].includes(status)) {
       return APIResponse.error("Invalid status");
+    }
+
+    let schedule: WeeklySchedule | null | undefined = undefined;
+    if (weeklySchedule !== undefined) {
+      if (weeklySchedule === null) {
+        schedule = null;
+      } else if (isWeeklySchedule(weeklySchedule)) {
+        schedule = weeklySchedule;
+      } else {
+        return APIResponse.error("Invalid weeklySchedule");
+      }
     }
 
     await updateEventSettings(
       SETTINGS_DOC,
       status,
       nextRunTime ? new Date(nextRunTime) : null,
+      schedule,
     );
 
     return APIResponse.success("Settings updated");

@@ -42,6 +42,7 @@ const ToaSpeedQueuePage = async () => {
         <AdminStatusSection
           initialStatus={settings.status}
           initialNextRunTime={settings.nextRunTime}
+          initialWeeklySchedule={settings.weeklySchedule}
         />
       ) : (
         <StatusSection

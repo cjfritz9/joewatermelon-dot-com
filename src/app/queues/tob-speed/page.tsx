@@ -38,6 +38,7 @@ export default async function TobSpeedQueuePage() {
         <AdminStatusSection
           initialStatus={settings.status}
           initialNextRunTime={settings.nextRunTime}
+          initialWeeklySchedule={settings.weeklySchedule}
           apiEndpoint="/api/queues/tob-speed/settings"
         />
       ) : (

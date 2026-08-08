@@ -1,6 +1,7 @@
 "use client";
 
 import { getBrandColor } from "@/lib/theme";
+import { EVENT_TIMEZONE } from "@/lib/time";
 import { Badge, Button, Card, Group, Stack, Text } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -58,17 +59,25 @@ export default function StatusSection({
     }
   };
 
-  const getFormattedLocalTime = (date: Date) => {
-    return new Intl.DateTimeFormat("en-US", {
+  const getAdvertisedTime = (date: Date) =>
+    new Intl.DateTimeFormat("en-US", {
       weekday: "short",
       month: "short",
       day: "numeric",
       hour: "numeric",
       minute: "numeric",
       hour12: true,
+      timeZone: EVENT_TIMEZONE,
       timeZoneName: "short",
     }).format(date);
-  };
+
+  const getViewerTime = (date: Date) =>
+    new Intl.DateTimeFormat("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+      timeZoneName: "short",
+    }).format(date);
 
   const getRelativeTime = (): string | null => {
     if (now === null || start === null) return null;
@@ -87,9 +96,17 @@ export default function StatusSection({
   const getNextRunText = () => {
     if (status === "active") return "Runs are currently in progress!";
     if (status === "inactive" && nextRunTime)
-      return now !== null ? getFormattedLocalTime(nextRunTime) : " ";
+      return getAdvertisedTime(nextRunTime);
     if (status === "inactive") return "Next run TBD";
   };
+
+  const viewerIsCentral =
+    now !== null &&
+    Intl.DateTimeFormat().resolvedOptions().timeZone === EVENT_TIMEZONE;
+  const viewerTime =
+    status === "inactive" && nextRunTime && now !== null && !viewerIsCentral
+      ? getViewerTime(nextRunTime)
+      : null;
 
   const relativeTime = status === "inactive" ? getRelativeTime() : null;
   const showStartingNow = status === "inactive" && inRunWindow;
@@ -116,6 +133,12 @@ export default function StatusSection({
         <Text fw={700} c={getBrandColor(7)}>
           {getNextRunText()}
         </Text>
+
+        {viewerTime && (
+          <Text size="sm" c="dimmed">
+            Your time: {viewerTime}
+          </Text>
+        )}
 
         {showStartingNow ? (
           <Text fw={700} c="yellow">

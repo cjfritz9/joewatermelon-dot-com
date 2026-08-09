@@ -18,6 +18,7 @@ export interface EventSettings {
   override: SignupOverride | null;
   nextRunTime: Date | null;
   weeklySchedule: WeeklySchedule | null;
+  nextPartyNumber: number;
 }
 
 const HALF_WEEK_MS = 3.5 * 24 * 60 * 60 * 1000;
@@ -28,6 +29,7 @@ const DEFAULT_SETTINGS: EventSettings = {
   override: null,
   nextRunTime: null,
   weeklySchedule: null,
+  nextPartyNumber: 1,
 };
 
 const runWindowEnded = (nextRunTime: Date): boolean =>
@@ -107,8 +109,22 @@ export const getEventSettings = async (
       );
     }
 
+    const runKey = nextRunTime ? nextRunTime.getTime() : null;
+    const partyCounter =
+      typeof data?.partyCounter === "number" ? data.partyCounter : 0;
+    const partyCounterRun =
+      typeof data?.partyCounterRun === "number" ? data.partyCounterRun : null;
+    const nextPartyNumber = partyCounterRun === runKey ? partyCounter + 1 : 1;
+
     const { status, phase } = derivePhase(nextRunTime, override);
-    return { status, phase, override, nextRunTime, weeklySchedule };
+    return {
+      status,
+      phase,
+      override,
+      nextRunTime,
+      weeklySchedule,
+      nextPartyNumber,
+    };
   } catch (err) {
     console.error(err);
     return DEFAULT_SETTINGS;

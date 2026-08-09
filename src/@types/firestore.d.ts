@@ -37,6 +37,11 @@ export interface DBToaQueueEntrant {
   order?: number;
   userId?: string;
   editToken?: string;
+  inParty?: boolean;
+  partyName?: string;
+  partyWorld?: string;
+  partyNumber?: number;
+  partyJoinedAt?: Timestamp;
 }
 
 export interface DBTobQueueEntrant {
@@ -46,6 +51,10 @@ export interface DBTobQueueEntrant {
   kc: number;
   ready: boolean;
   scythe: boolean;
+  whip: boolean;
+  saeldor: boolean;
+  reaperAxe: boolean;
+  halberd: boolean;
   needs4Man: boolean;
   needs5Man: boolean;
   notes: string;
@@ -54,4 +63,9 @@ export interface DBTobQueueEntrant {
   order?: number;
   userId?: string;
   editToken?: string;
+  inParty?: boolean;
+  partyName?: string;
+  partyWorld?: string;
+  partyNumber?: number;
+  partyJoinedAt?: Timestamp;
 }

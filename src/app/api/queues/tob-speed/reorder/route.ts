@@ -30,11 +30,14 @@ export async function POST(req: Request) {
       return APIResponse.error("Queue is empty", 404);
     }
 
-    const docs = queueSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      order: doc.data().order ?? Number.MAX_SAFE_INTEGER,
-      createdAt: doc.data().createdAt,
-    }));
+    const docs = queueSnapshot.docs
+      .map((doc) => ({
+        id: doc.id,
+        order: doc.data().order ?? Number.MAX_SAFE_INTEGER,
+        createdAt: doc.data().createdAt,
+        inParty: doc.data().inParty === true,
+      }))
+      .filter((doc) => !doc.inParty);
 
     docs.sort((a, b) => {
       if (a.order !== b.order) return a.order - b.order;

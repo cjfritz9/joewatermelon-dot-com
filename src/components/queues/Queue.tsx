@@ -20,7 +20,7 @@ import {
   IconSquareX,
   IconTrash,
 } from "@tabler/icons-react";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import EditQueueEntryModal from "./EditQueueEntryModal";
 import QueueNotificationListener from "./QueueNotificationListener";
 
@@ -63,6 +63,20 @@ export default function Queue({
 
   const myEntry = players.find((p) => p.id === myEntryId);
 
+  const partyMembers = useMemo(
+    () => players.filter((p) => p.inParty),
+    [players],
+  );
+  const waitingPlayers = useMemo(
+    () => players.filter((p) => !p.inParty),
+    [players],
+  );
+
+  const partyLabel =
+    partyMembers.length > 0
+      ? `${partyMembers[0].partyName as string} · World ${partyMembers[0].partyWorld as string}`
+      : "";
+
   const handleDelete = async () => {
     if (!myEntryId) return;
 
@@ -94,7 +108,24 @@ export default function Queue({
     }
   };
 
-  const rows = players.map((player) => {
+  const partyRows = partyMembers.map((player) => {
+    const id = player.id as string;
+    const rsn = player.rsn as string;
+
+    return (
+      <Table.Tr key={id}>
+        <Table.Td>{rsn ?? "-"}</Table.Td>
+        <Table.Td>{(player[config.kcField] as number) ?? "-"}</Table.Td>
+        {config.columns.map((col) => (
+          <Table.Td key={col.key}>
+            {getGearIcon(player[col.key] as boolean)}
+          </Table.Td>
+        ))}
+      </Table.Tr>
+    );
+  });
+
+  const rows = waitingPlayers.map((player) => {
     const id = player.id as string;
     const rsn = player.rsn as string;
     const isMyEntry = id === myEntryId;
@@ -147,9 +178,41 @@ export default function Queue({
         storageKey={config.storageKey}
         apiBasePath={config.apiBasePath}
       />
+
+      {partyMembers.length > 0 && (
+        <Stack gap="xs">
+          <Group gap="xs">
+            <Title fw={700} order={3}>
+              Now Running
+            </Title>
+            <Text c="dimmed">{partyLabel}</Text>
+          </Group>
+          <Card withBorder shadow="sm" p={0}>
+            <Table.ScrollContainer minWidth={500}>
+              <Table highlightOnHover withTableBorder withColumnBorders>
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th>RSN</Table.Th>
+                    <Table.Th>KC</Table.Th>
+                    {config.columns.map((col) => (
+                      <Table.Th key={col.key}>
+                        <Tooltip label={col.tooltip}>
+                          <span>{col.label}</span>
+                        </Tooltip>
+                      </Table.Th>
+                    ))}
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>{partyRows}</Table.Tbody>
+              </Table>
+            </Table.ScrollContainer>
+          </Card>
+        </Stack>
+      )}
+
       <Group justify="space-between" align="center">
         <Title fw={700} order={3}>
-          Current Queue ({players.length})
+          Current Queue ({waitingPlayers.length})
         </Title>
         {joinModal}
       </Group>

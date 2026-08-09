@@ -25,6 +25,7 @@ export const getTobSpeedQueue = async (): Promise<APITobQueueEntrant[]> => {
         id: doc.id,
         createdAt: data.createdAt?.toDate().toISOString() || null,
         notifiedAt: data.notifiedAt?.toDate().toISOString() || null,
+        partyJoinedAt: data.partyJoinedAt?.toDate().toISOString() || null,
       };
     }) as APITobQueueEntrant[];
 

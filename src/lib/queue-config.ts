@@ -64,6 +64,30 @@ export const tobQueueConfig: QueueConfig = {
       section: "Gear Check",
     },
     {
+      key: "whip",
+      label: "Whip",
+      tooltip: "Tentacle Whip",
+      section: "Gear Check",
+    },
+    {
+      key: "saeldor",
+      label: "Blade",
+      tooltip: "Blade of Saeldor",
+      section: "Gear Check",
+    },
+    {
+      key: "reaperAxe",
+      label: "SRA",
+      tooltip: "Soul Reaper Axe",
+      section: "Gear Check",
+    },
+    {
+      key: "halberd",
+      label: "Halberd",
+      tooltip: "Noxious Halberd",
+      section: "Gear Check",
+    },
+    {
       key: "needs4Man",
       label: "4-Man",
       tooltip: "Need 4-Man GM Time",

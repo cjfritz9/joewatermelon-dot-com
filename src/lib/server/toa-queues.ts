@@ -27,6 +27,7 @@ export const getToa8SpeedQueue = async (): Promise<APIToaQueueEntrant[]> => {
         id: doc.id,
         createdAt: data.createdAt?.toDate().toISOString() || null,
         notifiedAt: data.notifiedAt?.toDate().toISOString() || null,
+        partyJoinedAt: data.partyJoinedAt?.toDate().toISOString() || null,
       };
     }) as APIToaQueueEntrant[];
 

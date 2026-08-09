@@ -55,6 +55,7 @@ const ToaSpeedQueuePage = async () => {
         <AdminQueue
           players={queue as unknown as Record<string, unknown>[]}
           config={toaQueueConfig}
+          nextPartyNumber={settings.nextPartyNumber}
         />
       ) : (
         <Queue

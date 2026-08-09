@@ -52,6 +52,7 @@ export default async function TobSpeedQueuePage() {
         <AdminQueue
           players={queue as unknown as Record<string, unknown>[]}
           config={tobQueueConfig}
+          nextPartyNumber={settings.nextPartyNumber}
         />
       ) : (
         <Queue

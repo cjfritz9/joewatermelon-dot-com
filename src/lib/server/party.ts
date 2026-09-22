@@ -70,6 +70,56 @@ export const createParty = async ({
   );
 };
 
+export const addPartyMembers = async (
+  collectionName: string,
+  memberIds: string[],
+): Promise<void> => {
+  if (memberIds.length === 0) {
+    throw new PartyError("No members selected");
+  }
+
+  const collection = firestore.collection(collectionName);
+
+  const existingParty = await collection
+    .where("inParty", "==", true)
+    .limit(1)
+    .get();
+
+  if (existingParty.empty) {
+    throw new PartyError("No group is in progress");
+  }
+
+  const { partyName, partyWorld, partyNumber } = existingParty.docs[0].data();
+
+  const memberDocs = await Promise.all(
+    memberIds.map((id) => collection.doc(id).get()),
+  );
+
+  if (memberDocs.some((doc) => !doc.exists)) {
+    throw new PartyError("One or more selected players are no longer in queue");
+  }
+
+  if (memberDocs.some((doc) => doc.data()?.inParty)) {
+    throw new PartyError(
+      "One or more selected players are already in the group",
+    );
+  }
+
+  const batch = firestore.batch();
+
+  for (const doc of memberDocs) {
+    batch.update(doc.ref, {
+      inParty: true,
+      partyName,
+      partyWorld,
+      partyNumber,
+      partyJoinedAt: Timestamp.now(),
+    });
+  }
+
+  await batch.commit();
+};
+
 export const returnPartyMembers = async (
   collectionName: string,
   ids: string[],

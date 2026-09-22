@@ -30,6 +30,7 @@ import {
   IconSquareCheck,
   IconSquareX,
   IconTrash,
+  IconUserPlus,
   IconUsersGroup,
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
@@ -297,6 +298,40 @@ export default function AdminQueue({
         notifications.show({
           title: "Error",
           message: data?.message || "Failed to start group.",
+          position: "top-right",
+          color: "red",
+        });
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleAddToParty = async () => {
+    setSubmitting(true);
+    try {
+      const res = await fetch(`${config.apiBasePath}/party/add`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ memberIds: [...selectedIds] }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        notifications.show({
+          title: "Group updated",
+          message: `Added ${selectedIds.size} player${selectedIds.size === 1 ? "" : "s"} to ${partyMembers[0].partyName as string}.`,
+          position: "top-right",
+          color: "green",
+        });
+        cancelSelecting();
+        router.refresh();
+      } else {
+        notifications.show({
+          title: "Error",
+          message: data?.message || "Failed to add players to group.",
           position: "top-right",
           color: "red",
         });
@@ -595,9 +630,12 @@ export default function AdminQueue({
               <Button
                 size="xs"
                 disabled={selectedIds.size === 0}
-                onClick={() => setConfirmingParty(true)}
+                loading={hasParty && submitting}
+                onClick={
+                  hasParty ? handleAddToParty : () => setConfirmingParty(true)
+                }
               >
-                Confirm ({selectedIds.size})
+                {hasParty ? "Add" : "Confirm"} ({selectedIds.size})
               </Button>
               <Button size="xs" variant="default" onClick={cancelSelecting}>
                 Cancel
@@ -607,18 +645,24 @@ export default function AdminQueue({
             <Tooltip
               label={
                 hasParty
-                  ? "Finish the current group first"
+                  ? "Add players to the current group"
                   : "Select players for a run"
               }
             >
               <Button
                 size="xs"
                 variant="light"
-                leftSection={<IconUsersGroup size={16} />}
-                disabled={hasParty || waitingPlayers.length === 0}
+                leftSection={
+                  hasParty ? (
+                    <IconUserPlus size={16} />
+                  ) : (
+                    <IconUsersGroup size={16} />
+                  )
+                }
+                disabled={waitingPlayers.length === 0}
                 onClick={startSelecting}
               >
-                Select Group
+                {hasParty ? "Add to Group" : "Select Group"}
               </Button>
             </Tooltip>
           )}
@@ -694,7 +738,6 @@ export default function AdminQueue({
           </Group>
         </Stack>
       </Modal>
-
     </Stack>
   );
 }

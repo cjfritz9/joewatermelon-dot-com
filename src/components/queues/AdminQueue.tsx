@@ -25,6 +25,7 @@ import {
   IconArrowDown,
   IconArrowUp,
   IconBell,
+  IconBrandTwitch,
   IconChevronsDown,
   IconChevronsUp,
   IconSquareCheck,
@@ -80,6 +81,7 @@ export default function AdminQueue({
   const [world, setWorld] = useState("495");
   const [partyNumber, setPartyNumber] = useState(nextPartyNumber);
   const [submitting, setSubmitting] = useState(false);
+  const [sendingToChat, setSendingToChat] = useState(false);
   const lastRemoveToastId = useRef<string | null>(null);
 
   const sortOptions = useMemo(() => {
@@ -341,6 +343,38 @@ export default function AdminQueue({
     }
   };
 
+  const handleSendToChat = async () => {
+    setSendingToChat(true);
+    try {
+      const res = await fetch(`${config.apiBasePath}/party/announce`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: partyMessage }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        notifications.show({
+          title: "Sent to chat",
+          message: data?.data?.message || partyMessage,
+          position: "top-right",
+          color: "green",
+        });
+      } else {
+        notifications.show({
+          title: "Not sent",
+          message: data?.message || "Failed to send the message to chat.",
+          position: "top-right",
+          color: "red",
+        });
+      }
+    } finally {
+      setSendingToChat(false);
+    }
+  };
+
   const handleReturn = async (ids: string[]) => {
     const res = await fetch(`${config.apiBasePath}/party/return`, {
       method: "POST",
@@ -579,11 +613,15 @@ export default function AdminQueue({
               <Text c="dimmed">{partyLabel}</Text>
             </Group>
             <Group gap="xs">
-              <CopyButton
-                value={partyMessage}
-                text="Copy chat message"
-                size={14}
-              />
+              <Button
+                size="xs"
+                variant="default"
+                leftSection={<IconBrandTwitch size={14} />}
+                loading={sendingToChat}
+                onClick={handleSendToChat}
+              >
+                Send to chat
+              </Button>
               <Button
                 size="xs"
                 variant="default"
